@@ -55,6 +55,8 @@ MKR: Martin Krafft
 
 - dealing with physical descriptors (if necessary)
 
+- [MKR] Debian integration
+
 [done 2004.02.11] [MKR] libhid-config
 
 [done 2004.02.11] [MKR] reintegration of hidparser into libhid core.
