@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <usb.h>
+#include <hidparser.h>
 
 #ifndef byte
   typedef unsigned char byte;
@@ -30,7 +31,9 @@ typedef enum hid_return {
   HID_RET_HID_DESC_SHORT,
   HID_RET_FAIL_GET_REPORT,
   HID_RET_REPORT_DESC_SHORT,
+  HID_RET_REPORT_DESC_LONG,
   HID_RET_FAIL_ALLOC,
+  HID_RET_OUT_OF_SPACE,
   HID_RET_UNKNOWN_FAILURE
 } hid_return;
 
@@ -40,8 +43,8 @@ typedef struct HIDInterface_t {
   struct usb_dev_handle *dev_handle;
   struct usb_device *device;
   int interface;
-  char* report_desc;
-  unsigned int report_len;
+  HIDData* hid_data;
+  HIDParser* hid_parser;
 } HIDInterface;
 
 typedef struct HIDInterfaceMatcher_t {
@@ -90,19 +93,21 @@ hid_return hid_close(HIDInterface* hidif);
 
 bool hid_is_opened(HIDInterface const* hidif);
 
-hid_return hid_get_item_value(HIDInterface const* hidif,
-                              char const *const itempath,
+hid_return hid_get_item_value(HIDInterface* hidif,
+                              int const path[], unsigned int const depth,
                               double *const value);
 
-hid_return hid_get_item_string(HIDInterface const* hidif,
-                               char const *const itempath,
+hid_return hid_get_item_string(HIDInterface* hidif,
+                               int const path[], unsigned int const depth,
                                char *const value, unsigned int const maxlen);
 
-hid_return hid_set_item_value(HIDInterface const* hidif,
-                              char const *const itempath,
+hid_return hid_set_item_value(HIDInterface* hidif,
+                              int const path[], unsigned int const depth,
                               double const value);
 
 hid_return hid_write_identification(FILE* out, HIDInterface const* hidif);
+
+hid_return hid_dump_tree(FILE* out, HIDInterface* hidif);
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,6 @@
 AM_CFLAGS =
 AM_LDFLAGS = -lhidparser
-AM_CPPFLAGS = -I../include
+AM_CPPFLAGS = -I../include -DDEBUG
 
 noinst_PROGRAMS = test_libhid test_libhid.static
 

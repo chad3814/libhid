@@ -12,9 +12,9 @@ bool match_serial_number(struct usb_dev_handle const* usbdev, void* custom, unsi
   return ret;
 }
 
-int main(void) {
-
-  hid_set_debug(HID_DEBUG_NOTRACES);
+int main(void)
+{
+  hid_set_debug(HID_DEBUG_ALL);
   hid_set_debug_stream(stderr);
   hid_set_usb_debug(0);
 
@@ -27,6 +27,19 @@ int main(void) {
   ret = hid_force_open(&hid, 0, &matcher, 3);
 
   ret = hid_write_identification(stdout, &hid);
+
+  ret = hid_dump_tree(stdout, &hid);
+
+  int path1[] = { 0xffa00001, 0xffa00002, 0xffa10003 };
+  int path2[] = { 0xffa00001, 0xffa00002, 0x0 };
+  int path3[] = { 0xffa00001, 0xffa00002, 0xffa10004 };
+  double res;
+  hid_get_item_value(&hid, path1, 3, &res);
+  printf("result: %g\n", res);
+  hid_get_item_value(&hid, path2, 3, &res);
+  printf("result: %g\n", res);
+  hid_get_item_value(&hid, path3, 3, &res);
+  printf("result: %g\n", res);
 
   ret = hid_close(&hid);
 

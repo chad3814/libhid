@@ -1,6 +1,6 @@
 AM_CFLAGS =
 AM_CXXFLAGS = $(AM_CFLAGS)
-AM_CPPFLAGS = -I../include
+AM_CPPFLAGS = -I../include -DDEBUG
 
 if LINUX_API
 OS_SUPPORT = linux.c
@@ -24,7 +24,7 @@ libhid_la_SOURCES = hid.c debug.c $(OS_SUPPORT)
 include_HEADERS = \
   ../include/hid.h \
 	../include/debug.h \
-	../include/asser.h
+	../include/assert.h
 
 #doc::
 #	make -C ../doc
