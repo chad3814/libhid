@@ -27,7 +27,6 @@ dist_noinst_DATA = \
 	debian/python-hid.install \
 	debian/rules
 
-.PHONY: clean-local
 clean-local:
 	rm -f $(wildcard $(PACKAGE)-*.tar.gz)
 

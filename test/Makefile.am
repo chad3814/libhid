@@ -24,5 +24,5 @@ debug: test_libhid
 run: test_libhid
 	libtool --mode=execute ./$<
 
-clean-local::
+clean-local:
 	rm -f $(wildcard *.loT)

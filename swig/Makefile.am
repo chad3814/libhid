@@ -15,7 +15,7 @@ nodist__hid_la_SOURCES = hid_wrap.c
 _hid_la_DEPENDENCIES = ../src/libhid.la
 _hid_la_LDFLAGS = -module
 
-pkgpython_PYTHON = __init__.py
+nodist_pkgpython_PYTHON = __init__.py
 
 __init__.py: hid.py
 	ln -f $< $@
