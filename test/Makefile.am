@@ -1,4 +1,4 @@
-AM_CPPFLAGS = @LIBUSBINCLUDE@ -I../include -I../hidparser
+AM_CPPFLAGS = `libusb-config --cflags` -I../include -I../hidparser
 AM_CFLAGS =
 AM_LDFLAGS =
 

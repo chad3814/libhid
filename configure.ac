@@ -19,7 +19,7 @@ AH_TOP(
 #     if not backward compatible, iface_age = bin_age = 0
 #
 AC_INIT(libhid, 0.1.11.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.11 $)
+AC_REVISION($Revision: 1.12 $)
 
 AM_INIT_AUTOMAKE
 
@@ -130,34 +130,12 @@ else
 fi
 AC_SUBST(BIGENDIAN)
 
-AC_ARG_WITH(usb-prefix, AC_HELP_STRING([--with-usb-prefix=PATH],
-      [specify path to libusb installation ]),
-  [
-    if test -d "$withval/lib"; then
-      LIBUSBLIB="-L${withval}/lib"
-    else
-      LIBUSBLIB="-L${withval}"
-    fi
-
-    if test -d "$withval/include"; then
-      LIBUSBINCLUDE="-I${withval}/include"
-    elif test -d "$withval/../include"; then
-      LIBUSBINCLUDE="-I${withval}/../include"
-    else
-      LIBUSBINCLUDE="-I${withval}"
-    fi
-  ]
-)
-
-AC_SUBST(LIBUSBLIB)
-AC_SUBST(LIBUSBINCLUDE)
-
 saved_CPPFLAGS=$CPPFLAGS
 saved_LDFLAGS=$LDFLAGS
 
 AC_CHECK_HEADERS([usb.h])
-CPPFLAGS="$LIBUSBINCLUDE $CPPFLAGS"
-LDFLAGS="$LIBUSBLIB $LDFLAGS -lusb"
+CPPFLAGS="`libusb-config --cflags` $CPPFLAGS"
+LDFLAGS="`libusb-config --libs` $LDFLAGS"
 
 test "$os_support" = "linux" && {
   AC_MSG_CHECKING(for libusb version)

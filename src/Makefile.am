@@ -1,6 +1,6 @@
 AM_CFLAGS =
-AM_CPPFLAGS = @LIBUSBINCLUDE@ -I../include -I../hidparser
-AM_LDFLAGS = -L. @LIBUSBLIB@ -lusb
+AM_CPPFLAGS = `libusb-config --cflags` -I../include -I../hidparser
+AM_LDFLAGS = -L. `libusb-config --libs`
 
 if LINUX_API
 OS_SUPPORT = linux.c
