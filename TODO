@@ -5,6 +5,30 @@ AQU: Arnaud Quette
 CLE: Charles Lepple
 MKR: Martin Krafft
 
+- [AQU] implement SHUT marshalling (encapsulation)
+    libhid currently only support USB encapsulation
+    through libusb. SHUT simply encaps HID in SHUT frames
+    (MGE serial marshalling). More info about SHUT:
+    - SHUT overview:
+    http://eu2.networkupstools.org/protocols/mge/51029473zaac.pdf
+    - implementation example: nut/mge-shut driver (have a try in verbose
+    mode (-DDDDD) with your MGE Evolution...)
+
+    This implies, for libhid:
+    - to separate marshalling code (usb_*()) and play with function
+    pointers depending on the init param below,
+    - to make an init time param (in HID_new_Interface()? ie
+    HID_new_Interface(int mode) with mode=MODE_USB or MODE_SHUT)
+    that link the device' marshalling to the right one (usb or shut)
+
+    MKR suggested suggested a proper registration architecture (e.g.
+    loadable dlls and function pointers).
+
+    Note that this is not a high priority, but more a wish
+    that I (AQU) would like to see implemented for the newhidups
+    switch to libhid. Moreover, only MGE use SHUT and I've not
+    finished my reflexion about that...
+
 - [AQU] implement unit conversions in src/hid_conversion.c
     two functions will be provided:
       hid_convert_logical_to_physical()
@@ -35,13 +59,16 @@ MKR: Martin Krafft
     libhid, or else we'll have a support nightmare.
 
 - [AQU] investigate interrupt handling (get_input) (aka "dealing with more
-    than the default endpoints")
-    To be able to use the interrupt pipe in libusb, we'll need an entry point
-    in usbdefvs (for linux, don't know for *BSD and Darwin) that doesn't
-    currently exists! I'm currently looking at how to do it. My last finding
-    is that libusb 0.1.8 (only in cvs HEAD for the moment) seems to handle it
-    through generic URB ioctl (for linux). The function is
-    usb_interrupt_read(...) I got to test and validate this point
+    than the default (control/bulk) endpoints")
+    libusb 0.1.8 (only in cvs HEAD for the moment) handles the interrupt
+    pipe through generic URB ioctl (for linux). I'm not sure if it works
+    for other platforms than Linux, as I've only tested on this last!
+
+    The function are: usb_interrupt_*() with *=read/write
+    
+    For more information and code samples, check:
+    http://ailab.ch/pipermail/libhid-discuss/2004-September/000206.html
+    http://ailab.ch/pipermail/libhid-discuss/2004-September/000211.html
 
 - pkg-config
 
