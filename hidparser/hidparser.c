@@ -27,6 +27,7 @@
 
 /* to be implemented for DEBUG purpose */
 /* previously: #define ERROR(x) if(x) __asm { int 3 }; */
+/*!@todo Make this use the ASSERT() macro as found in the rest of libhid */
 #define ERROR(x)
 
 const char ItemSize[4]={0,1,2,4};
@@ -310,8 +311,8 @@ int HIDParse(HIDParser* pParser, HIDData* pData)
 }
 
 /*!
- * Get pData characteristics from pData->Path or from pData->ReportID/Offset
- * Return TRUE if object was found
+ * Get pData characteristics from pData->Path or from pData->ReportID/Offset.
+ * @return TRUE if object was found
  */
 int FindObject(HIDParser* pParser, HIDData* pData)
 {
@@ -341,7 +342,7 @@ int FindObject(HIDParser* pParser, HIDData* pData)
 /*!
  * Extract data from a report stored in Buf.
  * Use Value, Offset, Size and LogMax of pData.
- * Return response in Value.
+ * @return Response in pData->Value.
  */
 void GetValue(const uchar* Buf, HIDData* pData)
 {
@@ -368,7 +369,7 @@ void GetValue(const uchar* Buf, HIDData* pData)
 
 /*!
  * Set a data in a report stored in Buf. Use Value, Offset and Size of pData.
- * Return response in Buf.
+ * @return Response in Buf.
  */
 void SetValue(const HIDData* pData, uchar* Buf)
 {
