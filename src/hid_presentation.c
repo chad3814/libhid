@@ -25,8 +25,8 @@ hid_return hid_write_identification(FILE* const out,
   char buffer[BUFLEN];
   
   fprintf(out, "device identification of HIDInterface %s:\n", hidif->id);
-  fprintf(out, "  dev_handle:    0x%08x\n", (unsigned int)hidif->dev_handle);
-  fprintf(out, "  device:        0x%08x\n", (unsigned int)hidif->device);
+  fprintf(out, "  dev_handle:    0x%08lx\n", (unsigned long)hidif->dev_handle);
+  fprintf(out, "  device:        0x%08lx\n", (unsigned long)hidif->device);
   fprintf(out, "  location:      %s/%s\n",
       hidif->device->bus->dirname, hidif->device->filename);
 

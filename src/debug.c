@@ -34,28 +34,28 @@ struct usb_dev_handle {
 
 void trace_usb_bus(FILE* out, struct usb_bus const* usbbus)
 {
-  fprintf(out, "usb_bus instance at: 0x%08x\n", (unsigned int)usbbus);
+  fprintf(out, "usb_bus instance at: 0x%08lx\n", (unsigned long)usbbus);
   fprintf(out, "  dirname:           %s\n", usbbus->dirname);
-  fprintf(out, "  devices:           0x%08x\n", (unsigned int)usbbus->devices);
-  fprintf(out, "  prev:              0x%08x\n", (unsigned int)usbbus->prev);
-  fprintf(out, "  next:              0x%08x\n", (unsigned int)usbbus->next);
+  fprintf(out, "  devices:           0x%08lx\n", (unsigned long)usbbus->devices);
+  fprintf(out, "  prev:              0x%08lx\n", (unsigned long)usbbus->prev);
+  fprintf(out, "  next:              0x%08lx\n", (unsigned long)usbbus->next);
 }
 
 void trace_usb_device(FILE* out, struct usb_device const* usbdev)
 {
-  fprintf(out, "usb_device instance at: 0x%08x\n", (unsigned int)usbdev);
-  fprintf(out, "  prev:                 0x%08x\n", (unsigned int)usbdev->prev);
-  fprintf(out, "  next:                 0x%08x\n", (unsigned int)usbdev->next);
+  fprintf(out, "usb_device instance at: 0x%08lx\n", (unsigned long)usbdev);
+  fprintf(out, "  prev:                 0x%08lx\n", (unsigned long)usbdev->prev);
+  fprintf(out, "  next:                 0x%08lx\n", (unsigned long)usbdev->next);
   fprintf(out, "  filename:             %s\n", usbdev->filename);
-  fprintf(out, "  bus:                  0x%08x\n", (unsigned int)usbdev->bus);
-  fprintf(out, "  descriptor:           0x%08x\n", (unsigned int)&usbdev->descriptor);
-  fprintf(out, "  config:               0x%08x\n", (unsigned int)usbdev->config);
-  fprintf(out, "  dev:                  0x%08x\n", (unsigned int)usbdev->dev);
+  fprintf(out, "  bus:                  0x%08lx\n", (unsigned long)usbdev->bus);
+  fprintf(out, "  descriptor:           0x%08lx\n", (unsigned long)&usbdev->descriptor);
+  fprintf(out, "  config:               0x%08lx\n", (unsigned long)usbdev->config);
+  fprintf(out, "  dev:                  0x%08lx\n", (unsigned long)usbdev->dev);
 }
 
 void trace_usb_device_descriptor(FILE* out, struct usb_device_descriptor const* descriptor)
 {
-  fprintf(out, "usb_device_descriptor instance at: 0x%08x\n", (unsigned int)descriptor);
+  fprintf(out, "usb_device_descriptor instance at: 0x%08lx\n", (unsigned long)descriptor);
   fprintf(out, "  bLength:                         %d\n", descriptor->bLength);
   fprintf(out, "  bDescriptorType:                 %d\n", descriptor->bDescriptorType); 
   fprintf(out, "  bcdUSB:                          %d\n", descriptor->bcdUSB);
@@ -74,7 +74,7 @@ void trace_usb_device_descriptor(FILE* out, struct usb_device_descriptor const* 
 
 void trace_usb_config_descriptor(FILE* out, struct usb_config_descriptor const* config)
 {
-  fprintf(out, "usb_config_descriptor instance at: 0x%08x\n", (unsigned int)config);
+  fprintf(out, "usb_config_descriptor instance at: 0x%08lx\n", (unsigned long)config);
   fprintf(out, "  bLength:                         %d\n", config->bLength);
   fprintf(out, "  bDescriptorType:                 %d\n", config->bDescriptorType);
   fprintf(out, "  wTotalLength:                    %d\n", config->wTotalLength);
@@ -87,14 +87,14 @@ void trace_usb_config_descriptor(FILE* out, struct usb_config_descriptor const* 
 
 void trace_usb_dev_handle(FILE* out, usb_dev_handle const* usbdev_h)
 {
-  fprintf(out, "usb_dev_handle instance at: 0x%08x\n", (unsigned int)usbdev_h);
+  fprintf(out, "usb_dev_handle instance at: 0x%08lx\n", (unsigned long)usbdev_h);
   fprintf(out, "  fd:                       %d\n", usbdev_h->fd);
-  fprintf(out, "  bus:                      0x%08x\n", (unsigned int)usbdev_h->bus);
-  fprintf(out, "  device:                   0x%08x\n", (unsigned int)usbdev_h->device);
+  fprintf(out, "  bus:                      0x%08lx\n", (unsigned long)usbdev_h->bus);
+  fprintf(out, "  device:                   0x%08lx\n", (unsigned long)usbdev_h->device);
   fprintf(out, "  config:                   %d\n", usbdev_h->config);
   fprintf(out, "  interface:                %d\n", usbdev_h->interface);
   fprintf(out, "  altsetting:               %d\n", usbdev_h->altsetting);
-  fprintf(out, "  impl_info:                0x%08x\n", (unsigned int)usbdev_h->impl_info);
+  fprintf(out, "  impl_info:                0x%08lx\n", (unsigned long)usbdev_h->impl_info);
 }
 
 /* COPYRIGHT --

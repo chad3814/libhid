@@ -1,3 +1,19 @@
+libhid (0.2.9-1) unstable; urgency=low
+
+  * New upstream release (closes: Bug#280555).
+
+ -- martin f. krafft <madduck@debian.org>  Wed, 10 Nov 2004 09:23:02 +0100
+
+libhid (0.2.8-2) unstable; urgency=low
+
+  * Of course, -dev is not supposed to be arch-independent. It never was.
+    I simply forgot to erase the changelog entry.
+  * Also, mysteriously, the changelog entry from 0.2.7-3 got lost, and 0.2.8-1
+    got a medium priority. This is now fixed and a new upload should submit
+    libhid for proper 10-day testing. Sorry.
+
+ -- martin f. krafft <madduck@debian.org>  Tue,  9 Nov 2004 17:09:51 +0100
+
 libhid (0.2.8-1) unstable; urgency=medium
 
   * New upstream version.
@@ -5,7 +21,12 @@ libhid (0.2.8-1) unstable; urgency=medium
     respectively.
   * Made -dev package arch-independent.
 
- -- martin f. krafft <madduck@debian.org>  Fri, 22 Oct 2004 03:32:55 +0200
+ -- martin f. krafft <madduck@debian.org>  Tue,  9 Nov 2004 17:07:51 +0100
+
+libhid (0.2.7-3) unstable; urgency=medium
+
+  * Argh. Forgot to set the urgency to medium since subversion depends on this
+    upload. Memo to self: don't do these things at 3:30 am.
 
 libhid (0.2.7-2) unstable; urgency=low
 

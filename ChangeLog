@@ -1,6 +1,11 @@
 libhid ChangeLog
 ================
 
+2004-11-10  Martin F. Krafft (libhid@pobox.madduck.net)
+
+	- integrated patch by Andreas Jochens <aj@andaco.de> to fix compilation
+		issues on 64bit machines (amd64 specifically). Thanks, Andreas!
+
 2004-11-09  Martin F. Krafft (libhid@pobox.madduck.net)
 
 	- fixed autotools setup to honour CFLAGS on the ./configure and ./autogen.sh
