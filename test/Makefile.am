@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I../include
+AM_CPPFLAGS = @LIBUSBINCLUDE@ -I../include
 AM_CFLAGS =
 AM_LDFLAGS =
 
