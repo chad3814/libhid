@@ -19,7 +19,7 @@ AH_TOP(
 #     if not backward compatible, iface_age = bin_age = 0
 #
 AC_INIT(libhid, 0.1.10.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.7 $)
+AC_REVISION($Revision: 1.8 $)
 
 AM_INIT_AUTOMAKE
 
@@ -161,21 +161,23 @@ AC_CHECK_HEADERS([usb.h])
 CPPFLAGS="$LIBUSBINCLUDE $CPPFLAGS"
 LDFLAGS="$LIBUSBLIB $LDFLAGS -lusb"
 
-AC_MSG_CHECKING(for libusb version)
-AC_LINK_IFELSE(
-  [
-    #include <usb.h>
+test "$os_support" = "linux" && {
+  AC_MSG_CHECKING(for libusb version)
+  AC_LINK_IFELSE(
+    [
+      #include <usb.h>
 
-    int main(void)
-    {
-      usb_dev_handle* dev;
-      usb_detach_kernel_driver_np(dev, 0);
-      return 0;
-    }
-  ],
-  AC_MSG_RESULT(ok (>= 0.1.8beta)),
-  AC_MSG_ERROR(libhid requires libusb version 0.1.8beta or greater)
-)
+      int main(void)
+      {
+        usb_dev_handle* dev;
+        usb_detach_kernel_driver_np(dev, 0);
+        return 0;
+      }
+    ],
+    AC_MSG_RESULT(ok (>= 0.1.8beta)),
+    AC_MSG_ERROR(libhid requires libusb version 0.1.8beta or greater)
+  )
+}
 
 CPPFLAGS=$saved_CPPFLAGS
 LDFLAGS=$saved_LDFLAGS
