@@ -15,7 +15,7 @@ DOXY_SOURCES = \
 	$(wildcard ../hidparser/*.[ch]) \
 	$(wildcard *.dox)
 
-.stamp_doxygen: $(DOXY_SOURCES)
+.stamp_doxygen: $(DOXY_SOURCES) doxygen.rc
 	doxygen doxygen.rc
 	@touch $@
 
