@@ -6,7 +6,6 @@
 
 #include <debug.h>
 #include <assert.h>
-#include <macros.h>
 
 enum USBMatchFlags {
   USB_MATCH_NONE = 0x0,
@@ -19,12 +18,12 @@ enum USBMatchFlags {
 static unsigned int hid_compare_usb_device(struct usb_dev_handle const* dev_h,
     HIDInterfaceMatcher const* const match)
 {
-  ASSERT(hid_is_initialised());
   ASSERT(dev_h);
   ASSERT(match);
 
-  TRACE("comparing match specifications to USB device...");
   unsigned int ret = USB_MATCH_NONE;
+
+  TRACE("comparing match specifications to USB device...");
 
   struct usb_device const* dev = usb_device((usb_dev_handle*)dev_h);
   
@@ -63,7 +62,6 @@ static unsigned int hid_compare_usb_device(struct usb_dev_handle const* dev_h,
 static hid_return hid_find_usb_device(HIDInterface* const hidif,
     HIDInterfaceMatcher const* const match)
 {
-  ASSERT(hid_is_initialised());
   ASSERT(!hid_is_opened(hidif));
   ASSERT(match);
 
@@ -75,60 +73,56 @@ static hid_return hid_find_usb_device(HIDInterface* const hidif,
 
   TRACE("enumerating USB busses...");
   for (; usbbus; usbbus = usbbus->next) {
-    TRACE("enumerating USB devices on bus %s...", usbbus->dirname);
-    //trace_usb_bus(stderr, usbbus);
-    for (usbdev = usbbus->devices; usbdev; usbdev=usbdev->next) {
-      //trace_usb_device(stderr, usbdev);
 
-      TRACE("inspecting USB device %s/%s...", usbbus->dirname, usbdev->filename);
+    TRACE("enumerating USB devices on bus %s...", usbbus->dirname);
+    for (usbdev = usbbus->devices; usbdev; usbdev=usbdev->next) {
+
+      snprintf(hidif->id, sizeof(hidif->id), "%s/%s[%d]",
+          usbbus->dirname, usbdev->filename, hidif->interface);
+
+      TRACE("inspecting USB device %s...", hidif->id);
       usb_dev_handle *usbdev_h = usb_open(usbdev);
 
       if (usbdev_h) {
+        usb_claim_interface(usbdev_h, hidif->interface);
+
         unsigned int flags = hid_compare_usb_device(usbdev_h, match);
         if (flags == USB_MATCH_ALL) {
-          /* WARNING: are we sure we want to give out pointers to outside the
-           * library? this strikes me as horrible, but maybe their scope is
-           * long enough...
-           */
-          NOTICE("found a matching USB device on %s/%s.",
-              usbbus->dirname, usbdev->filename);
+          NOTICE("found a matching USB device %s.", hidif->id);
           hidif->dev_handle = usbdev_h;
           hidif->device = usb_device(usbdev_h);
           return HID_RET_SUCCESS;
         }
 
         if (!(flags & USB_MATCH_VENDOR)) {
-          NOTICE("vendor 0x%04x of USB device on %s/%s does not match 0x%04x.",
-             usbdev->descriptor.idVendor, usbbus->dirname, usbdev->filename,
-             match->vendor_id);
+          NOTICE("vendor 0x%04x of USB device %s does not match 0x%04x.",
+             usbdev->descriptor.idVendor, hidif->id, match->vendor_id);
         }
         else if (!(flags & USB_MATCH_PRODUCT)) {
-          NOTICE("product 0x%04x of USB device on %s/%s does not match 0x%04x.",
-             usbdev->descriptor.idProduct, usbbus->dirname, usbdev->filename,
-             match->product_id);
+          NOTICE("product 0x%04x of USB device %s does not match 0x%04x.",
+             usbdev->descriptor.idProduct, hidif->id, match->product_id);
         }
         else if (!(flags & USB_MATCH_CUSTOM)) {
-          NOTICE("custom matching function returned false on %s/%s.",
-              usbbus->dirname, usbdev->filename);
+          NOTICE("custom matching function returned false on %s.", hidif->id);
         }
+        //usb_release_interface(usbdev_h, hidif->interface);
         usb_close(usbdev_h);
       }
       else {
-        ERROR("failed to open USB device on %s/%s",
-            usbbus->dirname, usbdev->filename);
+        ERROR("failed to open USB device %s", hidif->id);
         return HID_RET_FAIL_OPEN_DEVICE;
       }
     }
   }
   WARNING("no matching USB device found.");
-  return HID_RET_NOT_FOUND;
+  return HID_RET_DEVICE_NOT_FOUND;
 }
 
 static hid_return hid_get_usb_handle(HIDInterface* const hidif,
     HIDInterfaceMatcher const* const match)
 {
-  ASSERT(hid_is_initialised());
   ASSERT(!hid_is_opened(hidif));
+  ASSERT(match);
 
   TRACE("acquiring handle for a USB device...");
   
@@ -143,110 +137,123 @@ static hid_return hid_get_usb_handle(HIDInterface* const hidif,
 }
 
 hid_return hid_open(HIDInterface* const hidif, int const interface,
-    HIDInterfaceMatcher const* const match)
+    HIDInterfaceMatcher const* const matcher)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(!hid_is_opened(hidif));
+  if (!hid_is_initialised()) {
+    ERROR("cannot open HIDInterface when HID library has not been initialised.");
+    return HID_RET_NOT_INITIALISED;
+  }
 
-  if (!hidif) return HID_RET_INVALID_INTERFACE;
+  if (!hidif) {
+    ERROR("cannot open NULL HIDInterface.");
+    return HID_RET_INVALID_PARAMETER;
+  }
 
-  TRACE("opening a device interface according to matching criteria...");
-  hid_return ret = hid_get_usb_handle(hidif, match);
-  if (ret != HID_RET_SUCCESS) return ret;
+  if (hid_is_opened(hidif)) {
+    ERROR("cannot open already opened HIDInterface.");
+    return HID_RET_DEVICE_ALREADY_OPENED;
+  }
+
+  if (!matcher) {
+    ERROR("cannot match against NULL HIDInterfaceMatcher.");
+    return HID_RET_INVALID_PARAMETER;
+  }
 
   hidif->interface = interface;
 
-  TRACE("claiming " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  TRACE("opening a device interface according to matching criteria...");
+  hid_return ret = hid_get_usb_handle(hidif, matcher);
+  if (ret != HID_RET_SUCCESS) return ret;
+
+  TRACE("claiming USB device %s.", hidif->id);
   if (usb_claim_interface(hidif->dev_handle, interface) < 0) {
-    WARNING("failed to claim " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    WARNING("failed to claim USB device %s.", hidif->id);
     hid_close(hidif);
     return HID_RET_FAIL_CLAIM_IFACE;
   }
-  NOTICE("successfully claimed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-  
-  /* TODO: what's this anyway?
-   * if (usb_set_altinterface(hidif->dev_handle, interface) < 0)
-   * return HID_RET_FAIL_SET_ALTIFACE;
-   */
+  NOTICE("successfully claimed USB device %s.", hidif->id);
 
   hid_prepare_interface(hidif);
 
-  NOTICE("successfully opened " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-
+  NOTICE("successfully opened USB device %s.", hidif->id);
   return HID_RET_SUCCESS;
 }
 
 hid_return hid_force_open(HIDInterface* const hidif, int const interface,
-    HIDInterfaceMatcher const* const match, unsigned short retries)
+    HIDInterfaceMatcher const* const matcher, unsigned short retries)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(!hid_is_opened(hidif));
+  if (!hid_is_initialised()) {
+    ERROR("cannot open HIDInterface when HID library has not been initialised.");
+    return HID_RET_NOT_INITIALISED;
+  }
 
-  if (!hidif) return HID_RET_INVALID_INTERFACE;
+  if (!hidif) {
+    ERROR("cannot open NULL HIDInterface.");
+    return HID_RET_INVALID_PARAMETER;
+  }
 
-  TRACE("forcefully opening a device interface "
-        "according to matching criteria...");
-  hid_return ret = hid_get_usb_handle(hidif, match);
-  if (ret != HID_RET_SUCCESS) return ret;
+  if (hid_is_opened(hidif)) {
+    ERROR("cannot open already opened HIDInterface.");
+    return HID_RET_DEVICE_ALREADY_OPENED;
+  }
+
+  if (!matcher) {
+    ERROR("cannot match against NULL HIDInterfaceMatcher.");
+    return HID_RET_INVALID_PARAMETER;
+  }
 
   hidif->interface = interface;
 
-  TRACE("claiming " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-  ret = hid_os_force_claim(hidif, interface, match, retries);
+  TRACE("forcefully opening a device interface "
+        "according to matching criteria...");
+  hid_return ret = hid_get_usb_handle(hidif, matcher);
+  if (ret != HID_RET_SUCCESS) return ret;
+
+  TRACE("claiming USB device %s.", hidif->id);
+  ret = hid_os_force_claim(hidif, interface, matcher, retries);
   if (ret != HID_RET_SUCCESS) {
-    WARNING("failed to claim " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    WARNING("failed to claim USB device %s.", hidif->id);
     hid_close(hidif);
     return ret;
   }
-
-  NOTICE("successfully claimed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully claimed USB device %s.", hidif->id);
  
-  /* TODO: what's this anyway?
-   * if (usb_set_altinterface(hidif->dev_handle, 0) < 0)
-   * return HID_RET_FAIL_SET_ALTIFACE;
-   */
-
   hid_prepare_interface(hidif);
 
-  NOTICE("successfully opened " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-
+  NOTICE("successfully opened USB device %s.", hidif->id);
   return HID_RET_SUCCESS;
 }
 
 hid_return hid_close(HIDInterface* const hidif)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(hid_is_opened(hidif));
-
-  if (!hidif) return HID_RET_INVALID_INTERFACE;
-
   int ret;
 
-  TRACE("closing " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("closing USB device %s...", hidif->id);
 
   if (hid_is_opened(hidif)) {
 
     hid_reset_parser(hidif);
-    //usb_reset(hidif->dev_handle);
     
-    /*TRACE("releasing " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+#if 0
+    TRACE("releasing USB device %s...", hidif->id);
     if (usb_release_interface(hidif->dev_handle, hidif->interface) < 0)
-      WARNING("failed to release " TRACEDEVICESTR ".", TRACEDEVICEARGS);*/
+      WARNING("failed to release USB device %s.", hidif->id);
+#endif
 
-    TRACE("closing handle of " TRACEDEVICESTR "...", TRACEDEVICEARGS);
-    ret = usb_close(hidif->dev_handle);
-    if (ret < 0) {
-      WARNING("failed to close " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    TRACE("closing handle of USB device %s...", hidif->id);
+    if ((ret = usb_close(hidif->dev_handle)) < 0) {
+      WARNING("failed to close USB device %s.", hidif->id);
+    }
+    else {
+      NOTICE("successfully closed USB device %s.", hidif->id);
     }
   }
+  else WARNING("attempt to close unopened HIDInterface.");
 
   TRACE("freeing memory allocated for HID parser...");
   if(hidif->hid_parser) free(hidif->hid_parser);
   if(hidif->hid_data) free(hidif->hid_data);
     
-  if (ret == 0)
-    NOTICE("successfully closed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-
   TRACE("resetting HIDInterface...");
   hid_reset_HIDInterface(hidif);
 
@@ -257,6 +264,6 @@ hid_return hid_close(HIDInterface* const hidif)
 
 bool hid_is_opened(HIDInterface const* hidif)
 {
-  ASSERT(hidif);
+  if (!hidif) WARNING("attempt to query open status of NULL HIDInterface.");
   return hidif && hidif->dev_handle != NULL;
 }

@@ -5,20 +5,20 @@
 
 #include <debug.h>
 #include <assert.h>
-#include <macros.h>
 
 hid_return hid_write_identification(FILE* const out,
     HIDInterface const* const hidif)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(hid_is_opened(hidif));
-  ASSERT(out);
-
   if (!hid_is_opened(hidif)) {
-    WARNING("the device has not been opened.");
-    return HID_RET_NOT_OPENED;
+    ERROR("cannot write identification of unopened HIDinterface.");
+    return HID_RET_DEVICE_NOT_OPENED;
   }
 
+  if (!out) {
+    ERROR("cannot write HIDinterface identification to NULL output stream.");
+    return HID_RET_INVALID_PARAMETER;
+  }
+  
   int len;
   unsigned short const BUFLEN = 256;
   char buffer[BUFLEN];
@@ -64,18 +64,19 @@ hid_return hid_write_identification(FILE* const out,
 
 hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(hid_is_opened(hidif));
-  ASSERT(out);
-
   if (!hid_is_opened(hidif)) {
-    WARNING("the device has not been opened.");
-    return HID_RET_NOT_OPENED;
+    ERROR("cannot dump tree of unopened HIDinterface.");
+    return HID_RET_DEVICE_NOT_OPENED;
   }
 
+  if (!out) {
+    ERROR("cannot dump HIDinterface tree to NULL output stream.");
+    return HID_RET_INVALID_PARAMETER;
+  }
+  
   hid_reset_parser(hidif);
   
-  TRACE("iterating the parse tree for " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("iterating the parse tree for USB device %s...", hidif->id);
       
   unsigned int i = 0;
 

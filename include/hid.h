@@ -19,27 +19,30 @@
 
 typedef enum hid_return {
   HID_RET_SUCCESS = 0,
+  HID_RET_INVALID_PARAMETER,
+  HID_RET_NOT_INITIALISED,
+  HID_RET_ALREADY_INITIALISED,
   HID_RET_FAIL_FIND_BUSSES,
   HID_RET_FAIL_FIND_DEVICES,
-  HID_RET_INVALID_INTERFACE,
-  HID_RET_INVALID_PARAMETER,
   HID_RET_FAIL_OPEN_DEVICE,
+  HID_RET_DEVICE_NOT_FOUND,
+  HID_RET_DEVICE_NOT_OPENED,
+  HID_RET_DEVICE_ALREADY_OPENED,
   HID_RET_FAIL_CLOSE_DEVICE,
-  HID_RET_NOT_OPENED,
-  HID_RET_NOT_INITIALISED,
-  HID_RET_NOT_FOUND,
-  HID_RET_FAIL_SET_ALTIFACE,
+  //HID_RET_INVALID_INTERFACE,
+  //HID_RET_FAIL_SET_ALTIFACE,
   HID_RET_FAIL_CLAIM_IFACE,
   HID_RET_FAIL_DETACH_DRIVER,
   HID_RET_NOT_HID_DEVICE,
   HID_RET_HID_DESC_SHORT,
   HID_RET_REPORT_DESC_SHORT,
   HID_RET_REPORT_DESC_LONG,
-  HID_RET_REPORT_SHORT,
+  //HID_RET_REPORT_SHORT,
   HID_RET_FAIL_ALLOC,
   HID_RET_OUT_OF_SPACE,
   HID_RET_FAIL_SET_REPORT,
   HID_RET_FAIL_GET_REPORT,
+  HID_RET_NOT_FOUND,
   HID_RET_UNKNOWN_FAILURE
 } hid_return;
 
@@ -49,6 +52,7 @@ typedef struct HIDInterface_t {
   struct usb_dev_handle *dev_handle;
   struct usb_device *device;
   int interface;
+  char id[16];
   HIDData* hid_data;
   HIDParser* hid_parser;
 } HIDInterface;
@@ -81,7 +85,9 @@ void hid_set_debug(HIDDebugLevel const level);
 void hid_set_debug_stream(FILE* const outstream);
 void hid_set_usb_debug(int const level);
 
-HIDInterface hid_new_HIDInterface();
+HIDInterface* hid_new_HIDInterface();
+
+void hid_delete_HIDInterface(HIDInterface** const hidif);
 
 void hid_reset_HIDInterface(HIDInterface* const hidif);
 
@@ -92,9 +98,9 @@ hid_return hid_cleanup();
 bool hid_is_initialised();
 
 hid_return hid_open(HIDInterface* const hidif, int const interface,
-    HIDInterfaceMatcher const* const match);
+    HIDInterfaceMatcher const* const matcher);
 hid_return hid_force_open(HIDInterface* const hidif, int const interface,
-    HIDInterfaceMatcher const* const match, unsigned short retries);
+    HIDInterfaceMatcher const* const matcher, unsigned short retries);
 
 hid_return hid_close(HIDInterface* const hidif);
 

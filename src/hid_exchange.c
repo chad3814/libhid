@@ -4,7 +4,6 @@
 #include <hid_helpers.h>
 #include <os.h>
 #include <constants.h>
-#include <macros.h>
 
 #include <debug.h>
 #include <assert.h>
@@ -20,10 +19,10 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
 
   if (!hid_is_opened(hidif)) {
     WARNING("the device has not been opened.");
-    return HID_RET_NOT_OPENED;
+    return HID_RET_DEVICE_NOT_OPENED;
   }
 
-  TRACE("retrieving report from " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("retrieving report from USB device %s...", hidif->id);
   hidif->hid_data->Type = ITEM_INPUT;
   hidif->hid_data->ReportID = 0;
 
@@ -37,18 +36,17 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
       buffer, size, USB_TIMEOUT);
 
   if (len < 0) {
-    WARNING("failed to retrieve report from " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    WARNING("failed to retrieve report from USB device %s.", hidif->id);
     return HID_RET_FAIL_GET_REPORT;
   }
 
   if (len != size) {
-    WARNING("failed to retrieve complete report to " TRACEDEVICESTR
-        "; requested: %d bytes, got: %d bytes.", TRACEDEVICEARGS, 
-        size, len);
+    WARNING("failed to retrieve complete report to USB device %s; "
+        "requested: %d bytes, got: %d bytes.", hidif->id, size, len);
     return HID_RET_FAIL_GET_REPORT;
   }
 
-  NOTICE("successfully retrieved report from " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully retrieved report from USB device %s.", hidif->id);
   return HID_RET_SUCCESS;
 }
 
@@ -63,10 +61,10 @@ hid_return hid_set_output_report(HIDInterface* const hidif, int const path[],
 
   if (!hid_is_opened(hidif)) {
     WARNING("the device has not been opened.");
-    return HID_RET_NOT_OPENED;
+    return HID_RET_DEVICE_NOT_OPENED;
   }
 
-  TRACE("sending report to " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("sending report to USB device %s...", hidif->id);
   hidif->hid_data->Type = ITEM_OUTPUT;
   hidif->hid_data->ReportID = 0;
 
@@ -77,21 +75,21 @@ hid_return hid_set_output_report(HIDInterface* const hidif, int const path[],
       HID_REPORT_SET,
       hidif->hid_data->ReportID + (HID_RT_OUTPUT << 8),
       hidif->interface,
-      buffer, size, USB_TIMEOUT);
+      (char*)buffer, size, USB_TIMEOUT);
 
   if (len < 0) {
-    WARNING("failed to send report to " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    WARNING("failed to send report to USB device %s.", hidif->id);
     return HID_RET_FAIL_SET_REPORT;
   }
 
   if (len != size) {
-    WARNING("failed to send complete report to " TRACEDEVICESTR
-        "; requested: %d bytes, sent: %d bytes.", TRACEDEVICEARGS, 
+    WARNING("failed to send complete report to USB device %s; "
+        "requested: %d bytes, sent: %d bytes.", hidif->id, 
         size, len);
     return HID_RET_FAIL_SET_REPORT;
   }
 
-  NOTICE("successfully sent report to " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully sent report to USB device %s.", hidif->id);
   return HID_RET_SUCCESS;
 }
 
@@ -106,10 +104,10 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
 
   if (!hid_is_opened(hidif)) {
     WARNING("the device has not been opened.");
-    return HID_RET_NOT_OPENED;
+    return HID_RET_DEVICE_NOT_OPENED;
   }
 
-  TRACE("retrieving report from " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("retrieving report from USB device %s...", hidif->id);
   hidif->hid_data->Type = ITEM_FEATURE;
   hidif->hid_data->ReportID = 0;
 
@@ -126,13 +124,13 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
       buffer, size, USB_TIMEOUT);
 
   if (len < 0) {
-    WARNING("failed to retrieve report from " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    WARNING("failed to retrieve report from USB device %s.", hidif->id);
     return HID_RET_FAIL_GET_REPORT;
   }
 
   if (len != size) {
-    WARNING("failed to retrieve complete report to " TRACEDEVICESTR
-        "; requested: %d bytes, got: %d bytes.", TRACEDEVICEARGS, 
+    WARNING("failed to retrieve complete report to USB device %s; "
+        "requested: %d bytes, got: %d bytes.", hidif->id, 
         size, len);
     return HID_RET_FAIL_GET_REPORT;
   }
@@ -141,7 +139,7 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
     return HID_RET_FAIL_GET_REPORT;
   }
 
-  NOTICE("successfully retrieved report from " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully retrieved report from USB device %s.", hidif->id);
   return HID_RET_SUCCESS;
 }
 

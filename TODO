@@ -57,6 +57,10 @@ MKR: Martin Krafft
 
 - [MKR] Debian integration
 
+- [MKR] export of USB_TIMEOUT parameter
+
+- [MKR] claim interface before matching device
+
 [done 2004.02.11] [MKR] CVS commit mails
 
 [done 2004.02.11] [MKR] libhid-config

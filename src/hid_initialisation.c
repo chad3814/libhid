@@ -13,6 +13,40 @@
  */
 static bool initialised = false;
 
+HIDInterface* hid_new_HIDInterface()
+{
+  TRACE("creating a new HIDInterface instance...");
+
+  HIDInterface* ret = (HIDInterface*)malloc(sizeof(HIDInterface));
+  if (!ret) {
+    ERROR("could not allocate memory for HIDInterface instance.");
+    return 0;
+  }
+
+  hid_reset_HIDInterface(ret);
+  return ret;
+}
+
+void hid_delete_HIDInterface(HIDInterface** const ixs)
+{
+  if (!ixs || !*ixs) {
+    ERROR("cannot delete NULL HIDInterface.");
+    return;
+  }
+
+  free(*ixs);
+  *ixs = 0;
+}
+
+void hid_reset_HIDInterface(HIDInterface* const hidif)
+{
+  hidif->dev_handle = NULL;
+  hidif->device = NULL;
+  hidif->interface = -1;
+  hidif->hid_data = NULL;
+  hidif->hid_parser = NULL;
+}
+
 /*!@brief Initialize libhid: scan for USB busses and devices using libusb.
  *
  * Call this routine before making any other libhid calls.
@@ -21,7 +55,10 @@ static bool initialised = false;
  */
 hid_return hid_init()
 {
-  ASSERT(!hid_is_initialised());
+  if (hid_is_initialised()) {
+    ERROR("cannot initialised already initialised HID library");
+    return HID_RET_ALREADY_INITIALISED;
+  }
   
   TRACE("initialising USB subsystem...");
   usb_init();
@@ -39,8 +76,8 @@ hid_return hid_init()
   }
 
   initialised = true;
-  NOTICE("successfully initialised HID library.");
 
+  NOTICE("successfully initialised HID library.");
   return HID_RET_SUCCESS;
 }
 
@@ -48,7 +85,10 @@ hid_return hid_init()
  */
 hid_return hid_cleanup()
 {
-  ASSERT(hid_is_initialised());
+  if (!hid_is_initialised()) {
+    ERROR("cannot cleanup uninitialised HID library.");
+    return HID_RET_NOT_INITIALISED;
+  }
 
   initialised = false;
   NOTICE("successfully deinitialised HID library.");
@@ -61,21 +101,4 @@ hid_return hid_cleanup()
 bool hid_is_initialised()
 {
   return initialised;
-}
-
-HIDInterface hid_new_HIDInterface()
-{
-  TRACE("creating a new HIDInterface instance...");
-  HIDInterface ret;
-  hid_reset_HIDInterface(&ret);
-  return ret;
-}
-
-void hid_reset_HIDInterface(HIDInterface* const hidif)
-{
-  hidif->dev_handle = NULL;
-  hidif->device = NULL;
-  hidif->interface = -1;
-  hidif->hid_data = NULL;
-  hidif->hid_parser = NULL;
 }

@@ -3,17 +3,6 @@
 #include <debug.h>
 #include <assert.h>
 
-/* NOTE: included from libusb/usbi.h. UGLY, i know, but so is libusb! */
-struct usb_dev_handle {
-  int fd;
-  struct usb_bus *bus;
-  struct usb_device *device;
-  int config;
-  int interface;
-  int altsetting;
-  void *impl_info;
-};
-
 HIDDebugLevel hid_debug_level = HID_DEBUG_NONE;
 FILE* hid_debug_stream = NULL;
 
@@ -31,6 +20,17 @@ void hid_set_usb_debug(int const level)
 {
   usb_set_debug(level);
 }
+
+/* NOTE: included from libusb/usbi.h. UGLY, i know, but so is libusb! */
+struct usb_dev_handle {
+  int fd;
+  struct usb_bus *bus;
+  struct usb_device *device;
+  int config;
+  int interface;
+  int altsetting;
+  void *impl_info;
+};
 
 void trace_usb_bus(FILE* out, struct usb_bus const* usbbus)
 {

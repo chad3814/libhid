@@ -5,20 +5,17 @@
 
 #include <debug.h>
 #include <assert.h>
-#include <macros.h>
 
 static void hid_prepare_parse_path(HIDInterface* const hidif,
     int const path[], unsigned int const depth)
 {
-  ASSERT(hid_is_initialised());
   ASSERT(hid_is_opened(hidif));
   ASSERT(hidif->hid_data);
-  ASSERT(path);
 
   unsigned int i = 0;
 
-  TRACE("preparing search path of depth %d for parse tree of "
-      TRACEDEVICESTR "...", depth, TRACEDEVICEARGS);
+  TRACE("preparing search path of depth %d for parse tree of USB device %s...",
+      depth, hidif->id);
   for (; i < depth; ++i) {
     hidif->hid_data->Path.Node[i].UPage = path[i] >> 16;
     hidif->hid_data->Path.Node[i].Usage = path[i] & 0x0000ffff;
@@ -26,17 +23,20 @@ static void hid_prepare_parse_path(HIDInterface* const hidif,
 
   hidif->hid_data->Path.Size = depth;
 
-  TRACE("search path prepared for parse tree of "
-      TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  TRACE("search path prepared for parse tree of USB device %s.", hidif->id);
 }
 
 hid_return hid_init_parser(HIDInterface* const hidif)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(hid_is_opened(hidif));
+  if (!hid_is_opened(hidif)) {
+    ERROR("cannot initialise parser of unopened HIDinterface.");
+    return HID_RET_DEVICE_NOT_OPENED;
+  }
+  
+  ASSERT(!hidif->hid_parser);
+  ASSERT(!hidif->hid_data);
 
-  TRACE("initialising the HID parser for "
-      TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("initialising the HID parser for USB Device %s...", hidif->id);
 
   TRACE("allocating space for HIDData structure...");
   hidif->hid_data = (HIDData*)malloc(sizeof(HIDData));
@@ -54,20 +54,21 @@ hid_return hid_init_parser(HIDInterface* const hidif)
   }
   TRACE("successfully allocated memory for HIDParser strcture.");
 
-  NOTICE("successfully initialised the HID parser for "
-      TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully initialised the HID parser for USB Device %s.",
+      hidif->id);
   
   return HID_RET_SUCCESS;
 }
 
 hid_return hid_prepare_parser(HIDInterface* const hidif)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(hid_is_opened(hidif));
+  if (!hid_is_opened(hidif)) {
+    ERROR("cannot prepare parser of unopened HIDinterface.");
+    return HID_RET_DEVICE_NOT_OPENED;
+  }
   ASSERT(hidif->hid_parser);
-  ASSERT(hidif->hid_data);
   
-  TRACE("setting up the HID parser for " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("setting up the HID parser for USB device %s...", hidif->id);
 
   hid_reset_parser(hidif);
 
@@ -89,38 +90,36 @@ hid_return hid_prepare_parser(HIDInterface* const hidif)
   }
   
   /* TODO: the return value here should be used, no? */
-  TRACE("parsing the HID tree of " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("parsing the HID tree of USB device %s...", hidif->id);
   HIDParse(hidif->hid_parser, hidif->hid_data);
 
-  NOTICE("successfully set up the HID parser for "
-      TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully set up the HID parser for USB device %s.", hidif->id);
 
   return HID_RET_SUCCESS;
 }
 
 void hid_reset_parser(HIDInterface* const hidif)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(hid_is_opened(hidif));
-  ASSERT(hidif->hid_parser);
-
   if (!hid_is_opened(hidif)) {
-    WARNING("the device has not been opened.");
+    ERROR("cannot prepare parser of unopened HIDinterface.");
     return;
   }
-
-  if (!hidif->hid_parser) {
-    WARNING("the HID parser has not been initialised.");
-    return;
-  }
-
-  TRACE("resetting the HID parser for " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  ASSERT(hidif->hid_parser);
+  
+  TRACE("resetting the HID parser for USB device %s...", hidif->id);
   ResetParser(hidif->hid_parser);
 }
 
 hid_return hid_find_object(HIDInterface* const hidif,
     int const path[], unsigned int const depth)
 {
+  if (!hid_is_opened(hidif)) {
+    ERROR("cannot prepare parser of unopened HIDinterface.");
+    return HID_RET_DEVICE_NOT_OPENED;
+  }
+  ASSERT(hidif->hid_parser);
+  ASSERT(hidif->hid_data);
+  
   hid_prepare_parse_path(hidif, path, depth);
 
   if (FindObject(hidif->hid_parser, hidif->hid_data) == 1) {
@@ -140,6 +139,23 @@ hid_return hid_find_object(HIDInterface* const hidif,
 hid_return hid_extract_value(HIDInterface* const hidif,
     unsigned char *const buffer, double *const value)
 {
+  if (!hid_is_opened(hidif)) {
+    ERROR("cannot extract value from unopened HIDinterface.");
+    return HID_RET_DEVICE_NOT_OPENED;
+  }
+  ASSERT(hidif->hid_parser);
+  ASSERT(hidif->hid_data);
+
+  if (!buffer) {
+    ERROR("cannot extract value into NULL raw buffer.");
+    return HID_RET_INVALID_PARAMETER;
+  }
+
+  if (!value) {
+    ERROR("cannot extract value into NULL value buffer.");
+    return HID_RET_INVALID_PARAMETER;
+  }
+  
   TRACE("extracting data value...");
 
   /* Extract the data value */
@@ -155,23 +171,20 @@ hid_return hid_get_report_size(HIDInterface* const hidif,
     unsigned int const reportID, unsigned int const reportType,
     unsigned int *size)
 {
-  ASSERT(hid_is_initialised());
-  ASSERT(hid_is_opened(hidif));
-  ASSERT(hidif->hid_parser);
-
   if (!hid_is_opened(hidif)) {
-    WARNING("the device has not been opened.");
-    return HID_RET_NOT_OPENED;
+    ERROR("cannot get report size of unopened HIDinterface.");
+    return HID_RET_DEVICE_NOT_OPENED;
   }
-
-  if (!hidif->hid_parser) {
-    WARNING("the HID parser has not been initialised.");
-    return HID_RET_NOT_INITIALISED;
+  ASSERT(hidif->hid_parser);
+  ASSERT(hidif->hid_data);
+  
+  if (!size) {
+    ERROR("cannot read report size into NULL size buffer.");
+    return HID_RET_INVALID_PARAMETER;
   }
-
+  
   /* FIXME: GetReportOffset has to be rewritten! */
-  size = *GetReportOffset(hidif->hid_parser,
-			  reportID, reportType);
+  *size = *GetReportOffset(hidif->hid_parser, reportID, reportType);
 	
   return HID_RET_SUCCESS;
 }
@@ -179,6 +192,11 @@ hid_return hid_get_report_size(HIDInterface* const hidif,
 hid_return hid_format_path(char* const buffer, unsigned int length,
     int const path[], unsigned int const depth)
 {
+  if (!buffer) {
+    ERROR("cannot format path into NULL buffer.");
+    return HID_RET_INVALID_PARAMETER;
+  }
+
   byte const ITEMSIZE = sizeof("0xdeadbeef");
   unsigned int i = 0;
 

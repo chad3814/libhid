@@ -18,8 +18,8 @@ AH_TOP(
 #     if functions were added, iface_age = 0
 #     if not backward compatible, iface_age = bin_age = 0
 #
-AC_INIT(libhid, 0.1.10.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.10 $)
+AC_INIT(libhid, 0.1.11.0.0, libhid@lists.ailab.ch)
+AC_REVISION($Revision: 1.11 $)
 
 AM_INIT_AUTOMAKE
 

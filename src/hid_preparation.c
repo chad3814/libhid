@@ -6,16 +6,13 @@
 
 #include <debug.h>
 #include <assert.h>
-#include <macros.h>
 
 static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
 {
-  ASSERT(hid_is_initialised());
   ASSERT(hid_is_opened(hidif));
   ASSERT(hidif->hid_parser);
 
-  TRACE("initialising the HID descriptor for "
-      TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("initialising the HID descriptor for USB device %s...", hidif->id);
 
   /* TODO: BUFLEN seems to depend on the device, so we need to do something
    * about the following.
@@ -23,8 +20,7 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
   byte const BUFLEN = 9;
   byte buffer[BUFLEN];
   
-  TRACE("retrieving HID descriptor for "
-      TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("retrieving HID descriptor for USB device %s...", hidif->id);
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN+1,
       USB_REQ_GET_DESCRIPTOR,
@@ -33,14 +29,13 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
       USB_TIMEOUT);
 
   if (len < 0) {
-    WARNING("failed to get HID descriptor for " 
-        TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    WARNING("failed to get HID descriptor for USB device %s", hidif->id);
     return HID_RET_NOT_HID_DEVICE;
   }
 
   if (len < BUFLEN) {
-    WARNING("HID descriptor for " TRACEDEVICESTR " is too short; "
-        "expected: %d bytes; got: %d bytes.\n", TRACEDEVICEARGS, BUFLEN, len);
+    WARNING("HID descriptor for USB device %s is too short; "
+        "expected: %d bytes; got: %d bytes.\n", hidif->id, BUFLEN, len);
     return HID_RET_HID_DESC_SHORT;
   }
 
@@ -49,30 +44,28 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
    */
   hidif->hid_parser->ReportDescSize = buffer[7] | (buffer[8] << 8);
 
-  NOTICE("successfully initialised HID descriptor for "
-      TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully initialised HID descriptor for USB device %s.",
+      hidif->id);
 
   return HID_RET_SUCCESS;
 }
 
 static hid_return hid_prepare_report_descriptor(HIDInterface* const hidif)
 {
-  ASSERT(hid_is_initialised());
   ASSERT(hid_is_opened(hidif));
   ASSERT(hidif->hid_parser);
 
-  TRACE("initialising the report descriptor for "
-      TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("initialising the report descriptor for USB device %s...", hidif->id);
 
   if (hidif->hid_parser->ReportDescSize > REPORT_DSC_SIZE) {
-    ERROR("report descriptor size for " TRACEDEVICESTR
-          " exceeds maximum size: %d > %d.\n", TRACEDEVICEARGS,
-          hidif->hid_parser->ReportDescSize, REPORT_DSC_SIZE);
+    ERROR("report descriptor size for USB device %s exceeds maximum size: "
+        "%d > %d.\n", hidif->id, hidif->hid_parser->ReportDescSize,
+        REPORT_DSC_SIZE);
+
     return HID_RET_REPORT_DESC_LONG;
   }
 
-  TRACE("retrieving report descriptor for "
-      TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("retrieving report descriptor for USB device %s...", hidif->id);
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN+1,
       USB_REQ_GET_DESCRIPTOR,
@@ -81,26 +74,30 @@ static hid_return hid_prepare_report_descriptor(HIDInterface* const hidif)
       USB_TIMEOUT);
 
   if (len < 0) {
-    WARNING("failed to get report descriptor for "
-        TRACEDEVICESTR "...", TRACEDEVICEARGS);
+    WARNING("failed to get report descriptor for USB device %s...", hidif->id);
     return HID_RET_FAIL_GET_REPORT;
   }
 
   if (len < hidif->hid_parser->ReportDescSize) {
-    WARNING("HID descriptor for " TRACEDEVICESTR " is too short; "
-        "expected: %d bytes; got: %d bytes.\n", TRACEDEVICEARGS,
+    WARNING("HID descriptor for USB device %s is too short; "
+        "expected: %d bytes; got: %d bytes.\n", hidif->id,
         hidif->hid_parser->ReportDescSize, len);
     return HID_RET_REPORT_DESC_SHORT;
   }
 
-  NOTICE("successfully initialised report descriptor for "
-      TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully initialised report descriptor for USB device %s.",
+      hidif->id);
 
   return HID_RET_SUCCESS;
 }
 
 hid_return hid_prepare_interface(HIDInterface* const hidif)
 {
+  if (!hid_is_opened(hidif)) {
+    ERROR("cannot prepare unopened HIDinterface.");
+    return HID_RET_DEVICE_NOT_OPENED;
+  }
+  
   hid_return ret = hid_init_parser(hidif);
   if (ret != HID_RET_SUCCESS) {
     hid_close(hidif);
