@@ -1,3 +1,9 @@
+libhid (0.2.12-1) unstable; urgency=low
+
+  * New upstream release (closes: Bug#296506).
+
+ -- martin f. krafft <madduck@debian.org>  Wed, 23 Feb 2005 00:34:13 +0100
+
 libhid (0.2.11-1) unstable; urgency=low
 
   * New upstream release (closes: Bug#287400).
