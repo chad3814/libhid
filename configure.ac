@@ -19,7 +19,7 @@ AH_TOP(
 #     if not backward compatible, iface_age = bin_age = 0
 #
 AC_INIT(libhid, 0.1.10.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.9 $)
+AC_REVISION($Revision: 1.10 $)
 
 AM_INIT_AUTOMAKE
 
@@ -118,9 +118,7 @@ AC_C_CONST
 AC_CHECK_FUNCS([strncmp])
 
 if test "x$GCC" = "xyes"; then
-  if ! echo " $CFLAGS " | grep -q '[ 	]-Wall[ 	]'; then
-    CFLAGS="$CFLAGS -Wall"
-  fi
+  CFLAGS="`echo $CFLAGS | sed -e 's,-Wall[[ 	]]\+,,g'` -Wall"
 fi
 
 AC_C_BIGENDIAN
