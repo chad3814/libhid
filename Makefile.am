@@ -1,16 +1,22 @@
 SUBDIRS = src test
 
-#dist_noinst_DATA = \
-#	debian/changelog \
-#	debian/compat \
-#	debian/control \
-#	debian/copyright \
-#	debian/docs \
-#	debian/libhid-dev.dirs \
-#	debian/libhid-dev.files \
-#	debian/libhid1.dirs \
-#	debian/libhid1.files \
-#	debian/rules
+dist_noinst_DATA = \
+	debian/changelog \
+	debian/compat \
+	debian/control \
+	debian/copyright \
+	debian/libhid-dev.dirs \
+	debian/libhid-dev.docs \
+	debian/libhid0.dirs \
+	debian/rules
+
+dist_noinst_HEADERS = \
+  include/assert.h \
+	include/constants.h \
+	include/debug.h \
+	include/hid_helpers.h \
+	include/macros.h \
+	include/os.h
 
 test:: test/test_libhid
 	$<
