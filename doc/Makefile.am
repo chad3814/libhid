@@ -12,6 +12,7 @@ EXTRA_DIST = frontpage.dox
 DOXY_SOURCES = \
 	$(wildcard ../src/*.c) \
 	$(wildcard ../include/*.h) \
+	$(wildcard ../hidparser/*.[ch]) \
 	$(wildcard *.dox)
 
 .stamp_doxygen: $(DOXY_SOURCES)

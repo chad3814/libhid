@@ -17,7 +17,7 @@
 #  define false 0
 #endif
 
-typedef enum hid_return {
+typedef enum hid_return_t {
   HID_RET_SUCCESS = 0,
   HID_RET_INVALID_PARAMETER,
   HID_RET_NOT_INITIALISED,
