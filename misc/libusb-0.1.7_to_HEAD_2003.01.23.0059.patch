@@ -1,0 +1,3758 @@
+? autom4te.cache
+Index: .cvsignore
+===================================================================
+RCS file: /cvsroot/libusb/libusb/.cvsignore,v
+retrieving revision 1.6
+retrieving revision 1.9
+diff -c -r1.6 -r1.9
+*** .cvsignore	9 Nov 2002 17:45:30 -0000	1.6
+--- .cvsignore	30 Dec 2003 01:10:09 -0000	1.9
+***************
+*** 8,25 ****
+  config.log
+  libtool
+  config.status
+- stamp-h
+  .libs
+  config.cache
+  libusb-config
+  config.h.in
+  config.h
+  stamp-h.in
+  libusb.spec
+  confdefs.h
+  libusb.la
+  README
+  INSTALL.libusb
+  usb.h
+! autom4te-2.53.cache
+! stamp-h1
+--- 8,28 ----
+  config.log
+  libtool
+  config.status
+  .libs
+  config.cache
+  libusb-config
+  config.h.in
+  config.h
++ stamp-h
+  stamp-h.in
++ stamp-h1
++ stamp-h1.in
++ stamp-h2.in
+  libusb.spec
+  confdefs.h
+  libusb.la
+  README
+  INSTALL.libusb
+  usb.h
+! autom4te-*.cache
+! ltmain.sh
+Index: COMPILE.CVS
+===================================================================
+RCS file: /cvsroot/libusb/libusb/COMPILE.CVS,v
+retrieving revision 1.2
+retrieving revision 1.4
+diff -c -r1.2 -r1.4
+*** COMPILE.CVS	24 May 2002 04:20:48 -0000	1.2
+--- COMPILE.CVS	20 Jan 2004 20:45:33 -0000	1.4
+***************
+*** 6,10 ****
+  If you update the sources from CVS and things are acting weird, try running
+  autogen.sh again.
+  
+! --jerdfelt 05/23/2002
+  
+--- 6,13 ----
+  If you update the sources from CVS and things are acting weird, try running
+  autogen.sh again.
+  
+! NOTE: automake 1.5 (or possibly newer) is required
+! NOTE: autoconf 2.53 (or possibly newer) is required
+! 
+! --jerdfelt 01/20/2004
+  
+Index: LICENSE
+===================================================================
+RCS file: /cvsroot/libusb/libusb/LICENSE,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -c -r1.1 -r1.2
+*** LICENSE	3 Nov 2001 21:02:35 -0000	1.1
+--- LICENSE	20 Nov 2003 22:55:14 -0000	1.2
+***************
+*** 1,3 ****
+--- 1,5 ----
++ libusb is covered by the LGPL:
++ 
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+***************
+*** 12,14 ****
+--- 14,47 ----
+  License along with this library; if not, write to the
+  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+  Boston, MA 02111-1307, USA.
++ 
++ ----
++ 
++ Alternatively, the files usb.h.in and/or usb.h may be licensed under the
++ BSD license:
++ 
++ Copyright (c) 2000-2003 Johannes Erdfelt <johannes@erdfelt.com>
++ All rights reserved.
++ 
++ Redistribution and use in source and binary forms, with or without
++ modification, are permitted provided that the following conditions
++ are met:
++ 1. Redistributions of source code must retain the above copyright
++    notice, this list of conditions and the following disclaimer.
++ 2. Redistributions in binary form must reproduce the above copyright
++    notice, this list of conditions and the following disclaimer in the
++    documentation and/or other materials provided with the distribution.
++ 3. The name of the author may not be used to endorse or promote products
++    derived from this software without specific prior written permission.
++ 
++ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
++ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
++ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
++ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
++ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
++ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
++ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ 
+Index: Makefile.am
+===================================================================
+RCS file: /cvsroot/libusb/libusb/Makefile.am,v
+retrieving revision 1.24
+retrieving revision 1.30
+diff -c -r1.24 -r1.30
+*** Makefile.am	25 Oct 2002 17:53:16 -0000	1.24
+--- Makefile.am	14 Jan 2004 13:37:09 -0000	1.30
+***************
+*** 11,21 ****
+  configincludedir = $(pkglibdir)/include
+  
+  bin_SCRIPTS = libusb-config
+- BUILT_SOURCES = libusb-config
+  
+! libusb-config: libusb-config.in
+! 
+! EXTRA_DIST = libusb.spec.in linux.c linux.h bsd.c darwin.c
+  
+  lib_LTLIBRARIES = libusb.la
+  
+--- 11,19 ----
+  configincludedir = $(pkglibdir)/include
+  
+  bin_SCRIPTS = libusb-config
+  
+! EXTRA_DIST = LICENSE libusb.spec.in libusb.spec libusb-config.in README.in README INSTALL.libusb.in INSTALL.libusb
+! EXTRA_libusb_la_SOURCE = linux.c linux.h bsd.c darwin.c
+  
+  lib_LTLIBRARIES = libusb.la
+  
+***************
+*** 28,34 ****
+  if DARWIN_API
+  OS_SUPPORT = darwin.c
+  CFLAGS_EXT = -no-cpp-precomp
+! LDADDS = -lIOKit -framework "CoreFoundation"
+  else
+  OS_SUPPORT = 
+  endif
+--- 26,32 ----
+  if DARWIN_API
+  OS_SUPPORT = darwin.c
+  CFLAGS_EXT = -no-cpp-precomp
+! LDADDS = -framework IOKit -framework CoreFoundation
+  else
+  OS_SUPPORT = 
+  endif
+***************
+*** 39,45 ****
+  
+  libusb_la_SOURCES = usb.c usbi.h error.c error.h descriptors.c $(OS_SUPPORT)
+  
+! include_HEADERS = usb.h
+  
+  libusb_la_LDFLAGS = \
+  	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
+--- 37,45 ----
+  
+  libusb_la_SOURCES = usb.c usbi.h error.c error.h descriptors.c $(OS_SUPPORT)
+  
+! # Do not add usb.h to *_SOURCES, regardless of dependencies.
+! # It would be added to the dist tarball, which it shouldn't be.
+! nodist_include_HEADERS = usb.h
+  
+  libusb_la_LDFLAGS = \
+  	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
+***************
+*** 61,71 ****
+  snapshot:
+  	$(MAKE) dist distdir=$(PACKAGE)-`date +"%Y%m%d"`
+  
+- dist-hook: libusb.spec
+- 	if test -e $(srcdir)/INSTALL.libusb.in && test -e $(srcdir)/README.in ; then \
+- 	     CONFIG_FILES="INSTALL.libusb:$(srcdir)/INSTALL.libusb.in README:$(srcdir)/README.in" \
+- 	     CONFIG_HEADERS= \
+- 	     $(SHELL) config.status \
+- 	     && cp INSTALL.libusb LICENSE README $(distdir) ; \
+- 	fi \
+- 	&& cp libusb.spec $(distdir)
+--- 61,63 ----
+Index: autogen.sh
+===================================================================
+RCS file: /cvsroot/libusb/libusb/autogen.sh,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -c -r1.5 -r1.6
+*** autogen.sh	11 Nov 2002 18:07:24 -0000	1.5
+--- autogen.sh	27 Oct 2003 23:19:11 -0000	1.6
+***************
+*** 50,56 ****
+  (glibtoolize --version) < /dev/null > /dev/null 2>&1 && LIBTOOLIZE=glibtoolize || LIBTOOLIZE=libtoolize
+  
+  $LIBTOOLIZE
+! aclocal $ACLOCAL_FLAGS
+  
+  # optionally feature autoheader
+  (autoheader${AUTOCONF_SUFFIX} --version)  < /dev/null > /dev/null 2>&1 && autoheader${AUTOCONF_SUFFIX}
+--- 50,56 ----
+  (glibtoolize --version) < /dev/null > /dev/null 2>&1 && LIBTOOLIZE=glibtoolize || LIBTOOLIZE=libtoolize
+  
+  $LIBTOOLIZE
+! aclocal${AUTOMAKE_SUFFIX} $ACLOCAL_FLAGS
+  
+  # optionally feature autoheader
+  (autoheader${AUTOCONF_SUFFIX} --version)  < /dev/null > /dev/null 2>&1 && autoheader${AUTOCONF_SUFFIX}
+Index: bsd.c
+===================================================================
+RCS file: /cvsroot/libusb/libusb/bsd.c,v
+retrieving revision 1.24
+retrieving revision 1.28
+diff -c -r1.24 -r1.28
+*** bsd.c	10 Nov 2002 20:29:30 -0000	1.24
+--- bsd.c	30 Dec 2003 01:12:38 -0000	1.28
+***************
+*** 3,9 ****
+   *
+   * Derived from Linux version by Richard Tobin.
+   *
+!  * $Id: libusb-0.1.7_to_HEAD_2003.01.23.0059.patch,v 1.1 2004/01/23 00:00:20 krafft Exp $
+   * $Name:  $
+   *
+   * This library is covered by the LGPL, read LICENSE for details.
+--- 3,9 ----
+   *
+   * Derived from Linux version by Richard Tobin.
+   *
+!  * $Id: libusb-0.1.7_to_HEAD_2003.01.23.0059.patch,v 1.1 2004/01/23 00:00:20 krafft Exp $
+   * $Name:  $
+   *
+   * This library is covered by the LGPL, read LICENSE for details.
+***************
+*** 43,51 ****
+  #endif
+  
+  #ifdef HAVE_OLD_DEV_USB_USB_H
+! /* It appears some of the BSD's (OpenBSD atleast) have switched over to a */
+! /* new naming convention, so we setup some macro's for backward */
+! /* compability with older versions --jerdfelt */
+  
+  /* struct usb_ctl_request */
+  #define ucr_addr		addr
+--- 43,53 ----
+  #endif
+  
+  #ifdef HAVE_OLD_DEV_USB_USB_H
+! /*
+!  * It appears some of the BSD's (OpenBSD atleast) have switched over to a
+!  * new naming convention, so we setup some macro's for backward
+!  * compability with older versions --jerdfelt
+!  */
+  
+  /* struct usb_ctl_request */
+  #define ucr_addr		addr
+***************
+*** 195,201 ****
+  
+    ret = ioctl(dev->fd, USB_SET_CONFIG, &configuration);
+    if (ret < 0)
+!     USB_ERROR_STR(ret, "could not set config %d: %s", configuration,
+                    strerror(errno));
+  
+    dev->config = configuration;
+--- 197,203 ----
+  
+    ret = ioctl(dev->fd, USB_SET_CONFIG, &configuration);
+    if (ret < 0)
+!     USB_ERROR_STR(-errno, "could not set config %d: %s", configuration,
+                    strerror(errno));
+  
+    dev->config = configuration;
+***************
+*** 232,238 ****
+  
+    ret = ioctl(dev->fd, USB_SET_ALTINTERFACE, &intf);
+    if (ret < 0)
+!     USB_ERROR_STR(ret, "could not set alt intf %d/%d: %s",
+                    dev->interface, alternate, strerror(errno));
+  
+    dev->altsetting = alternate;
+--- 234,240 ----
+  
+    ret = ioctl(dev->fd, USB_SET_ALTINTERFACE, &intf);
+    if (ret < 0)
+!     USB_ERROR_STR(-errno, "could not set alt intf %d/%d: %s",
+                    dev->interface, alternate, strerror(errno));
+  
+    dev->altsetting = alternate;
+***************
+*** 265,271 ****
+      if (fd < 0 && errno == ENXIO)
+        fd = open(buf, mode);
+      if (fd < 0)
+!       USB_ERROR_STR(fd, "can't open %s for bulk read: %s",
+                      buf, strerror(errno));
+      info->ep_fd[ep] = fd;
+    }
+--- 267,273 ----
+      if (fd < 0 && errno == ENXIO)
+        fd = open(buf, mode);
+      if (fd < 0)
+!       USB_ERROR_STR(-errno, "can't open %s for bulk read: %s",
+                      buf, strerror(errno));
+      info->ep_fd[ep] = fd;
+    }
+***************
+*** 295,316 ****
+  
+    ret = ioctl(fd, USB_SET_TIMEOUT, &timeout);
+    if (ret < 0)
+!     USB_ERROR_STR(ret, "error setting timeout: %s",
+                    strerror(errno));
+  
+    do {
+      ret = write(fd, bytes+sent, size-sent);
+      if (ret < 0)
+  #if __FreeBSD__
+!       USB_ERROR_STR(ret, "error writing to bulk endpoint %s.%d: %s",
+                      dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+  #else
+!       USB_ERROR_STR(ret, "error writing to bulk endpoint %s.%02d: %s",
+                    dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+  #endif
+  
+      sent += ret;
+!   } while(ret > 0 && sent < size);
+  
+    return sent;
+  }
+--- 297,318 ----
+  
+    ret = ioctl(fd, USB_SET_TIMEOUT, &timeout);
+    if (ret < 0)
+!     USB_ERROR_STR(-errno, "error setting timeout: %s",
+                    strerror(errno));
+  
+    do {
+      ret = write(fd, bytes+sent, size-sent);
+      if (ret < 0)
+  #if __FreeBSD__
+!       USB_ERROR_STR(-errno, "error writing to bulk endpoint %s.%d: %s",
+                      dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+  #else
+!       USB_ERROR_STR(-errno, "error writing to bulk endpoint %s.%02d: %s",
+                    dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+  #endif
+  
+      sent += ret;
+!   } while (ret > 0 && sent < size);
+  
+    return sent;
+  }
+***************
+*** 337,358 ****
+  
+    ret = ioctl(fd, USB_SET_TIMEOUT, &timeout);
+    if (ret < 0)
+!     USB_ERROR_STR(ret, "error setting timeout: %s",
+!                   strerror(errno));
+  
+    ret = ioctl(fd, USB_SET_SHORT_XFER, &one);
+    if (ret < 0)
+!     USB_ERROR_STR(ret, "error setting short xfer: %s",
+                    strerror(errno));
+  
+    do {
+      ret = read(fd, bytes+retrieved, size-retrieved);
+      if (ret < 0)
+  #if __FreeBSD__
+!       USB_ERROR_STR(ret, "error reading from bulk endpoint %s.%d: %s",
+                      dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+  #else
+!       USB_ERROR_STR(ret, "error reading from bulk endpoint %s.%02d: %s",
+                    dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+  #endif
+      retrieved += ret;
+--- 339,444 ----
+  
+    ret = ioctl(fd, USB_SET_TIMEOUT, &timeout);
+    if (ret < 0)
+!     USB_ERROR_STR(-errno, "error setting timeout: %s", strerror(errno));
+  
+    ret = ioctl(fd, USB_SET_SHORT_XFER, &one);
+    if (ret < 0)
+!     USB_ERROR_STR(-errno, "error setting short xfer: %s", strerror(errno));
+! 
+!   do {
+!     ret = read(fd, bytes+retrieved, size-retrieved);
+!     if (ret < 0)
+! #if __FreeBSD__
+!       USB_ERROR_STR(-errno, "error reading from bulk endpoint %s.%d: %s",
+!                     dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+! #else
+!       USB_ERROR_STR(-errno, "error reading from bulk endpoint %s.%02d: %s",
+!                   dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+! #endif
+!     retrieved += ret;
+!   } while (ret > 0 && retrieved < size);
+! 
+!   return retrieved;
+! }
+! 
+! int usb_interrupt_write(usb_dev_handle *dev, int ep, char *bytes, int size,
+!                         int timeout)
+! {
+!   int fd, ret, sent = 0;
+! 
+!   /* Ensure the endpoint address is correct */
+!   ep &= ~USB_ENDPOINT_IN;
+! 
+!   fd = ensure_ep_open(dev, ep, O_WRONLY);
+!   if (fd < 0) {
+!     if (usb_debug >= 2) {
+! #if __FreeBSD__
+!       fprintf (stderr, "usb_interrupt_write: got negative open file descriptor for endpoint %d\n", UE_GET_ADDR(ep));
+! #else
+!       fprintf (stderr, "usb_interrupt_write: got negative open file descriptor for endpoint %02d\n", UE_GET_ADDR(ep));
+! #endif
+!     }
+!     return fd;
+!   }
+! 
+!   ret = ioctl(fd, USB_SET_TIMEOUT, &timeout);
+!   if (ret < 0)
+!     USB_ERROR_STR(-errno, "error setting timeout: %s",
+                    strerror(errno));
+  
+    do {
++     ret = write(fd, bytes+sent, size-sent);
++     if (ret < 0)
++ #if __FreeBSD__
++       USB_ERROR_STR(-errno, "error writing to interrupt endpoint %s.%d: %s",
++                     dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
++ #else
++       USB_ERROR_STR(-errno, "error writing to interrupt endpoint %s.%02d: %s",
++                   dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
++ #endif
++ 
++     sent += ret;
++   } while (ret > 0 && sent < size);
++ 
++   return sent;
++ }
++ 
++ int usb_interrupt_read(usb_dev_handle *dev, int ep, char *bytes, int size,
++                        int timeout)
++ {
++   int fd, ret, retrieved = 0, one = 1;
++ 
++   /* Ensure the endpoint address is correct */
++   ep |= USB_ENDPOINT_IN;
++ 
++   fd = ensure_ep_open(dev, ep, O_RDONLY);
++   if (fd < 0) {
++     if (usb_debug >= 2) {
++ #if __FreeBSD__
++       fprintf (stderr, "usb_interrupt_read: got negative open file descriptor for endpoint %d\n", UE_GET_ADDR(ep));
++ #else
++       fprintf (stderr, "usb_interrupt_read: got negative open file descriptor for endpoint %02d\n", UE_GET_ADDR(ep));
++ #endif
++     }
++     return fd;
++   }
++ 
++   ret = ioctl(fd, USB_SET_TIMEOUT, &timeout);
++   if (ret < 0)
++     USB_ERROR_STR(-errno, "error setting timeout: %s", strerror(errno));
++ 
++   ret = ioctl(fd, USB_SET_SHORT_XFER, &one);
++   if (ret < 0)
++     USB_ERROR_STR(-errno, "error setting short xfer: %s", strerror(errno));
++ 
++   do {
+      ret = read(fd, bytes+retrieved, size-retrieved);
+      if (ret < 0)
+  #if __FreeBSD__
+!       USB_ERROR_STR(-errno, "error reading from interrupt endpoint %s.%d: %s",
+                      dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+  #else
+!       USB_ERROR_STR(-errno, "error reading from interrupt endpoint %s.%02d: %s",
+                    dev->device->filename, UE_GET_ADDR(ep), strerror(errno));
+  #endif
+      retrieved += ret;
+***************
+*** 386,397 ****
+  #else
+    if (ret < 0)
+  #endif
+!     USB_ERROR_STR(ret, "error setting timeout: %s",
+                    strerror(errno));
+  
+    ret = ioctl(dev->fd, USB_DO_REQUEST, &req);
+    if (ret < 0)
+!     USB_ERROR_STR(ret, "error sending control message: %s",
+                    strerror(errno));
+  
+    return UGETW(req.ucr_request.wLength);
+--- 472,483 ----
+  #else
+    if (ret < 0)
+  #endif
+!     USB_ERROR_STR(-errno, "error setting timeout: %s",
+                    strerror(errno));
+  
+    ret = ioctl(dev->fd, USB_DO_REQUEST, &req);
+    if (ret < 0)
+!     USB_ERROR_STR(-errno, "error sending control message: %s",
+                    strerror(errno));
+  
+    return UGETW(req.ucr_request.wLength);
+Index: configure.in
+===================================================================
+RCS file: /cvsroot/libusb/libusb/configure.in,v
+retrieving revision 1.33
+retrieving revision 1.40
+diff -c -r1.33 -r1.40
+*** configure.in	17 Nov 2002 18:48:14 -0000	1.33
+--- configure.in	20 Jan 2004 20:20:22 -0000	1.40
+***************
+*** 6,17 ****
+  # init autoconf (and check for presence of usb.c)
+  AC_INIT(usb.c)
+  
+  # Save this value here, since automake will set cflags later
+  cflags_set=${CFLAGS+set}
+  
+  dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
+  dnl are available for $ac_help expansion (don't we all *love* autoconf?)
+! AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+  
+  #
+  # The following version number definitions apply to libusb
+--- 6,42 ----
+  # init autoconf (and check for presence of usb.c)
+  AC_INIT(usb.c)
+  
++ AH_TOP(
++ #undef LINUX_API
++ #undef BSD_API
++ #undef DARWIN_API
++ 
++ #undef HAVE_OLD_DEV_USB_USB_H
++ 
++ #undef HAVE_LIMITS_H
++ #undef HAVE_UNISTD_H
++ #undef HAVE_VALUES_H
++ 
++ #undef SIZEOF_CHAR
++ #undef SIZEOF_SHORT
++ #undef SIZEOF_LONG
++ #undef SIZEOF_INT
++ #undef SIZEOF_VOID_P
++ 
++ #undef LIBUSB_MAJOR_VERSION
++ #undef LIBUSB_MINOR_VERSION
++ #undef LIBUSB_MICRO_VERSION
++ #undef LIBUSB_INTERFACE_AGE
++ #undef LIBUSB_BINARY_AGE
++ )
++ 
+  # Save this value here, since automake will set cflags later
+  cflags_set=${CFLAGS+set}
+  
+  dnl we need to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
+  dnl are available for $ac_help expansion (don't we all *love* autoconf?)
+! ifdef([AC_DIVERSION_NOTICE], [AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)],
+! 			     [AC_DIVERT_PUSH(NOTICE)])
+  
+  #
+  # The following version number definitions apply to libusb
+***************
+*** 28,36 ****
+  #
+  LIBUSB_MAJOR_VERSION=0
+  LIBUSB_MINOR_VERSION=1
+! LIBUSB_MICRO_VERSION=7
+! LIBUSB_INTERFACE_AGE=0
+! LIBUSB_BINARY_AGE=3
+  LIBUSB_VERSION=$LIBUSB_MAJOR_VERSION.$LIBUSB_MINOR_VERSION.$LIBUSB_MICRO_VERSION
+  dnl
+  AC_DIVERT_POP()dnl
+--- 53,61 ----
+  #
+  LIBUSB_MAJOR_VERSION=0
+  LIBUSB_MINOR_VERSION=1
+! LIBUSB_MICRO_VERSION=8beta
+! LIBUSB_INTERFACE_AGE=1
+! LIBUSB_BINARY_AGE=4
+  LIBUSB_VERSION=$LIBUSB_MAJOR_VERSION.$LIBUSB_MINOR_VERSION.$LIBUSB_MICRO_VERSION
+  dnl
+  AC_DIVERT_POP()dnl
+***************
+*** 76,108 ****
+  dnl Initialize maintainer mode
+  AM_MAINTAINER_MODE
+  
+! AC_CANONICAL_HOST
+  
+  AC_MSG_CHECKING(for what USB OS support)
+  case $host in
+    *-linux*)
+      AC_DEFINE(LINUX_API)
+!     AC_SUBST(LINUX_API)
+      os_support=linux
+      AC_MSG_RESULT(Linux)
+      OSLIBS=""
+      ;;
+    *-freebsd*|*-openbsd*|*-netbsd*)
+      AC_DEFINE(BSD_API)
+!     AC_SUBST(BSD_API)
+      os_support=bsd
+      AC_MSG_RESULT(FreeBSD, OpenBSD and/or NetBSD)
+      OSLIBS=""
+      ;;
+    *-darwin*)
+!     AC_DEFINE(DARWIN_API)
+!     AC_SUBST(DARWIN_API)
+      os_support=darwin
+      AC_MSG_RESULT(Darwin and/or MacOS 10)
+!     OSLIBS="-lIOKit"
+      ;;
+  esac
+  
+  AM_CONDITIONAL(LINUX_API, test "$os_support" = "linux")
+  AM_CONDITIONAL(BSD_API, test "$os_support" = "bsd")
+  AM_CONDITIONAL(DARWIN_API, test "$os_support" = "darwin")
+--- 101,152 ----
+  dnl Initialize maintainer mode
+  AM_MAINTAINER_MODE
+  
+! dnl This has already been dragged in by AM_PROG_LIBTOOL
+! dnl AC_CANONICAL_HOST
+! 
+! LINUX_API=0
+! DARWIN_API=0
+! BSD_API=0
+  
+  AC_MSG_CHECKING(for what USB OS support)
+  case $host in
+    *-linux*)
+      AC_DEFINE(LINUX_API)
+!     AC_DEFINE(BSD_API, 0)
+!     AC_DEFINE(DARWIN_API, 0)
+!     LINUX_API=1
+      os_support=linux
+      AC_MSG_RESULT(Linux)
+      OSLIBS=""
+      ;;
+    *-freebsd*|*-openbsd*|*-netbsd*)
+      AC_DEFINE(BSD_API)
+!     AC_DEFINE(LINUX_API, 0)
+!     AC_DEFINE(DARWIN_API, 0)
+!     BSD_API=1
+      os_support=bsd
+      AC_MSG_RESULT(FreeBSD, OpenBSD and/or NetBSD)
+      OSLIBS=""
+      ;;
+    *-darwin*)
+!     AC_DEFINE(DARWIN_API) 
+!     AC_DEFINE(LINUX_API, 0)
+!     AC_DEFINE(BSD_API, 0)
+!     DARWIN_API=1
+      os_support=darwin
+      AC_MSG_RESULT(Darwin and/or MacOS 10)
+!     OSLIBS="-framework IOKit"
+!     ;;
+!   *)
+!     AC_MSG_RESULT(unknown operating system)
+!     AC_MSG_ERROR(libusb does not support compiling for $host)
+      ;;
+  esac
+  
++ AC_SUBST(DARWIN_API)
++ AC_SUBST(LINUX_API)
++ AC_SUBST(BSD_API)
++ 
+  AM_CONDITIONAL(LINUX_API, test "$os_support" = "linux")
+  AM_CONDITIONAL(BSD_API, test "$os_support" = "bsd")
+  AM_CONDITIONAL(DARWIN_API, test "$os_support" = "darwin")
+***************
+*** 111,117 ****
+  
+  dnl figure debugging default, prior to $ac_help setup
+  dnl
+! AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+  if test `expr $LIBUSB_MINOR_VERSION \% 2` = 1 ; then
+    debug_default=yes
+  else
+--- 155,162 ----
+  
+  dnl figure debugging default, prior to $ac_help setup
+  dnl
+! ifdef([AC_DIVERSION_NOTICE], [AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)],
+! 			     [AC_DIVERT_PUSH(NOTICE)])
+  if test `expr $LIBUSB_MINOR_VERSION \% 2` = 1 ; then
+    debug_default=yes
+  else
+***************
+*** 146,158 ****
+  # Checks for library functions.
+  AC_FUNC_VPRINTF
+  
+- AC_CHECK_SIZEOF(char)
+- AC_CHECK_SIZEOF(short)
+- AC_CHECK_SIZEOF(long)
+- AC_CHECK_SIZEOF(int)
+- AC_CHECK_SIZEOF(void *)
+- AC_CHECK_SIZEOF(long long)
+- 
+  AC_C_CONST
+  
+  dnl for bytesex stuff
+--- 191,196 ----
+***************
+*** 166,174 ****
+  AC_SUBST(BIGENDIAN)
+  
+  dnl header file checks
+! AC_CHECK_HEADERS(limits.h, AC_DEFINE(HAVE_LIMITS_H))
+! AC_CHECK_HEADERS(unistd.h, AC_DEFINE(HAVE_UNISTD_H))
+! AC_CHECK_HEADERS(values.h, AC_DEFINE(HAVE_VALUES_H))
+  
+  # Check for some functions
+  AC_CHECK_FUNCS(memmove)
+--- 204,212 ----
+  AC_SUBST(BIGENDIAN)
+  
+  dnl header file checks
+! AC_CHECK_HEADERS(limits.h, AC_DEFINE_UNQUOTED(HAVE_LIMITS_H))
+! AC_CHECK_HEADERS(unistd.h, AC_DEFINE_UNQUOTED(HAVE_UNISTD_H))
+! AC_CHECK_HEADERS(values.h, AC_DEFINE_UNQUOTED(HAVE_VALUES_H))
+  
+  # Check for some functions
+  AC_CHECK_FUNCS(memmove)
+***************
+*** 184,190 ****
+       }],
+      [AC_MSG_RESULT(yes)],
+      [AC_MSG_RESULT(no)
+!     AC_DEFINE(HAVE_OLD_DEV_USB_USB_H)])
+  fi
+  
+  # Check if the user wants to enable documentation
+--- 222,228 ----
+       }],
+      [AC_MSG_RESULT(yes)],
+      [AC_MSG_RESULT(no)
+!     AC_DEFINE_UNQUOTED(HAVE_OLD_DEV_USB_USB_H)])
+  fi
+  
+  # Check if the user wants to enable documentation
+Index: darwin.c
+===================================================================
+RCS file: /cvsroot/libusb/libusb/darwin.c,v
+retrieving revision 1.13
+retrieving revision 1.40
+diff -c -r1.13 -r1.40
+*** darwin.c	10 Nov 2002 20:31:08 -0000	1.13
+--- darwin.c	13 Jan 2004 05:56:10 -0000	1.40
+***************
+*** 1,8 ****
+  /*
+   * Darwin/MacOS X Support
+   *
+!  * (c) 2002 Nathan Hjelm <hjelmn@users.sourceforge.net>
+   *
+   * 0.1.6 (05/12/2002):
+   *   - Fixed problem where libusb holds resources after program completion.
+   *   - Mouse should no longer freeze up now.
+--- 1,17 ----
+  /*
+   * Darwin/MacOS X Support
+   *
+!  * (c) 2002-2004 Nathan Hjelm <hjelmn@users.sourceforge.net>
+   *
++  * 0.1.8 (01/12/2004):
++  *   - Fixed several memory leaks.
++  *   - Readded 10.0 support
++  *   - Added support for USB fuctions defined in 10.3 and above
++  * (01/02/2003):
++  *   - Applied a patch by Philip Edelbrock <phil@edgedesign.us> that fixes a bug in usb_control_msg.
++  * (12/16/2003):
++  *   - Even better error printing.
++  *   - Devices that cannot be opened can have their interfaces opened.
+   * 0.1.6 (05/12/2002):
+   *   - Fixed problem where libusb holds resources after program completion.
+   *   - Mouse should no longer freeze up now.
+***************
+*** 42,61 ****
+  #include <IOKit/IOCFPlugIn.h>
+  
+  /* some defines */
+! /* version 183 gives timeout bulk functions */
+! #define usb_interface_t IOUSBInterfaceInterface183
+  #define usb_device_t    IOUSBDeviceInterface182
+  #define io_return_t     IOReturn
+  
+  /* Darwin/OS X impl does not use fd field, instead it uses this */
+- /* This will NOT work with 10.0 or darwin 1.4, upgrade! */
+  struct darwin_dev_handle {
+    usb_device_t **device;
+    usb_interface_t **interface;
+  };
+  
+  static CFRunLoopSourceRef runLoopSource;
+! static masterPort = NULL;
+  
+  int usb_os_open(usb_dev_handle *dev)
+  {
+--- 51,184 ----
+  #include <IOKit/IOCFPlugIn.h>
+  
+  /* some defines */
+! /* IOUSBInterfaceInferface */
+! #if defined (IOUSBINTERFACE_FUNCS_197)
+! 
+! #warning "libusb being compiled for 10.3 or higher"
+! #define usb_interface_t IOUSBInterfaceInterface197
+! #define InterfaceInterfaceID kIOUSBInterfaceInterfaceID197
+! #define InterfaceVersion 197
+! 
+! #elif defined (IOUSBINTERFACE_FUNCS_190)
+! 
+! #warning "libusb being compiled for 10.2 or higher"
+! #define usb_interface_t IOUSBInterfaceInterface190
+! #define InterfaceInterfaceID kIOUSBInterfaceInterfaceID190
+! #define InterfaceVersion 190
+! 
+! #elif defined (IOUSBINTERFACE_FUNCS_182)
+! 
+! #warning "libusb being compiled for 10.1 or higher"
+! #define usb_interface_t IOUSBInterfaceInterface182
+! #define InterfaceInterfaceID kIOUSBInterfaceInterfaceID182
+! #define InterfaceVersion 182
+! 
+! #else
+! 
+! /* No timeout functions available! Time to upgrade your os. */
+! #warning "libusb being compiled without support for timout bulk functions! 10.0 and up"
+! #define usb_interface_t IOUSBInterfaceInterface
+! #define InterfaceInterfaceID kIOUSBInterfaceInterfaceID
+! #define LIBUSB_NO_TIMEOUT_INTERFACE
+! #define InterfaceVersion 180
+! 
+! #endif
+! 
+! /* IOUSBDeviceInterface */
+! #if defined (IOUSBDEVICE_FUNCS_197)
+! 
+! #define usb_device_t    IOUSBDeviceInterface197
+! #define DeviceInterfaceID kIOUSBDeviceInterfaceID197
+! #define DeviceVersion 197
+! 
+! #elif defined (IOUSBDEVICE_FUNCS_187)
+! 
+! #define usb_device_t    IOUSBDeviceInterface187
+! #define DeviceInterfaceID kIOUSBDeviceInterfaceID187
+! #define DeviceVersion 187
+! 
+! #elif defined (IOUSBDEVICE_FUNCS_182)
+! 
+  #define usb_device_t    IOUSBDeviceInterface182
++ #define DeviceInterfaceID kIOUSBDeviceInterfaceID182
++ #define DeviceVersion 182
++ 
++ #else
++ 
++ #define usb_device_t    IOUSBDeviceInterface
++ #define DeviceInterfaceID kIOUSBDeviceInterfaceID
++ #define LIBUSB_NO_TIMEOUT_DEVICE
++ #define LIBUSB_NO_SEIZE_DEVICE
++ #define DeviceVersion 180
++ 
++ #endif
++ 
+  #define io_return_t     IOReturn
+  
+  /* Darwin/OS X impl does not use fd field, instead it uses this */
+  struct darwin_dev_handle {
+    usb_device_t **device;
+    usb_interface_t **interface;
++   int open;
+  };
+  
+  static CFRunLoopSourceRef runLoopSource;
+! static CFMutableDictionaryRef matchingDict;
+! static IONotificationPortRef gNotifyPort;
+! static mach_port_t masterPort = MACH_PORT_NULL;
+! 
+! static void darwin_cleanup (void)
+! {
+!   IONotificationPortDestroy(gNotifyPort);
+!   mach_port_deallocate(mach_task_self(), masterPort);
+! }
+! 
+! static char *darwin_error_str (int result) {
+!   switch (result) {
+!   case kIOReturnSuccess:
+!     return "no error";
+!   case kIOReturnNotOpen:
+!     return "device not opened for exclusive access";
+!   case kIOReturnNoDevice:
+!     return "no connection to an IOService";
+!   case kIOUSBNoAsyncPortErr:
+!     return "no asyc port has been opened for interface";
+!   case kIOReturnExclusiveAccess:
+!     return "another process has device opened for exclusive access";
+!   case kIOUSBPipeStalled:
+!     return "pipe is stalled";
+!   case kIOReturnError:
+!     return "could not establish a connection to Darin kernel";
+!   case kIOReturnBadArgument:
+!     return "invalid argument";
+!   default:
+!     return "unknown error";
+!   }
+! }
+! 
+! /* not a valid errorno outside darwin.c */
+! #define LUSBDARWINSTALL (ELAST+1)
+! 
+! static int darwin_to_errno (int result) {
+!   switch (result) {
+!   case kIOReturnSuccess:
+!     return 0;
+!   case kIOReturnNotOpen:
+!     return EBADF;
+!   case kIOReturnNoDevice:
+!   case kIOUSBNoAsyncPortErr:
+!     return ENXIO;
+!   case kIOReturnExclusiveAccess:
+!     return EBUSY;
+!   case kIOUSBPipeStalled:
+!     return LUSBDARWINSTALL;
+!   case kIOReturnBadArgument:
+!     return EINVAL;
+!   case kIOReturnError:
+!   default:
+!     return 1;
+!   }
+! }
+  
+  int usb_os_open(usb_dev_handle *dev)
+  {
+***************
+*** 68,108 ****
+    usb_device_t **darwin_device;
+  
+    IOCFPlugInInterface **plugInInterface = NULL;
+-   IONotificationPortRef gNotifyPort;
+- 
+-   CFMutableDictionaryRef matchingDict;
+  
+    long score;
+!   u_int16_t address, vendorr;
+!   u_int32_t location;
+  
+    if (!dev)
+      USB_ERROR(-ENXIO);
+  
+!   device = malloc(sizeof(struct darwin_dev_handle));
+    if (!device)
+      USB_ERROR(-ENOMEM);
+  
+!   if (!masterPort)
+!     USB_ERROR(-EINVAL);
+  
+!   /* set up the matching dictionary for class IOUSBDevice and it's subclasses */
+    if ((matchingDict = IOServiceMatching(kIOUSBDeviceClassName)) == NULL) {
+!     mach_port_deallocate(mach_task_self(), masterPort);
+      USB_ERROR(-ENOMEM);
+    }
+  
+!   gNotifyPort = IONotificationPortCreate(masterPort);
+!   runLoopSource = IONotificationPortGetRunLoopSource(gNotifyPort);
+! 
+!   CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource,
+!                      kCFRunLoopDefaultMode);
+  
+!   result = IOServiceAddMatchingNotification(gNotifyPort, kIOFirstMatchNotification,
+!                                             matchingDict, NULL, NULL,
+!                                             &deviceIterator);
+  
+!   while (usbDevice = IOIteratorNext(deviceIterator)) {
+      /* Create an intermediate plug-in */
+      result = IOCreatePlugInInterfaceForService(usbDevice, kIOUSBDeviceUserClientTypeID,
+                                                 kIOCFPlugInInterfaceID, &plugInInterface,
+--- 191,234 ----
+    usb_device_t **darwin_device;
+  
+    IOCFPlugInInterface **plugInInterface = NULL;
+  
+    long score;
+!   UInt16 address, vendor;
+!   UInt32 location = *((UInt32 *)dev->device->dev);
+!   UInt32 dlocation;
+  
+    if (!dev)
+      USB_ERROR(-ENXIO);
+  
+!   if (!masterPort)
+!     USB_ERROR(-EINVAL);
+! 
+!   device = calloc(1, sizeof(struct darwin_dev_handle));
+    if (!device)
+      USB_ERROR(-ENOMEM);
+  
+!   if (usb_debug > 3)
+!     fprintf(stderr, "usb_os_open: %04x:%04x\n",
+! 	    dev->device->descriptor.idVendor,
+! 	    dev->device->descriptor.idProduct);
+  
+!   /* set up the matching dictionary for class IOUSBDevice and its subclasses.
+!      It will be consumed by the IOServiceGetMatchingServices call */
+    if ((matchingDict = IOServiceMatching(kIOUSBDeviceClassName)) == NULL) {
+!     darwin_cleanup ();
+!     
+      USB_ERROR(-ENOMEM);
+    }
+  
+!   result = IOServiceGetMatchingServices(masterPort,
+! 					matchingDict,
+! 					&deviceIterator);
+!   matchingDict = NULL;
+  
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno (result), "usb_os_open(IOServiceGetMatchingServices): %s", darwin_error_str(result));
+  
+!   while (IOIteratorIsValid (deviceIterator) && (usbDevice = IOIteratorNext(deviceIterator))) {
+      /* Create an intermediate plug-in */
+      result = IOCreatePlugInInterfaceForService(usbDevice, kIOUSBDeviceUserClientTypeID,
+                                                 kIOCFPlugInInterfaceID, &plugInInterface,
+***************
+*** 112,149 ****
+      if (result || !plugInInterface)
+        continue;
+  
+!     (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID),
+                                         (LPVOID)&darwin_device);
+  
+!     (*plugInInterface)->Release(plugInInterface);
+  
+      if (!darwin_device)
+        continue;
+  
+!     result = (*(darwin_device))->GetLocationID(darwin_device, (UInt32 *)&location);
+!     if (location == *((UInt32 *)dev->device->dev)) {
+        device->device = darwin_device;
+        break;
+-     } else {
+-       (*darwin_device)->Release(darwin_device);
+-       continue;
+      }
+    }
+  
+    IOObjectRelease(deviceIterator);
+-   deviceIterator = NULL;
+- 
+-   if (usb_debug > 3)
+-     fprintf(stderr, "usb_os_open: %04x:%04x\n",
+- 	    dev->device->descriptor.idVendor,
+- 	    dev->device->descriptor.idProduct);
+  
+!   result = (*(device->device))->USBDeviceOpen(device->device);
+! 
+!   if (result)
+!     USB_ERROR_STR(result, "could not open device");
+  
+    dev->impl_info = device;
+  
+    return 0;
+  }
+--- 238,289 ----
+      if (result || !plugInInterface)
+        continue;
+  
+!     (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(DeviceInterfaceID),
+                                         (LPVOID)&darwin_device);
+  
+!     (*plugInInterface)->Stop(plugInInterface);
+!     IODestroyPlugInInterface (plugInInterface);
+!     plugInInterface = NULL;
+  
+      if (!darwin_device)
+        continue;
+  
+!     result = (*(darwin_device))->GetLocationID(darwin_device, (UInt32 *)&dlocation);
+!     if (dlocation == location) {
+        device->device = darwin_device;
+        break;
+      }
++ 
++     (*darwin_device)->Release(darwin_device);
+    }
+  
+    IOObjectRelease(deviceIterator);
+  
+! #if !defined (LIBUSB_NO_SEIZE_DEVICE)
+!   result = (*(device->device))->USBDeviceOpenSeize (device->device);
+! #else
+!   /* No Seize in OS X 10.0 (Darwin 1.4) */
+!   result = (*(device->device))->USBDeviceOpen (device->device);
+! #endif
+  
++   if (result != kIOReturnSuccess) {
++     switch (result) {
++     case kIOReturnExclusiveAccess:
++       if (usb_debug > 0)
++ 	fprintf (stderr, "usb_os_open(USBDeviceOpenSeize): %s\n", darwin_error_str(result));
++       break;
++     default:
++       (*(device->device))->Release (device->device);
++       USB_ERROR_STR(-darwin_to_errno (result), "usb_os_open(USBDeviceOpenSeize): %s", darwin_error_str(result));
++     }
++     
++     device->open = 0;
++   } else
++     device->open = 1;
++     
+    dev->impl_info = device;
++   dev->interface = -1;
++   dev->altsetting = -1;
+  
+    return 0;
+  }
+***************
+*** 166,245 ****
+  	    dev->device->descriptor.idVendor,
+  	    dev->device->descriptor.idProduct);
+  
+!   result = (*(device->device))->USBDeviceClose(device->device);
+! 
+!   if (result)
+!     USB_ERROR_STR(result, "error closing device");
+  
+!   /* device may not need to be released, but if it has too... */
+    (*(device->device))->Release(device->device);
+  
+!   return 0;
+! }
+! 
+! int usb_set_configuration(usb_dev_handle *dev, int configuration)
+! {
+!   struct darwin_dev_handle *device;
+!   io_return_t result;
+! 
+!   if (!dev)
+!     USB_ERROR(-ENXIO);
+! 
+!   if ((device = dev->impl_info) == NULL)
+!     USB_ERROR(-ENOENT);
+! 
+!   result = (*(device->device))->SetConfiguration(device->device, configuration);
+! 
+!   if (result)
+!     USB_ERROR_STR(result, "could not set configuration");
+  
+!   dev->config = configuration;
+  
+    return 0;
+  }
+  
+! int usb_claim_interface(usb_dev_handle *dev, int interface)
+  {
+-   struct darwin_dev_handle *device = dev->impl_info;
+- 
+    io_iterator_t interface_iterator;
+    io_service_t  usbInterface;
+  
+    io_return_t result;
+    IOUSBFindInterfaceRequest request;
+    IOCFPlugInInterface **plugInInterface = NULL;
+- 
+    long score;
+!   int current_interface = 0;
+  
+    request.bInterfaceClass = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
+    request.bAlternateSetting = kIOUSBFindInterfaceDontCare;
+  
+!   if (!device)
+!     USB_ERROR(-ENOENT);
+! 
+!   if (!(device->device))
+!     USB_ERROR(-EINVAL);
+  
+!   (*(device->device))->CreateInterfaceIterator(device->device, &request, &interface_iterator);
+! 
+!   while (current_interface++ <= interface)
+      usbInterface = IOIteratorNext(interface_iterator);
+  
+    /* the interface iterator is no longer needed, release it */
+    IOObjectRelease(interface_iterator);
+-   interface_iterator = NULL; /* not really needed */
+  
+!   if (!usbInterface)
+!     USB_ERROR(-ENOENT);
+  
+!   result = IOCreatePlugInInterfaceForService(usbInterface,
+! 						   kIOUSBInterfaceUserClientTypeID,
+! 						   kIOCFPlugInInterfaceID,
+! 						   &plugInInterface, &score);
+  
+    //No longer need the usbInterface object after getting the plug-in
+    result = IOObjectRelease(usbInterface);
+    if (result || !plugInInterface)
+--- 306,445 ----
+  	    dev->device->descriptor.idVendor,
+  	    dev->device->descriptor.idProduct);
+  
+!   if (device->open == 1)
+!     result = (*(device->device))->USBDeviceClose(device->device);
+!   else
+!     result = kIOReturnSuccess;
+  
+!   /* device may not need to be released, but if it has to... */
+    (*(device->device))->Release(device->device);
+  
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno(result), "usb_os_close(USBDeviceClose): %s", darwin_error_str(result));
+  
+!   free (device);
+  
+    return 0;
+  }
+  
+! // static int claim_interface ( struct darwin_dev_handle *device, int interface )
+! static int claim_interface ( usb_dev_handle *dev, int interface )
+  {
+    io_iterator_t interface_iterator;
+    io_service_t  usbInterface;
+  
++   struct darwin_dev_handle *device;
+    io_return_t result;
+    IOUSBFindInterfaceRequest request;
+    IOCFPlugInInterface **plugInInterface = NULL;
+    long score;
+!   int current_interface;
+! 
+!   device = dev->impl_info;
+  
+    request.bInterfaceClass = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
+    request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
+    request.bAlternateSetting = kIOUSBFindInterfaceDontCare;
+  
+!   result = (*(device->device))->CreateInterfaceIterator(device->device, &request, &interface_iterator);
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR (-darwin_to_errno(result), "claim_interface(CreateInterfaceIterator): %s",
+! 		   darwin_error_str(result));
+  
+!   for ( current_interface=0; current_interface<=interface; current_interface++ ) {
+      usbInterface = IOIteratorNext(interface_iterator);
++     if ( usb_debug > 3 )
++       fprintf ( stderr, "Interface %d of device is 0x%x\n",
++ 		current_interface, (void *)usbInterface );
++   }
++   current_interface--;
+  
+    /* the interface iterator is no longer needed, release it */
+    IOObjectRelease(interface_iterator);
+  
+!   if (!usbInterface) {
+!     UInt8 nConfig;			     /* Index of configuration to use */
+!     IOUSBConfigurationDescriptorPtr configDesc; /* to describe which configuration to select */
+!     /* Only a composite class device with no vendor-specific driver will
+!        be configured. Otherwise, we need to do it ourselves, or there
+!        will be no interfaces for the device. */
+! 
+!     if ( usb_debug > 3 )
+!       fprintf ( stderr,"claim_interface: No interface found; selecting configuration\n" );
+! 
+!     result = (*(device->device))->GetNumberOfConfigurations ( device->device, &nConfig );
+!     if (result != kIOReturnSuccess)
+!       USB_ERROR_STR(-darwin_to_errno(result), "claim_interface(GetNumberOfConfigurations): %s",
+! 		    darwin_error_str(result));
+!     
+!     if (nConfig < 1)
+!       USB_ERROR_STR(-ENXIO ,"claim_interface(GetNumberOfConfigurations): no configurations");
+!     else if ( nConfig > 1 && usb_debug > 0 )
+!       fprintf ( stderr, "claim_interface: device has more than one"
+! 		" configuration, using the first (warning)\n" );
+! 
+!     if ( usb_debug > 3 )
+!       fprintf ( stderr, "claim_interface: device has %d configuration%s\n",
+! 		(int)nConfig, (nConfig>1?"s":"") );
+! 
+!     /* Always use the first configuration */
+!     result = (*(device->device))->GetConfigurationDescriptorPtr ( (device->device), 0, &configDesc );
+!     if (result != kIOReturnSuccess) {
+!       if (device->open == 1) {
+!         (*(device->device))->USBDeviceClose ( (device->device) );
+!         (*(device->device))->Release ( (device->device) );
+!       }
+! 
+!       USB_ERROR_STR(-darwin_to_errno(result), "claim_interface(GetConfigurationDescriptorPtr): %s",
+! 		    darwin_error_str(result));
+!     } else if ( usb_debug > 3 )
+!       fprintf ( stderr, "claim_interface: configuration value is %d\n",
+! 		configDesc->bConfigurationValue );
+! 
+!     if (device->open == 1) {
+!       result = (*(device->device))->SetConfiguration ( (device->device), configDesc->bConfigurationValue );
+! 
+!       if (result != kIOReturnSuccess) {
+! 	(*(device->device))->USBDeviceClose ( (device->device) );
+! 	(*(device->device))->Release ( (device->device) );
+! 
+! 	USB_ERROR_STR(-darwin_to_errno(result), "claim_interface(SetConfiguration): %s",
+! 		      darwin_error_str(result));
+!       }
+!     }
+!     
+!     request.bInterfaceClass = kIOUSBFindInterfaceDontCare;
+!     request.bInterfaceSubClass = kIOUSBFindInterfaceDontCare;
+!     request.bInterfaceProtocol = kIOUSBFindInterfaceDontCare;
+!     request.bAlternateSetting = kIOUSBFindInterfaceDontCare;
+! 
+!     /* Now go back and get the chosen interface */
+!     result = (*(device->device))->CreateInterfaceIterator(device->device, &request, &interface_iterator);
+!     if (result != kIOReturnSuccess)
+!       USB_ERROR_STR (-darwin_to_errno(result), "claim_interface(CreateInterfaceIterator): %s",
+! 		     darwin_error_str(result));
+! 
+!     for (current_interface = 0 ; current_interface <= interface ; current_interface++) {
+!       usbInterface = IOIteratorNext(interface_iterator);
+! 
+!       if ( usb_debug > 3 )
+! 	fprintf ( stderr, "claim_interface: Interface %d of device is 0x%x\n",
+! 		  current_interface, (void *)usbInterface );
+!     }
+!     current_interface--;
+  
+!     /* the interface iterator is no longer needed, release it */
+!     IOObjectRelease(interface_iterator);
+! 
+!     if (!usbInterface)
+!       USB_ERROR_STR (-ENOENT, "claim_interface: interface iterator returned NULL");
+!   }
+  
++   result = IOCreatePlugInInterfaceForService(usbInterface,
++ 					     kIOUSBInterfaceUserClientTypeID,
++ 					     kIOCFPlugInInterfaceID,
++ 					     &plugInInterface, &score);
+    //No longer need the usbInterface object after getting the plug-in
+    result = IOObjectRelease(usbInterface);
+    if (result || !plugInInterface)
+***************
+*** 247,277 ****
+  
+    //Now create the device interface for the interface
+    result = (*plugInInterface)->QueryInterface(plugInInterface,
+!                                               CFUUIDGetUUIDBytes(kIOUSBInterfaceInterfaceID),
+!                                               (LPVOID) &device->interface);
+!   //No longer need the intermediate plug-in
+!   (*plugInInterface)->Release(plugInInterface);
+  
+!   if (result)
+!     USB_ERROR(result);
+  
+    if (!device->interface)
+      USB_ERROR(-EACCES);
+  
+    /* claim the interface */
+    result = (*(device->interface))->USBInterfaceOpen(device->interface);
+    if (result)
+!     USB_ERROR(result);
+  
+-   result = (*(device->interface))->CreateInterfaceAsyncEventSource(device->interface, &runLoopSource);
+    if (result)
+!     USB_ERROR(result);
+  
+!   CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
+  
+    dev->interface = interface;
+  
+!   /* interface is claimed and async IO is set up return 0 */
+    return 0;
+  }
+  
+--- 447,539 ----
+  
+    //Now create the device interface for the interface
+    result = (*plugInInterface)->QueryInterface(plugInInterface,
+! 					      CFUUIDGetUUIDBytes(InterfaceInterfaceID),
+! 					      (LPVOID) &device->interface);
+  
+!   //No longer need the intermediate plug-in  
+!   (*plugInInterface)->Stop(plugInInterface);
+!   IODestroyPlugInInterface (plugInInterface);
+! 
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno(result), "claim_interface(QueryInterface): %s",
+! 		  darwin_error_str(result));
+  
+    if (!device->interface)
+      USB_ERROR(-EACCES);
+  
++   if ( usb_debug > 3 )
++     fprintf ( stderr, "claim_interface: Interface %d of device from QueryInterface is 0x%x\n",
++ 	      current_interface, (void *)(device->interface) );
++ 
+    /* claim the interface */
+    result = (*(device->interface))->USBInterfaceOpen(device->interface);
+    if (result)
+!     USB_ERROR_STR(-darwin_to_errno(result), "claim_interface(USBInterfaceOpen): %s",
+! 		  darwin_error_str(result));
+! 
+!   return 0;
+! }
+! 
+! int usb_set_configuration(usb_dev_handle *dev, int configuration)
+! {
+!   struct darwin_dev_handle *device;
+!   io_return_t result;
+! 
+!   if ( usb_debug > 3 )
+!     fprintf ( stderr, "usb_set_configuration: called for config %x\n", configuration );
+! 
+!   if (!dev)
+!     USB_ERROR_STR ( -ENXIO, "usb_set_configuration: called with null device\n" );
+! 
+!   if ((device = dev->impl_info) == NULL)
+!     USB_ERROR_STR ( -ENOENT, "usb_set_configuration: device not properly initialized" );
+! 
+!   /* Setting configuration will invalidate the interface, so we need
+!      to reclaim it. First, dispose of existing interface, if any. */
+!   if ( device->interface )
+!     usb_release_interface(dev, dev->interface);
+! 
+!   result = (*(device->device))->SetConfiguration(device->device, configuration);
+  
+    if (result)
+!     USB_ERROR_STR(-darwin_to_errno(result), "usb_set_configuration(SetConfiguration): %s",
+! 		  darwin_error_str(result));
+! 
+!   /* Reclaim interface: assume zero */
+!   if (dev->interface != -1)
+!     result = claim_interface(dev, dev->interface);
+! 
+!   dev->config = configuration;
+! 
+!   return result;
+! }
+! 
+! int usb_claim_interface(usb_dev_handle *dev, int interface)
+! {
+!   struct darwin_dev_handle *device = dev->impl_info;
+! 
+!   io_return_t result;
+! 
+!   if ( usb_debug > 3 )
+!     fprintf ( stderr, "usb_claim_interface: called for interface %d\n", interface );
+  
+!   if (!device)
+!     USB_ERROR_STR ( -ENOENT, "usb_claim_interface: device is NULL" );
+! 
+!   if (!(device->device))
+!     USB_ERROR_STR ( -EINVAL, "usb_claim_interface: device->device is NULL" );
+! 
+!   /* If we have already claimed an interface, release it */
+!   if ( device->interface )
+!     usb_release_interface(dev, dev->interface);
+! 
+!   result = claim_interface ( dev, interface );
+!   if ( result )
+!     USB_ERROR_STR ( result, "usb_claim_interface: couldn't claim interface" );
+  
+    dev->interface = interface;
+  
+!   /* interface is claimed and async IO is set up: return 0 */
+    return 0;
+  }
+  
+***************
+*** 292,307 ****
+  
+    result = (*(device->interface))->USBInterfaceClose(device->interface);
+  
+!   if (result)
+!     USB_ERROR_STR(result, "error closing interface");
+  
+    result = (*(device->interface))->Release(device->interface);
+  
+!   if (result)
+!     USB_ERROR_STR(result, "error releasing interface");
+  
+    device->interface = NULL;
+  
+    return 0;
+  }
+  
+--- 554,574 ----
+  
+    result = (*(device->interface))->USBInterfaceClose(device->interface);
+  
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno(result), "usb_release_interface(USBInterfaceClose): %s",
+! 		  darwin_error_str(result));
+  
+    result = (*(device->interface))->Release(device->interface);
+  
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno(result), "usb_release_interface(Release): %s",
+! 		  darwin_error_str(result));
+  
+    device->interface = NULL;
+  
++   dev->interface = -1;
++   dev->altsetting = -1;
++ 
+    return 0;
+  }
+  
+***************
+*** 318,329 ****
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "interface used without being claimed");
+  
+    result = (*(device->interface))->SetAlternateInterface(device->interface, alternate);
+  
+    if (result)
+!     USB_ERROR_STR(result, "could not set alternate interface");
+  
+    dev->altsetting = alternate;
+  
+--- 585,596 ----
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "usb_set_altinterface: interface used without being claimed");
+  
+    result = (*(device->interface))->SetAlternateInterface(device->interface, alternate);
+  
+    if (result)
+!     USB_ERROR_STR(result, "usb_set_altinterface: could not set alternate interface");
+  
+    dev->altsetting = alternate;
+  
+***************
+*** 336,366 ****
+    u_int8_t numep, direction, number;
+    u_int8_t dont_care1, dont_care3;
+    u_int16_t dont_care2;
+!   int i;
+  
+!   if (usb_debug)
+      fprintf(stderr, "Converting ep address to pipeRef.\n");
+  
+    /* retrieve the total number of endpoints on this interface */
+!   (*(device->interface))->GetNumEndpoints(device->interface, &numep);
+  
+    /* iterate through the pipeRefs until we find the correct one */
+    for (i = 1 ; i <= numep ; i++) {
+!     (*(device->interface))->GetPipeProperties(device->interface, i, &direction, &number,
+! 					      &dont_care1, &dont_care2, &dont_care3);
+  
+      /* calculate the endpoint of the pipe and check it versus the requested endpoint */
+!     if ( (direction << 7 | number) == ep ) {
+!       if (usb_debug)
+! 	fprintf(stderr, "pipeRef for ep 0x%02x found: 0x%02x\n", ep, i);
+  
+        return i;
+      }
+    }
+  
+!   if (usb_debug)
+!     fprintf(stderr, "No pipeRef found with endpoint address 0x%02x.\n", ep);
+! 
+    /* none of the found pipes match the requested endpoint */
+    return -1;
+  }
+--- 603,647 ----
+    u_int8_t numep, direction, number;
+    u_int8_t dont_care1, dont_care3;
+    u_int16_t dont_care2;
+!   int i, ret;
+  
+!   if (usb_debug > 1)
+      fprintf(stderr, "Converting ep address to pipeRef.\n");
+  
+    /* retrieve the total number of endpoints on this interface */
+!   ret = (*(device->interface))->GetNumEndpoints(device->interface, &numep);
+!   if ( ret ) {
+!     if ( usb_debug > 1 )
+!       fprintf ( stderr, "ep_to_pipeRef: interface is %x\n", device->interface );
+!     USB_ERROR_STR ( -ret, "ep_to_pipeRef: can't get number of endpoints for interface" );
+!   }
+  
+    /* iterate through the pipeRefs until we find the correct one */
+    for (i = 1 ; i <= numep ; i++) {
+!     ret = (*(device->interface))->GetPipeProperties(device->interface, i, &direction, &number,
+! 						    &dont_care1, &dont_care2, &dont_care3);
+! 
+!     if (ret != kIOReturnSuccess) {
+!       fprintf (stderr, "ep_to_pipeRef: an error occurred getting pipe information on pipe %d\n",
+! 	       i );
+!       USB_ERROR_STR(-darwin_to_errno(ret), "ep_to_pipeRef(GetPipeProperties): %s", darwin_error_str(ret));
+!     }
+! 
+!     if (usb_debug > 1)
+!       fprintf (stderr, "ep_to_pipeRef: Pipe %i: DIR: %i number: %i\n", i, direction, number);
+  
+      /* calculate the endpoint of the pipe and check it versus the requested endpoint */
+!     if ( ((direction << 7 & USB_ENDPOINT_DIR_MASK) | (number & USB_ENDPOINT_ADDRESS_MASK)) == ep ) {
+!       if (usb_debug > 1)
+! 	fprintf(stderr, "ep_to_pipeRef: pipeRef for ep address 0x%02x found: 0x%02x\n", ep, i);
+  
+        return i;
+      }
+    }
+  
+!   if (usb_debug > 1)
+!     fprintf(stderr, "ep_to_pipeRef: No pipeRef found with endpoint address 0x%02x.\n", ep);
+!   
+    /* none of the found pipes match the requested endpoint */
+    return -1;
+  }
+***************
+*** 373,380 ****
+    CFRunLoopStop(CFRunLoopGetCurrent());
+  }
+  
+- /* FIXME: Does this need to write chunks like we read chunks? --jerdfelt */
+- /* these will require lots of work */
+  int usb_bulk_write(usb_dev_handle *dev, int ep, char *bytes, int size,
+                     int timeout)
+  {
+--- 654,659 ----
+***************
+*** 383,388 ****
+--- 662,670 ----
+    io_return_t result = -1;
+    int pipeRef;
+  
++   UInt8   direction, number, transferType, interval;
++   UInt16			       maxPacketSize;
++ 
+    if (!dev)
+      USB_ERROR(-ENXIO);
+  
+***************
+*** 391,422 ****
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "interface used without being claimed");
+  
+!   if ((pipeRef = ep_to_pipeRef(device, ep)) == -1)
+      USB_ERROR(-EINVAL);
+  
+    if (usb_debug > 3)
+      fprintf(stderr, "usb_bulk_write: endpoint=0x%02x size=%i TO=%i\n", ep, size, timeout);
+  
+    (*(device->interface))->CreateInterfaceAsyncEventSource(device->interface, &cfSource);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), cfSource, kCFRunLoopDefaultMode);
+  
+    /* there seems to be no way to determine how many bytes are actually written */
+!   result = (*(device->interface))->WritePipeAsyncTO(device->interface, pipeRef,
+! 					    bytes, size, 0, timeout,
+! 					    write_completed, NULL);
+! 
+!   /* wait for write to complete */
+!   CFRunLoopRun();
+  
+!   if (usb_debug)
+!     fprintf(stderr, "CFLoopRun returned\n");
+  
+-   if (result)
+-     USB_ERROR_STR(result, "error writing to device");
+  
+!   return 0;
+  }
+  
+  int usb_bulk_read(usb_dev_handle *dev, int ep, char *bytes, int size,
+--- 673,713 ----
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "usb_bulk_write: interface used without being claimed");
+  
+!   if ((pipeRef = ep_to_pipeRef(device, ep)) < 0)
+      USB_ERROR(-EINVAL);
+  
+    if (usb_debug > 3)
+      fprintf(stderr, "usb_bulk_write: endpoint=0x%02x size=%i TO=%i\n", ep, size, timeout);
+  
++   (*(device->interface))->GetPipeProperties ( device->interface, pipeRef, &direction, &number,
++ 					     &transferType, &maxPacketSize, &interval );
++ 
+    (*(device->interface))->CreateInterfaceAsyncEventSource(device->interface, &cfSource);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), cfSource, kCFRunLoopDefaultMode);
+  
+    /* there seems to be no way to determine how many bytes are actually written */
+! #if !defined (LIBUSB_NO_TIMEOUT_INTERFACE)
+!   if ( transferType == kUSBInterrupt )
+!     result = (*(device->interface))->WritePipeAsyncTO(device->interface, pipeRef,
+! 						      bytes, size, 0, timeout,
+! 						      write_completed, NULL);
+!   else
+! #endif
+!     result = (*(device->interface))->WritePipeAsync(device->interface, pipeRef,
+! 						    bytes, size, write_completed, NULL);
+!   
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno(result), "usb_bulk_write(WritePipeAsyncTO): %s", darwin_error_str(result));
+!   else
+!     /* wait for write to complete */
+!     CFRunLoopRun();
+  
+!   CFRunLoopRemoveSource(CFRunLoopGetCurrent(), cfSource, kCFRunLoopDefaultMode);
+  
+  
+!   return size;
+  }
+  
+  int usb_bulk_read(usb_dev_handle *dev, int ep, char *bytes, int size,
+***************
+*** 428,475 ****
+    u_int32_t retrieved = 0;
+    io_return_t result = -1;
+  
+    if (!dev)
+!     USB_ERROR(-ENXIO);
+  
+    if ((device = dev->impl_info) == NULL)
+!     USB_ERROR(-ENOENT);
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "interface used without being claimed");
+  
+    if ((pipeRef = ep_to_pipeRef(device, ep)) == -1)
+!     USB_ERROR(-EINVAL);
+  
+    if (usb_debug > 3)
+!     fprintf(stderr, "usb_bulk_read: endpoint=0x%02x size=%i TO=%i\n", ep, size, timeout);
+  
+!   /* now in a loop, this should fix the problems reading large amounts of data from
+!      the bulk endpoint */
+!   do {
+!     result = (*(device->interface))->ReadPipeTO(device->interface, pipeRef,
+! 					     bytes + retrieved, (UInt32 *)&ret_size, 0, timeout);
+!     if (result)
+!       USB_ERROR_STR(result, "error reading from bulk endpoint %02x", ep);
+! 
+!     retrieved += ret_size;
+!     ret_size = size - retrieved;
+!   } while (!result && retrieved < size);
+  
+!   if (result || (ret_size < 0))
+!     USB_ERROR_STR(result ? result : ret_size, "error reading from endpoint %02x", ep);
+  
+!   retrieved += ret_size;
+  
+    return retrieved;
+  }
+  
+  int usb_control_msg(usb_dev_handle *dev, int requesttype, int request,
+!                      int value, int index, char *bytes, int size, int timeout)
+  {
+    struct darwin_dev_handle *device = dev->impl_info;
+! 
+    IOUSBDevRequestTO urequest;
+    io_return_t result;
+  
+    if (usb_debug >= 3)
+--- 719,806 ----
+    u_int32_t retrieved = 0;
+    io_return_t result = -1;
+  
++   UInt8				direction, number, transferType, interval;
++   UInt16				maxPacketSize;
++ 
++   if (usb_debug)
++     fprintf (stderr, "usb_bulk_read: ep addr = 0x%02x\n", ep);
++ 
++   ep |= 0x80; /* USB_DIR_OUT */
++ 
+    if (!dev)
+!     USB_ERROR_STR ( -ENXIO, "usb_bulk_read: called with null device" );
+  
+    if ((device = dev->impl_info) == NULL)
+!     USB_ERROR_STR ( -ENOENT, "usb_bulk_read: device not initialized" );
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "usb_bulk_read: interface used without being claimed");
+  
+    if ((pipeRef = ep_to_pipeRef(device, ep)) == -1)
+!     USB_ERROR_STR ( -EINVAL, "usb_bulk_read: invalid pipe reference" );
+  
+    if (usb_debug > 3)
+!     fprintf(stderr, "usb_bulk_read: endpoint=0x%02x size=%i timeout=%fsec\n" , ep, size, (double)timeout/1000 );
+  
+!   (*(device->interface))->GetPipeProperties ( device->interface, pipeRef, &direction, &number,
+! 					     &transferType, &maxPacketSize, &interval );
+  
+! #if !defined (LIBUSB_NO_TIMEOUT_INTERFACE)
+!   if ( transferType == kUSBInterrupt ) {
+! #endif
+!     /* This is an interrupt pipe. We can't specify a timeout. */
+!     if (usb_debug > 3)
+!       fprintf(stderr, "usb_bulk_read: interrupt pipe\n" );
+!     result = (*(device->interface))->ReadPipe(device->interface, pipeRef,
+! 						  bytes, (UInt32 *)&ret_size);
+!     if (result != kIOReturnSuccess)
+!       USB_ERROR_STR(-darwin_to_errno(result), "usb_bulk_read(ReadPipe): error reading from bulk endpoint %02x: %s",
+! 		    ep, darwin_error_str(result));
+! 
+!     retrieved = ret_size;
+! #if !defined (LIBUSB_NO_TIMEOUT_INTERFACE)
+!   } else {
+!     result = (*(device->interface))->ReadPipeTO(device->interface, pipeRef,
+! 						bytes + retrieved, (UInt32 *)&ret_size, 0,
+! 						timeout);
+!     
+!     if (result != kIOReturnSuccess)
+!       USB_ERROR_STR(-darwin_to_errno(result), "usb_bulk_read(ReadPipeTO): error reading from bulk endpoint %02x: %s",
+! 		    ep, darwin_error_str(result));
+!     retrieved = ret_size;
+!   }
+! #endif
+  
+!   /* Will this ever be true? -N */
+!   if (retrieved < 0)
+!     USB_ERROR_STR(retrieved, "usb_bulk_read: error reading from endpoint %02x", ep);
+  
+    return retrieved;
+  }
+  
++ /* interrupt endpoints seem to be treated just like any other endpoint under OSX/Darwin */
++ int usb_interrupt_write(usb_dev_handle *dev, int ep, char *bytes, int size,
++ 	int timeout)
++ {
++   return usb_bulk_write (dev, ep, bytes, size, timeout);
++ }
++ 
++ int usb_interrupt_read(usb_dev_handle *dev, int ep, char *bytes, int size,
++ 	int timeout)
++ {
++   return usb_bulk_read (dev, ep, bytes, size, timeout);
++ }
++ 
+  int usb_control_msg(usb_dev_handle *dev, int requesttype, int request,
+! 		    int value, int index, char *bytes, int size, int timeout)
+  {
+    struct darwin_dev_handle *device = dev->impl_info;
+! #if !defined (LIBUSB_NO_TIMEOUT_DEVICE)
+    IOUSBDevRequestTO urequest;
++ #else
++   IOUSBDevRequest urequest;
++ #endif
+    io_return_t result;
+  
+    if (usb_debug >= 3)
+***************
+*** 484,498 ****
+    urequest.wIndex = index;
+    urequest.wLength = size;
+    urequest.pData = bytes;
+    urequest.completionTimeout = timeout;
+  
+    result = (*(device->device))->DeviceRequestTO(device->device, &urequest);
+  
+!   if (result)
+!     USB_ERROR_STR(result, "error sending control message");
+! 
+!   /* i am pretty sure DeviceRequest modifies this */
+!   return urequest.wLength;
+  }
+  
+  int usb_os_find_busses(struct usb_bus **busses)
+--- 815,832 ----
+    urequest.wIndex = index;
+    urequest.wLength = size;
+    urequest.pData = bytes;
++ #if !defined (LIBUSB_NO_TIMEOUT_DEVICE)
+    urequest.completionTimeout = timeout;
+  
+    result = (*(device->device))->DeviceRequestTO(device->device, &urequest);
++ #else
++   result = (*(device->device))->DeviceRequest(device->device, &urequest);
++ #endif
++   if (result != kIOReturnSuccess)
++     USB_ERROR_STR(-darwin_to_errno(result), "usb_control_msg(DeviceRequestTO): %s", darwin_error_str(result));
+  
+!   /* Bytes transfered is stored in the wLenDone field*/
+!   return urequest.wLenDone;
+  }
+  
+  int usb_os_find_busses(struct usb_bus **busses)
+***************
+*** 505,513 ****
+    usb_device_t **device;
+  
+    IOCFPlugInInterface **plugInInterface = NULL;
+-   IONotificationPortRef gNotifyPort;
+- 
+-   CFMutableDictionaryRef matchingDict;
+  
+    io_return_t result;
+    SInt32 score;
+--- 839,844 ----
+***************
+*** 515,589 ****
+    UInt32 location;
+  
+    char buf[20];
+!   int busnum = 0;
+  
+    /* Create a master port for communication with IOKit (this should
+!    have been created if the user called usb_init() )*/
+    if (!masterPort) {
+!     result = IOMasterPort(MACH_PORT_NULL, &masterPort);
+  
+      if (result || !masterPort)
+        USB_ERROR(-ENOENT);
+    }
+  
+!   /* set up the matching dictionary for class IOUSBDevice and it's subclasses */
+!   if ((matchingDict = IOServiceMatching(kIOUSBDeviceClassName)) == NULL) {
+!     mach_port_deallocate(mach_task_self(), masterPort);
+      USB_ERROR(-ENOMEM);
+    }
+  
+!   gNotifyPort = IONotificationPortCreate(masterPort);
+!   runLoopSource = IONotificationPortGetRunLoopSource(gNotifyPort);
+  
+!   CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource,
+!                      kCFRunLoopDefaultMode);
+  
+-   result = IOServiceAddMatchingNotification(gNotifyPort, kIOFirstMatchNotification,
+-                                             matchingDict, NULL, NULL,
+-                                             &deviceIterator);
+  
+!   while (usbDevice = IOIteratorNext(deviceIterator)) {
+      struct usb_bus *bus;
+  
+      /* Create an intermediate plug-in */
+!     result = IOCreatePlugInInterfaceForService(usbDevice, kIOUSBDeviceUserClientTypeID,
+!                                                kIOCFPlugInInterfaceID, &plugInInterface,
+                                                 &score);
+  
+      result = IOObjectRelease(usbDevice);
+      if (result || !plugInInterface)
+        continue;
+  
+!     (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID),
+                                         (LPVOID)&device);
+  
+      /* done with this */
+!     (*plugInInterface)->Release(plugInInterface);
+  
+      if (!device)
+        continue;
+  
+-     result = (*(device))->GetDeviceAddress(device, (USBDeviceAddress *)&address);
+      result = (*(device))->GetLocationID(device, &location);
+  
+!     if (address == 0x1) {
+!       bus = malloc(sizeof(*bus));
+!       if (!bus)
+! 	USB_ERROR(-ENOMEM);
+! 
+!       memset((void *)bus, 0, sizeof(*bus));
+  
+!       sprintf(buf, "%03i", ( (location & 0x0f000000) >> 24) - 0x8);
+!       strncpy(bus->dirname, buf, sizeof(bus->dirname) - 1);
+!       bus->dirname[sizeof(bus->dirname) - 1] = 0;
+! 
+!       LIST_ADD(fbus, bus);
+! 
+!       if (usb_debug >= 2)
+! 	fprintf(stderr, "usb_os_find_busses: Found %s\n", bus->dirname);
+! 
+!       (*(device))->Release(device);
+!     }
+    }
+  
+    IOObjectRelease(deviceIterator);
+--- 846,925 ----
+    UInt32 location;
+  
+    char buf[20];
+!   int i = 1;
+  
+    /* Create a master port for communication with IOKit (this should
+!      have been created if the user called usb_init() )*/
+    if (!masterPort) {
+!     usb_init ();
+  
+      if (result || !masterPort)
+        USB_ERROR(-ENOENT);
+    }
+  
+!   /* set up the matching dictionary for class IOUSBRootHubDevice
+!      and its subclasses. It will be consumed by the next call */
+!   if ((matchingDict = IOServiceMatching("IOUSBRootHubDevice")) == NULL) {
+!     darwin_cleanup ();
+! 
+      USB_ERROR(-ENOMEM);
+    }
+  
+!   result = IOServiceGetMatchingServices(masterPort,
+! 					matchingDict,
+! 					&deviceIterator);
+!   matchingDict = NULL;
+  
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno (result), "usb_os_find_busses(IOServiceGetMatchingServices): %s", darwin_error_str(result));
+  
+  
+!   while (IOIteratorIsValid(deviceIterator) && (usbDevice = IOIteratorNext(deviceIterator))) {
+      struct usb_bus *bus;
+  
+      /* Create an intermediate plug-in */
+!     result = IOCreatePlugInInterfaceForService(usbDevice,
+! 					       kIOUSBDeviceUserClientTypeID,
+!                                                kIOCFPlugInInterfaceID,
+! 					       &plugInInterface,
+                                                 &score);
+  
+      result = IOObjectRelease(usbDevice);
+      if (result || !plugInInterface)
+        continue;
+  
+!     (*plugInInterface)->QueryInterface(plugInInterface,
+! 				       CFUUIDGetUUIDBytes(DeviceInterfaceID),
+                                         (LPVOID)&device);
+  
+      /* done with this */
+!     (*plugInInterface)->Stop(plugInInterface);
+!     IODestroyPlugInInterface (plugInInterface);
+!     plugInInterface = NULL;
+  
+      if (!device)
+        continue;
+  
+      result = (*(device))->GetLocationID(device, &location);
+  
+!     bus = malloc(sizeof(*bus));
+!     if (!bus)
+!       USB_ERROR(-ENOMEM);
+!     
+!     memset((void *)bus, 0, sizeof(*bus));
+!     
+!     sprintf(buf, "%03i", i++);
+!     bus->location = location;
+! 
+!     strncpy(bus->dirname, buf, sizeof(bus->dirname) - 1);
+!     bus->dirname[sizeof(bus->dirname) - 1] = 0;
+!     
+!     LIST_ADD(fbus, bus);
+!     
+!     if (usb_debug >= 2)
+!       fprintf(stderr, "usb_os_find_busses: Found %s\n", bus->dirname);
+  
+!     (*(device))->Release(device);
+    }
+  
+    IOObjectRelease(deviceIterator);
+***************
+*** 603,617 ****
+    usb_device_t **device;
+  
+    IOCFPlugInInterface **plugInInterface = NULL;
+-   IONotificationPortRef gNotifyPort;
+- 
+-   CFMutableDictionaryRef matchingDict;
+  
+    io_return_t result;
+    SInt32 score;
+    UInt16 address;
+    UInt32 location;
+!   UInt32 bus_loc = atoi(bus->dirname);
+  
+    /* for use in retrieving device description */
+    IOUSBDevRequest req;
+--- 939,950 ----
+    usb_device_t **device;
+  
+    IOCFPlugInInterface **plugInInterface = NULL;
+  
+    io_return_t result;
+    SInt32 score;
+    UInt16 address;
+    UInt32 location;
+!   UInt32 bus_loc = bus->location;
+  
+    /* for use in retrieving device description */
+    IOUSBDevRequest req;
+***************
+*** 623,643 ****
+    if (!masterPort)
+      USB_ERROR(-ENOENT);
+  
+!   /* set up the matching dictionary for class IOUSBDevice and it's subclasses */
+    if ((matchingDict = IOServiceMatching(kIOUSBDeviceClassName)) == NULL) {
+!     mach_port_deallocate(mach_task_self(), masterPort);
+      USB_ERROR(-ENOMEM);
+    }
+  
+!   gNotifyPort = IONotificationPortCreate(masterPort);
+!   runLoopSource = IONotificationPortGetRunLoopSource(gNotifyPort);
+  
+!   CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource,
+!                      kCFRunLoopDefaultMode);
+! 
+!   result = IOServiceAddMatchingNotification(gNotifyPort, kIOFirstMatchNotification,
+!                                             matchingDict, NULL, NULL,
+!                                             &deviceIterator);
+  
+    req.bmRequestType = USBmakebmRequestType(kUSBIn, kUSBStandard, kUSBDevice);
+    req.bRequest = kUSBRqGetDescriptor;
+--- 956,974 ----
+    if (!masterPort)
+      USB_ERROR(-ENOENT);
+  
+!   /* set up the matching dictionary for class IOUSBDevice and its subclasses.
+!      It will be consumed by the next call */
+    if ((matchingDict = IOServiceMatching(kIOUSBDeviceClassName)) == NULL) {
+!     darwin_cleanup ();
+! 
+      USB_ERROR(-ENOMEM);
+    }
+  
+!   result = IOServiceGetMatchingServices(masterPort, matchingDict, &deviceIterator);
+!   matchingDict = NULL;
+  
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno (result), "usb_os_find_devices(IOServiceGetMatchingServices): %s", darwin_error_str(result));
+  
+    req.bmRequestType = USBmakebmRequestType(kUSBIn, kUSBStandard, kUSBDevice);
+    req.bRequest = kUSBRqGetDescriptor;
+***************
+*** 645,651 ****
+    req.wIndex = 0;
+    req.wLength = sizeof(IOUSBDeviceDescriptor);
+  
+!   while (usbDevice = IOIteratorNext(deviceIterator)) {
+      /* Create an intermediate plug-in */
+      result = IOCreatePlugInInterfaceForService(usbDevice, kIOUSBDeviceUserClientTypeID,
+                                                 kIOCFPlugInInterfaceID, &plugInInterface,
+--- 976,982 ----
+    req.wIndex = 0;
+    req.wLength = sizeof(IOUSBDeviceDescriptor);
+  
+!   while (IOIteratorIsValid (deviceIterator) && (usbDevice = IOIteratorNext(deviceIterator))) {
+      /* Create an intermediate plug-in */
+      result = IOCreatePlugInInterfaceForService(usbDevice, kIOUSBDeviceUserClientTypeID,
+                                                 kIOCFPlugInInterfaceID, &plugInInterface,
+***************
+*** 655,665 ****
+      if (result || !plugInInterface)
+        continue;
+  
+!     (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID),
+                                         (LPVOID)&device);
+  
+      /* done with this */
+!     (*plugInInterface)->Release(plugInInterface);
+  
+      if (!device)
+        continue;
+--- 986,998 ----
+      if (result || !plugInInterface)
+        continue;
+  
+!     (*plugInInterface)->QueryInterface(plugInInterface, CFUUIDGetUUIDBytes(DeviceInterfaceID),
+                                         (LPVOID)&device);
+  
+      /* done with this */
+!     (*plugInInterface)->Stop(plugInInterface);
+!     IODestroyPlugInInterface (plugInInterface);
+!     plugInInterface = NULL;
+  
+      if (!device)
+        continue;
+***************
+*** 667,684 ****
+      result = (*(device))->GetDeviceAddress(device, (USBDeviceAddress *)&address);
+      result = (*(device))->GetLocationID(device, &location);
+  
+!     if ((location & 0x0f000000) == ((bus_loc + 0x8) << 24)) {
+        struct usb_device *dev;
+  
+        dev = malloc(sizeof(*dev));
+!       if (!dev)
+  	USB_ERROR(-ENOMEM);
+  
+        memset((void *)dev, 0, sizeof(*dev));
+  
+        dev->bus = bus;
+  
+-       sprintf(dev->filename, "%03i", address);
+        req.pData = &(dev->descriptor);
+        result = (*(device))->DeviceRequest(device, &req);
+  
+--- 1000,1021 ----
+      result = (*(device))->GetDeviceAddress(device, (USBDeviceAddress *)&address);
+      result = (*(device))->GetLocationID(device, &location);
+  
+!     if (usb_debug >= 2)
+!       fprintf(stderr, "usb_os_find_devices: Found USB device at location 0x%08x\n", location);
+! 
+!     /* first byte of location appears to be associated with the device's bus */
+!     if (location >> 24 == bus_loc >> 24) {
+        struct usb_device *dev;
+  
+        dev = malloc(sizeof(*dev));
+!       if (!dev) {
+  	USB_ERROR(-ENOMEM);
++       }
+  
+        memset((void *)dev, 0, sizeof(*dev));
+  
+        dev->bus = bus;
+  
+        req.pData = &(dev->descriptor);
+        result = (*(device))->DeviceRequest(device, &req);
+  
+***************
+*** 687,704 ****
+        USB_LE16_TO_CPU(dev->descriptor.idProduct);
+        USB_LE16_TO_CPU(dev->descriptor.bcdDevice);
+  
+        dev->dev = (USBDeviceAddress *)malloc(4);
+        memcpy(dev->dev, &location, 4);
+  
+        LIST_ADD(fdev, dev);
+  
+        if (usb_debug >= 2)
+! 	fprintf(stderr, "usb_os_find_devices: Found %s on %s\n",
+! 		dev->filename, bus->dirname);
+! 
+!       /* release the device now */
+!       (*(device))->Release(device);
+      }
+    }
+  
+    IOObjectRelease(deviceIterator);
+--- 1024,1045 ----
+        USB_LE16_TO_CPU(dev->descriptor.idProduct);
+        USB_LE16_TO_CPU(dev->descriptor.bcdDevice);
+  
++       sprintf(dev->filename, "%03i-%04x-%04x-%02x-%02x", address,
++ 	      dev->descriptor.idVendor, dev->descriptor.idProduct,
++ 	      dev->descriptor.bDeviceClass, dev->descriptor.bDeviceSubClass);
++ 
+        dev->dev = (USBDeviceAddress *)malloc(4);
+        memcpy(dev->dev, &location, 4);
+  
+        LIST_ADD(fdev, dev);
+  
+        if (usb_debug >= 2)
+! 	fprintf(stderr, "usb_os_find_devices: Found %s on %s at location 0x%08x\n",
+! 		dev->filename, bus->dirname, location);
+      }
++ 
++     /* release the device now */
++     (*(device))->Release(device);
+    }
+  
+    IOObjectRelease(deviceIterator);
+***************
+*** 710,722 ****
+  
+  void usb_os_init(void)
+  {
+!   IOMasterPort(MACH_PORT_NULL, &masterPort);
+  }
+  
+  int usb_resetep(usb_dev_handle *dev, unsigned int ep)
+  {
+    struct darwin_dev_handle *device;
+    io_return_t result = -1;
+  
+    if (!dev)
+      USB_ERROR(-ENXIO);
+--- 1051,1076 ----
+  
+  void usb_os_init(void)
+  {
+!   if (masterPort == NULL) {
+!     IOMasterPort(MACH_PORT_NULL, &masterPort);
+!     
+!     gNotifyPort = IONotificationPortCreate(masterPort);
+!   }
+! }
+! 
+! void usb_os_cleanup (void)
+! {
+!   if (masterPort != NULL) {
+!     mach_port_deallocate(mach_task_self(), masterPort);
+!     masterPort = NULL;
+!   }
+  }
+  
+  int usb_resetep(usb_dev_handle *dev, unsigned int ep)
+  {
+    struct darwin_dev_handle *device;
+    io_return_t result = -1;
++   int pipeRef;
+  
+    if (!dev)
+      USB_ERROR(-ENXIO);
+***************
+*** 726,737 ****
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "interface used without being claimed");
+  
+!   result = (*(device->interface))->ResetPipe(device->interface, ep);
+  
+!   if (result)
+!     USB_ERROR_STR(result, "error resetting pipe");
+  
+    return 0;
+  }
+--- 1080,1094 ----
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "usb_resetep: interface used without being claimed");
+  
+!   if ((pipeRef = ep_to_pipeRef(device, ep)) == -1)
+!     USB_ERROR(-EINVAL);
+  
+!   result = (*(device->interface))->ResetPipe(device->interface, pipeRef);
+! 
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno(result), "usb_resetep(ResetPipe): %s", darwin_error_str(result));
+  
+    return 0;
+  }
+***************
+*** 740,745 ****
+--- 1097,1103 ----
+  {
+    struct darwin_dev_handle *device;
+    io_return_t result = -1;
++   int pipeRef;
+  
+    if (!dev)
+      USB_ERROR(-ENXIO);
+***************
+*** 749,760 ****
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "interface used without being claimed");
+  
+!   result = (*(device->interface))->ClearPipeStall(device->interface, ep);
+  
+!   if (result)
+!     USB_ERROR_STR(result, "error clearing pipe stall");
+  
+    return 0;
+  }
+--- 1107,1121 ----
+  
+    /* interface is not open */
+    if (!device->interface)
+!     USB_ERROR_STR(-EACCES, "usb_clear_halt: interface used without being claimed");
+  
+!   if ((pipeRef = ep_to_pipeRef(device, ep)) == -1)
+!     USB_ERROR(-EINVAL);
+  
+!   result = (*(device->interface))->ClearPipeStall(device->interface, pipeRef);
+! 
+!   if (result != kIOReturnSuccess)
+!     USB_ERROR_STR(-darwin_to_errno(result), "usb_clear_halt(ClearPipeStall): %s", darwin_error_str(result));
+  
+    return 0;
+  }
+***************
+*** 762,767 ****
+--- 1123,1129 ----
+  int usb_reset(usb_dev_handle *dev)
+  {
+    struct darwin_dev_handle *device;
++   int result;
+  
+    if (!dev)
+      USB_ERROR(-ENXIO);
+***************
+*** 769,779 ****
+    if ((device = dev->impl_info) == NULL)
+      USB_ERROR(-ENOENT);
+  
+!   if (device->device)
+!     (*(device->device))->ResetDevice(device->device);
+!   else
+!     USB_ERROR_STR(-ENOENT, "no such device");
+  
+    return 0;
+  }
+- 
+--- 1131,1143 ----
+    if ((device = dev->impl_info) == NULL)
+      USB_ERROR(-ENOENT);
+  
+!   if (!device->device)
+!     USB_ERROR_STR(-ENOENT, "usb_reset: no such device");
+! 
+!   result = (*(device->device))->ResetDevice(device->device);
+  
++   if (result != kIOReturnSuccess)
++     USB_ERROR_STR(-darwin_to_errno(result), "usb_reset(ResetDevice): %s", darwin_error_str(result));
++   
+    return 0;
+  }
+Index: descriptors.c
+===================================================================
+RCS file: /cvsroot/libusb/libusb/descriptors.c,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -c -r1.4 -r1.5
+*** descriptors.c	7 May 2002 00:00:23 -0000	1.4
+--- descriptors.c	14 Jan 2004 19:50:54 -0000	1.5
+***************
+*** 9,15 ****
+  #include <stdio.h>
+  #include "usbi.h"
+  
+! int usb_get_descriptor(usb_dev_handle *udev, unsigned char type, unsigned char index, void *buf, int size)
+  {
+    memset(buf, 0, size);
+  
+--- 9,25 ----
+  #include <stdio.h>
+  #include "usbi.h"
+  
+! int usb_get_descriptor_by_endpoint(usb_dev_handle *udev, int ep,
+! 	unsigned char type, unsigned char index, void *buf, int size)
+! {
+!   memset(buf, 0, size);
+! 
+!   return usb_control_msg(udev, ep | USB_ENDPOINT_IN, USB_REQ_GET_DESCRIPTOR,
+!                         (type << 8) + index, 0, buf, size, 1000);
+! }
+! 
+! int usb_get_descriptor(usb_dev_handle *udev, unsigned char type,
+! 	unsigned char index, void *buf, int size)
+  {
+    memset(buf, 0, size);
+  
+***************
+*** 110,116 ****
+    return parsed;
+  }
+  
+! static int usb_parse_interface(struct usb_interface *interface, unsigned char *buffer, int size)
+  {
+    int i, len, numskipped, retval, parsed = 0;
+    struct usb_descriptor_header *header;
+--- 120,127 ----
+    return parsed;
+  }
+  
+! static int usb_parse_interface(struct usb_interface *interface,
+! 	unsigned char *buffer, int size)
+  {
+    int i, len, numskipped, retval, parsed = 0;
+    struct usb_descriptor_header *header;
+Index: linux.c
+===================================================================
+RCS file: /cvsroot/libusb/libusb/linux.c,v
+retrieving revision 1.35
+retrieving revision 1.48
+diff -c -r1.35 -r1.48
+*** linux.c	18 Sep 2002 01:25:34 -0000	1.35
+--- linux.c	20 Jan 2004 19:05:55 -0000	1.48
+***************
+*** 1,7 ****
+  /*
+   * Linux USB support
+   *
+!  * Copyright (c) 2000-2002 Johannes Erdfelt <johannes@erdfelt.com>
+   *
+   * This library is covered by the LGPL, read LICENSE for details.
+   */
+--- 1,7 ----
+  /*
+   * Linux USB support
+   *
+!  * Copyright (c) 2000-2003 Johannes Erdfelt <johannes@erdfelt.com>
+   *
+   * This library is covered by the LGPL, read LICENSE for details.
+   */
+***************
+*** 110,116 ****
+  
+    ret = ioctl(dev->fd, IOCTL_USB_SETINTF, &setintf);
+    if (ret < 0)
+!     USB_ERROR_STR(ret, "could not set alt intf %d/%d: %s",
+  	dev->interface, alternate, strerror(errno));
+  
+    dev->altsetting = alternate;
+--- 110,116 ----
+  
+    ret = ioctl(dev->fd, IOCTL_USB_SETINTF, &setintf);
+    if (ret < 0)
+!     USB_ERROR_STR(-errno, "could not set alt intf %d/%d: %s",
+  	dev->interface, alternate, strerror(errno));
+  
+    dev->altsetting = alternate;
+***************
+*** 141,147 ****
+  
+      ret = ioctl(dev->fd, IOCTL_USB_BULK, &bulk);
+      if (ret < 0)
+!       USB_ERROR_STR(ret, "error writing to bulk endpoint %d: %s",
+  	ep, strerror(errno));
+  
+      sent += ret;
+--- 141,147 ----
+  
+      ret = ioctl(dev->fd, IOCTL_USB_BULK, &bulk);
+      if (ret < 0)
+!       USB_ERROR_STR(-errno, "error writing to bulk endpoint %d: %s",
+  	ep, strerror(errno));
+  
+      sent += ret;
+***************
+*** 170,176 ****
+  
+      ret = ioctl(dev->fd, IOCTL_USB_BULK, &bulk);
+      if (ret < 0)
+!       USB_ERROR_STR(ret, "error reading from bulk endpoint 0x%x: %s",
+  	ep, strerror(errno));
+  
+      retrieved += ret;
+--- 170,176 ----
+  
+      ret = ioctl(dev->fd, IOCTL_USB_BULK, &bulk);
+      if (ret < 0)
+!       USB_ERROR_STR(-errno, "error reading from bulk endpoint 0x%x: %s",
+  	ep, strerror(errno));
+  
+      retrieved += ret;
+***************
+*** 196,206 ****
+  
+    ret = ioctl(dev->fd, IOCTL_USB_CONTROL, &ctrl);
+    if (ret < 0)
+!     USB_ERROR_STR(ret, "error sending control message: %s", strerror(errno));
+  
+    return ret;
+  }
+  
+  int usb_os_find_busses(struct usb_bus **busses)
+  {
+    struct usb_bus *fbus = NULL;
+--- 196,308 ----
+  
+    ret = ioctl(dev->fd, IOCTL_USB_CONTROL, &ctrl);
+    if (ret < 0)
+!     USB_ERROR_STR(-errno, "error sending control message: %s", strerror(errno));
+  
+    return ret;
+  }
+  
++ /* Reading and writing are the same except for the endpoint */
++ static int usb_interrupt_transfer(usb_dev_handle *dev, int ep, char *bytes,
++ 	int size, int timeout)
++ {
++   struct usb_urb int_urb;
++   void *context;
++   int ret;
++   unsigned int bytesdone = 0, requested;
++   struct timeval tv, tv_ref, tv_now;
++   int waiting;
++ 
++   /*
++    * FIXME: Packetize large buffers here. 2.4 HCDs (atleast, haven't checked
++    * 2.5 HCDs yet) don't handle multi-packet Interrupt transfers. So we need
++    * to lookup the endpoint packet size and packetize appropriately here.
++    */
++ 
++   /* get actual time, and add the timeout value. The result is the absolute
++    * time where we have to quit waiting for an interrupt message.
++    */
++   gettimeofday(&tv_ref, NULL);
++   tv_ref.tv_sec = tv_ref.tv_sec + timeout / 1000;
++   tv_ref.tv_usec = tv_ref.tv_usec + (timeout % 1000) * 1000;
++ 
++   if (tv_ref.tv_usec > 1e6) {
++     tv_ref.tv_usec -= 1e6;
++     tv_ref.tv_sec++;
++   }
++ 
++   do {
++     requested = size - bytesdone;
++     if (requested > MAX_READ_WRITE)
++       requested = MAX_READ_WRITE;
++ 
++     int_urb.type = USB_URB_TYPE_INTERRUPT;
++     int_urb.endpoint = ep;
++     int_urb.flags = 0;
++     int_urb.buffer = bytes + bytesdone;
++     int_urb.buffer_length = requested;
++     int_urb.usercontext = (void *)ep;
++     int_urb.signr = 0;
++     int_urb.actual_length = 0;
++ 
++     waiting = 1;
++     while (((ret = ioctl(dev->fd, IOCTL_USB_REAPURBNDELAY, &context)) == -1) && waiting) {
++       tv.tv_sec = 0;
++       tv.tv_usec = 1000; // 1 msec
++       select(0, NULL, NULL, NULL, &tv); //sub second wait
++ 
++       /* compare with actual time, as the select timeout is not that precise */
++       gettimeofday(&tv_now, NULL);
++ 
++       if ((tv_now.tv_sec >= tv_ref.tv_sec) && (tv_now.tv_usec >= tv_ref.tv_usec))
++         waiting = 0;
++     }
++ 
++     /*
++      * If there was an error, that wasn't EAGAIN (no completion), then
++      * something happened during the reaping and we should return that
++      * error now
++      */
++     if (ret < 0 && errno != EAGAIN)
++       USB_ERROR_STR(-errno, "error reaping interrupt URB: %s", strerror(errno));
++ 
++     bytesdone += int_urb.actual_length;
++   } while (ret > 0 && bytesdone < size && ret == requested);
++ 
++   /* If the URB didn't complete in success or error, then let's unlink it */
++   if (ret < 0) {
++     int rc;
++ 
++     if (!waiting)
++       rc = -ETIMEDOUT;
++     else
++       rc = int_urb.status;
++ 
++     ret = ioctl(dev->fd, IOCTL_USB_DISCARDURB, &int_urb);
++     if (ret < 0 && errno != EINVAL && usb_debug >= 1)
++       fprintf(stderr, "error discarding interrupt URB: %s", strerror(errno));
++ 
++     return rc;
++   }
++ 
++   return bytesdone;
++ }
++ 
++ int usb_interrupt_write(usb_dev_handle *dev, int ep, char *bytes, int size,
++ 	int timeout)
++ {
++   /* Ensure the endpoint address is correct */
++   return usb_interrupt_transfer(dev, ep & ~USB_ENDPOINT_IN, bytes, size,
++ 		timeout);
++ }
++ 
++ int usb_interrupt_read(usb_dev_handle *dev, int ep, char *bytes, int size,
++ 	int timeout)
++ {
++   /* Ensure the endpoint address is correct */
++   return usb_interrupt_transfer(dev, ep | USB_ENDPOINT_IN, bytes, size,
++ 		timeout);
++ }
++ 
+  int usb_os_find_busses(struct usb_bus **busses)
+  {
+    struct usb_bus *fbus = NULL;
+***************
+*** 451,457 ****
+  
+    ret = ioctl(dev->fd, IOCTL_USB_RESETEP, &ep);
+    if (ret)
+!     USB_ERROR_STR(ret, "could not reset ep %d: %s", ep,
+      	strerror(errno));
+  
+    return 0;
+--- 553,559 ----
+  
+    ret = ioctl(dev->fd, IOCTL_USB_RESETEP, &ep);
+    if (ret)
+!     USB_ERROR_STR(-errno, "could not reset ep %d: %s", ep,
+      	strerror(errno));
+  
+    return 0;
+***************
+*** 463,469 ****
+  
+    ret = ioctl(dev->fd, IOCTL_USB_CLEAR_HALT, &ep);
+    if (ret)
+!     USB_ERROR_STR(ret, "could not clear/halt ep %d: %s", ep,
+      	strerror(errno));
+  
+    return 0;
+--- 565,571 ----
+  
+    ret = ioctl(dev->fd, IOCTL_USB_CLEAR_HALT, &ep);
+    if (ret)
+!     USB_ERROR_STR(-errno, "could not clear/halt ep %d: %s", ep,
+      	strerror(errno));
+  
+    return 0;
+***************
+*** 475,481 ****
+  
+    ret = ioctl(dev->fd, IOCTL_USB_RESET, NULL);
+    if (ret)
+!      USB_ERROR_STR(ret, "could not reset: %s", strerror(errno));
+  
+    return 0;
+  }
+--- 577,618 ----
+  
+    ret = ioctl(dev->fd, IOCTL_USB_RESET, NULL);
+    if (ret)
+!      USB_ERROR_STR(-errno, "could not reset: %s", strerror(errno));
+! 
+!   return 0;
+! }
+! 
+! int usb_get_driver_np(usb_dev_handle *dev, int interface, char *name,
+! 	unsigned int namelen)
+! {
+!   struct usb_getdriver getdrv;
+!   int ret;
+! 
+!   getdrv.interface = interface;
+!   ret = ioctl(dev->fd, IOCTL_USB_GETDRIVER, &getdrv);
+!   if (ret)
+!     USB_ERROR_STR(-errno, "could not get bound driver: %s", strerror(errno));
+! 
+!   strncpy(name, getdrv.driver, namelen - 1);
+!   name[namelen - 1] = 0;
+  
+    return 0;
+  }
++ 
++ int usb_detach_kernel_driver_np(usb_dev_handle *dev, int interface)
++ {
++   struct usb_ioctl command;
++   int ret;
++ 
++   command.ifno = interface;
++   command.ioctl_code = IOCTL_USB_DISCONNECT;
++   command.data = NULL;
++ 
++   ret = ioctl(dev->fd, IOCTL_USB_IOCTL, &command);
++   if (ret)
++     USB_ERROR_STR(-errno, "could not detach kernel driver from interface %d: %s",
++         interface, strerror(errno));
++ 
++   return 0;
++ }
++ 
+Index: linux.h
+===================================================================
+RCS file: /cvsroot/libusb/libusb/linux.h,v
+retrieving revision 1.3
+retrieving revision 1.6
+diff -c -r1.3 -r1.6
+*** linux.h	8 Jul 2002 22:37:03 -0000	1.3
+--- linux.h	20 Jan 2004 19:05:56 -0000	1.6
+***************
+*** 35,49 ****
+--- 35,102 ----
+  	unsigned int altsetting;
+  };
+  
++ #define USB_MAXDRIVERNAME 255
++ 
++ struct usb_getdriver {
++ 	unsigned int interface;
++ 	char driver[USB_MAXDRIVERNAME + 1];
++ };
++ 
++ #define USB_URB_DISABLE_SPD	1
++ #define USB_URB_ISO_ASAP	2
++ #define USB_URB_QUEUE_BULK	0x10
++ 
++ #define USB_URB_TYPE_ISO	0
++ #define USB_URB_TYPE_INTERRUPT	1
++ #define USB_URB_TYPE_CONTROL	2
++ #define USB_URB_TYPE_BULK	3
++ 
++ struct usb_iso_packet_desc {
++ 	unsigned int length;
++ 	unsigned int actual_length;
++ 	unsigned int status;
++ };
++ 
++ struct usb_urb {
++ 	unsigned char type;
++ 	unsigned char endpoint;
++ 	int status;
++ 	unsigned int flags;
++ 	void *buffer;
++ 	int buffer_length;
++ 	int actual_length;
++ 	int start_frame;
++ 	int number_of_packets;
++ 	int error_count;
++ 	unsigned int signr;  /* signal to be sent on error, -1 if none should be sent */
++ 	void *usercontext;
++ 	struct usb_iso_packet_desc iso_frame_desc[0];
++ };
++ 
++ struct usb_ioctl {
++ 	int ifno;	/* interface 0..N ; negative numbers reserved */
++ 	int ioctl_code;	/* MUST encode size + direction of data so the
++ 			 * macros in <asm/ioctl.h> give correct values */
++ 	void *data;	/* param buffer (in, or out) */
++ };
++ 
+  #define IOCTL_USB_CONTROL	_IOWR('U', 0, struct usb_ctrltransfer)
+  #define IOCTL_USB_BULK		_IOWR('U', 2, struct usb_bulktransfer)
+  #define IOCTL_USB_RESETEP	_IOR('U', 3, unsigned int)
+  #define IOCTL_USB_SETINTF	_IOR('U', 4, struct usb_setinterface)
+  #define IOCTL_USB_SETCONFIG	_IOR('U', 5, unsigned int)
++ #define IOCTL_USB_GETDRIVER	_IOW('U', 8, struct usb_getdriver)
++ #define IOCTL_USB_SUBMITURB	_IOR('U', 10, struct usb_urb)
++ #define IOCTL_USB_DISCARDURB	_IO('U', 11)
++ #define IOCTL_USB_REAPURB	_IOW('U', 12, void *)
++ #define IOCTL_USB_REAPURBNDELAY	_IOW('U', 13, void *)
+  #define IOCTL_USB_CLAIMINTF	_IOR('U', 15, unsigned int)
+  #define IOCTL_USB_RELEASEINTF	_IOR('U', 16, unsigned int)
++ #define IOCTL_USB_IOCTL         _IOWR('U', 18, struct usb_ioctl)
+  #define IOCTL_USB_RESET		_IO('U', 20)
+  #define IOCTL_USB_CLEAR_HALT	_IOR('U', 21, unsigned int)
++ #define IOCTL_USB_DISCONNECT	_IO('U', 22)	/* via IOCTL_USB_IOCTL */
++ #define IOCTL_USB_CONNECT	_IO('U', 23)	/* via IOCTL_USB_IOCTL */
+  
+  #endif
+  
+Index: usb.c
+===================================================================
+RCS file: /cvsroot/libusb/libusb/usb.c,v
+retrieving revision 1.24
+retrieving revision 1.31
+diff -c -r1.24 -r1.31
+*** usb.c	17 Nov 2002 18:41:52 -0000	1.24
+--- usb.c	14 Jan 2004 19:50:54 -0000	1.31
+***************
+*** 1,7 ****
+  /*
+   * Main API entry point
+   *
+!  * Copyright (c) 2000-2002 Johannes Erdfelt <johannes@erdfelt.com>
+   *
+   * This library is covered by the LGPL, read LICENSE for details.
+   */
+--- 1,7 ----
+  /*
+   * Main API entry point
+   *
+!  * Copyright (c) 2000-2003 Johannes Erdfelt <johannes@erdfelt.com>
+   *
+   * This library is covered by the LGPL, read LICENSE for details.
+   */
+***************
+*** 201,208 ****
+    return udev;
+  }
+  
+! int usb_get_string(usb_dev_handle *dev, int index, int langid, char *buf, size_t buflen)
+  {
+    return usb_control_msg(dev, USB_ENDPOINT_IN, USB_REQ_GET_DESCRIPTOR,
+  			(USB_DT_STRING << 8) + index, langid, buf, buflen, 1000);
+  }
+--- 201,213 ----
+    return udev;
+  }
+  
+! int usb_get_string(usb_dev_handle *dev, int index, int langid, char *buf,
+! 	size_t buflen)
+  {
++   /*
++    * We can't use usb_get_descriptor() because it's lacking the index
++    * parameter. This will be fixed in libusb 1.0
++    */
+    return usb_control_msg(dev, USB_ENDPOINT_IN, USB_REQ_GET_DESCRIPTOR,
+  			(USB_DT_STRING << 8) + index, langid, buf, buflen, 1000);
+  }
+***************
+*** 212,218 ****
+    char tbuf[256];
+    int ret, langid, si, di;
+  
+!   ret = usb_get_string(dev, index, 0, tbuf, sizeof(tbuf));
+    if (ret < 0)
+      return ret;
+  
+--- 217,230 ----
+    char tbuf[256];
+    int ret, langid, si, di;
+  
+!   /*
+!    * Asking for the zero'th index is special - it returns a string
+!    * descriptor that contains all the language IDs supported by the
+!    * device. Typically there aren't many - often only one. The
+!    * language IDs are 16 bit numbers, and they start at the third byte
+!    * in the descriptor. See USB 2.0 specification, section 9.6.7, for
+!    * more information on this. */
+!   ret = usb_get_string(dev, 0, 0, tbuf, sizeof(tbuf));
+    if (ret < 0)
+      return ret;
+  
+***************
+*** 225,231 ****
+    if (ret < 0)
+      return ret;
+  
+!   for (di = 0, si = 2; si < ret; si += 2) {
+      if (di >= (buflen - 1))
+        break;
+  
+--- 237,249 ----
+    if (ret < 0)
+      return ret;
+  
+!   if (tbuf[1] != USB_DT_STRING)
+!     return -EIO;
+! 
+!   if (tbuf[0] > ret)
+!     return -EFBIG;
+! 
+!   for (di = 0, si = 2; si < tbuf[0]; si += 2) {
+      if (di >= (buflen - 1))
+        break;
+  
+Index: usb.h.in
+===================================================================
+RCS file: /cvsroot/libusb/libusb/usb.h.in,v
+retrieving revision 1.5
+retrieving revision 1.15
+diff -c -r1.5 -r1.15
+*** usb.h.in	17 Nov 2002 18:42:10 -0000	1.5
+--- usb.h.in	20 Jan 2004 19:05:56 -0000	1.15
+***************
+*** 1,3 ****
+--- 1,13 ----
++ /*
++  * Prototypes, structure definitions and macros.
++  *
++  * Copyright (c) 2000-2003 Johannes Erdfelt <johannes@erdfelt.com>
++  *
++  * This library is covered by the LGPL, read LICENSE for details.
++  *
++  * This file (and only this file) may alternatively be licensed under the
++  * BSD license as well, read LICENSE for details.
++  */
+  #ifndef __USB_H__
+  #define __USB_H__
+  
+***************
+*** 71,76 ****
+--- 81,89 ----
+  	u_int16_t bcdHID;
+  	u_int8_t  bCountryCode;
+  	u_int8_t  bNumDescriptors;
++ 	/* u_int8_t  bReportDescriptorType; */
++ 	/* u_int16_t wDescriptorLength; */
++ 	/* ... */
+  };
+  
+  /* Endpoint descriptor */
+***************
+*** 160,165 ****
+--- 173,186 ----
+  	u_int8_t  bNumConfigurations;
+  };
+  
++ struct usb_ctrl_setup {
++ 	u_int8_t  bRequestType;
++ 	u_int8_t  bRequest;
++ 	u_int16_t wValue;
++ 	u_int16_t wIndex;
++ 	u_int16_t wLength;
++ };
++ 
+  /*
+   * Standard requests
+   */
+***************
+*** 230,235 ****
+--- 251,257 ----
+    char dirname[PATH_MAX + 1];
+  
+    struct usb_device *devices;
++   u_int32_t location;
+  };
+  
+  struct usb_dev_handle;
+***************
+*** 243,254 ****
+--- 265,294 ----
+  #endif
+  
+  /* Function prototypes */
++ 
++ /* usb.c */
+  usb_dev_handle *usb_open(struct usb_device *dev);
+  int usb_close(usb_dev_handle *dev);
++ int usb_get_string(usb_dev_handle *dev, int index, int langid, char *buf,
++ 	size_t buflen);
++ int usb_get_string_simple(usb_dev_handle *dev, int index, char *buf,
++ 	size_t buflen);
++ 
++ /* descriptors.c */
++ int usb_get_descriptor_by_endpoint(usb_dev_handle *udev, int ep,
++ 	unsigned char type, unsigned char index, void *buf, int size);
++ int usb_get_descriptor(usb_dev_handle *udev, unsigned char type,
++ 	unsigned char index, void *buf, int size);
++ 
++ /* <arch>.c */
+  int usb_bulk_write(usb_dev_handle *dev, int ep, char *bytes, int size,
+  	int timeout);
+  int usb_bulk_read(usb_dev_handle *dev, int ep, char *bytes, int size,
+  	int timeout);
++ int usb_interrupt_write(usb_dev_handle *dev, int ep, char *bytes, int size,
++         int timeout);
++ int usb_interrupt_read(usb_dev_handle *dev, int ep, char *bytes, int size,
++         int timeout);
+  int usb_control_msg(usb_dev_handle *dev, int requesttype, int request,
+  	int value, int index, char *bytes, int size, int timeout);
+  int usb_set_configuration(usb_dev_handle *dev, int configuration);
+***************
+*** 258,267 ****
+  int usb_resetep(usb_dev_handle *dev, unsigned int ep);
+  int usb_clear_halt(usb_dev_handle *dev, unsigned int ep);
+  int usb_reset(usb_dev_handle *dev);
+! int usb_get_string(usb_dev_handle *dev, int index, int langid, char *buf,
+! 	size_t buflen);
+! int usb_get_string_simple(usb_dev_handle *dev, int index, char *buf,
+! 	size_t buflen);
+  
+  char *usb_strerror(void);
+  
+--- 298,311 ----
+  int usb_resetep(usb_dev_handle *dev, unsigned int ep);
+  int usb_clear_halt(usb_dev_handle *dev, unsigned int ep);
+  int usb_reset(usb_dev_handle *dev);
+! 
+! #if @LINUX_API@
+! #define LIBUSB_HAS_GET_DRIVER_NP 1
+! int usb_get_driver_np(usb_dev_handle *dev, int interface, char *name,
+! 	unsigned int namelen);
+! #define LIBUSB_HAS_DETACH_KERNEL_DRIVER_NP 1
+! int usb_detach_kernel_driver_np(usb_dev_handle *dev, int interface);
+! #endif
+  
+  char *usb_strerror(void);
+  
+Index: doc/api.sgml
+===================================================================
+RCS file: /cvsroot/libusb/libusb/doc/api.sgml,v
+retrieving revision 1.3
+retrieving revision 1.4
+diff -c -r1.3 -r1.4
+*** doc/api.sgml	28 Jun 2002 22:51:38 -0000	1.3
+--- doc/api.sgml	6 Jan 2003 05:36:08 -0000	1.4
+***************
+*** 30,32 ****
+--- 30,38 ----
+      <para>All functions in libusb v0.1 are synchronous, meaning the functions block and wait for the operation to finish or timeout before returning execution to the calling application. Asynchronous operation will be supported in v1.0, but not v0.1.</para>
+    </chapter>
+  
++   <chapter id="api-return-values">
++     <title>Return values</title>
++  
++     <para>There are two types of return values used in libusb v0.1. The first is a handle returned by <xref linkend="function.usbopen">. The second is an int. In all cases where an int is returned, &gt;= 0 is a success and &lt; 0 is an error condition.</para>
++   </chapter>
++ 
+Index: doc/examples.sgml
+===================================================================
+RCS file: /cvsroot/libusb/libusb/doc/examples.sgml,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -c -r1.4 -r1.5
+*** doc/examples.sgml	28 Jun 2002 22:29:53 -0000	1.4
+--- doc/examples.sgml	6 Jan 2003 05:35:09 -0000	1.5
+***************
+*** 5,11 ****
+  
+    <chapter id="examples-code">
+      <title>Basic Examples</title>
+!     <para>Before you can communicate with any devices, you need to find the device you want to talk to. This is accomplished by finding all of the busses and then finding all of the devices on all of the busses:</para>
+      <programlisting>
+  <![CDATA[
+  	struct usb_bus *busses;
+--- 5,11 ----
+  
+    <chapter id="examples-code">
+      <title>Basic Examples</title>
+!     <para>Before any communication can occur with a device, it needs to be found. This is accomplished by finding all of the busses and then finding all of the devices on all of the busses:</para>
+      <programlisting>
+  <![CDATA[
+  	struct usb_bus *busses;
+***************
+*** 17,26 ****
+  	busses = usb_get_busses();
+  ]]>
+      </programlisting>
+!     <para>After this, you manually loop through all of the busess and all of the devices and matching the device by whatever criteria you need:</para>
+      <programlisting>
+  <![CDATA[
+  	struct usb_bus *bus;
+  
+  	/* ... */
+  
+--- 17,27 ----
+  	busses = usb_get_busses();
+  ]]>
+      </programlisting>
+!     <para>After this, the application should manually loop through all of the busess and all of the devices and matching the device by whatever criteria is needed:</para>
+      <programlisting>
+  <![CDATA[
+  	struct usb_bus *bus;
++ 	int c, i, a;
+  
+  	/* ... */
+  
+***************
+*** 28,35 ****
+  		struct usb_device *dev;
+  
+  		for (dev = bus->devices; dev; dev = dev->next) {
+! 			if (dev->descriptor.bDeviceClass == 0x10) {
+! 				/* Open the device and do your processing */
+  			}
+  		}
+  	}
+--- 29,53 ----
+  		struct usb_device *dev;
+  
+  		for (dev = bus->devices; dev; dev = dev->next) {
+! 			/* Check if this device is a printer */
+! 			if (dev->descriptor.bDeviceClass == 7) {
+! 				/* Open the device, claim the interface and do your processing */
+! 				...
+! 			}
+! 
+! 			/* Loop through all of the configurations */
+! 			for (c = 0; c < dev->descriptor.bNumConfigurations; c++) {
+! 				/* Loop through all of the interfaces */
+! 				for (i = 0; i < dev->config[c].bNumInterfaces; i++) {
+! 					/* Loop through all of the alternate settings */
+! 					for (a = 0; a < dev->config[c].interface[i].num_altsetting; a++) {
+! 						/* Check if this interface is a printer */
+! 						if (dev->config[c].interface[i].altsetting[a].bInterfaceClass == 7) {
+! 							/* Open the device, set the alternate setting, claim the interface and do your processing */
+! 							...
+! 						}
+! 					}
+! 				}
+  			}
+  		}
+  	}
+***************
+*** 44,50 ****
+  
+    <chapter id="examples-other">
+      <title>Other Applications</title>
+!     <para>Another source of examples can be gleaned from other applications.</para>
+      <itemizedlist>
+        <listitem><para><ulink url="http://www.gphoto.org/">gPhoto</ulink> uses libusb to communicate with digital still cameras.</para></listitem>
+        <listitem><para><ulink url="http://rio500.sourceforge.net/">rio500</ulink> utils uses libusb to communicate with SONICblue Rio 500 Digital Audio Player.</para></listitem>
+--- 62,68 ----
+  
+    <chapter id="examples-other">
+      <title>Other Applications</title>
+!     <para>Another source of examples can be obtained from other applications.</para>
+      <itemizedlist>
+        <listitem><para><ulink url="http://www.gphoto.org/">gPhoto</ulink> uses libusb to communicate with digital still cameras.</para></listitem>
+        <listitem><para><ulink url="http://rio500.sourceforge.net/">rio500</ulink> utils uses libusb to communicate with SONICblue Rio 500 Digital Audio Player.</para></listitem>
+Index: doc/functions.sgml
+===================================================================
+RCS file: /cvsroot/libusb/libusb/doc/functions.sgml,v
+retrieving revision 1.8
+retrieving revision 1.15
+diff -c -r1.8 -r1.15
+*** doc/functions.sgml	9 Nov 2002 17:44:50 -0000	1.8
+--- doc/functions.sgml	20 Jan 2004 19:05:56 -0000	1.15
+***************
+*** 3,9 ****
+    <reference id="ref.core">
+      <title>Core</title>
+      <partintro>
+!       <para>These functions compromise the core of libusb. They are used by all applications that utilize libusb.</para>
+      </partintro>
+  
+      <refentry id="function.usbinit">
+--- 3,10 ----
+    <reference id="ref.core">
+      <title>Core</title>
+      <partintro>
+!       <!-- FIXME: Check spelling of "comprise" -->
+!       <para>These functions comprise the core of libusb. They are used by all applications that utilize libusb.</para>
+      </partintro>
+  
+      <refentry id="function.usbinit">
+***************
+*** 26,32 ****
+      <refentry id="function.usbfindbusses">
+        <refnamediv>
+          <refname>usb_find_busses</refname>
+!         <refpurpose>Find's all USB busses on system</refpurpose>
+        </refnamediv>
+        <refsect1>
+          <title>Description</title>
+--- 27,33 ----
+      <refentry id="function.usbfindbusses">
+        <refnamediv>
+          <refname>usb_find_busses</refname>
+!         <refpurpose>Finds all USB busses on system</refpurpose>
+        </refnamediv>
+        <refsect1>
+          <title>Description</title>
+***************
+*** 36,42 ****
+              <void>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_find_busses</function> will find all of the busses on the system. Returns the number of changes previous to this call (total of new busses and busses removed).</para>
+        </refsect1>
+      </refentry>
+  
+--- 37,43 ----
+              <void>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_find_busses</function> will find all of the busses on the system. Returns the number of changes since previous call to this function (total of new busses and busses removed).</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 53,59 ****
+              <void>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_find_devices</function> will find all of the devices on each bus. This should be called after <xref linkend="function.usbfindbusses">. Returns the number of changes previous to this call (total of new device and devices removed).</para>
+        </refsect1>
+      </refentry>
+  
+--- 54,60 ----
+              <void>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_find_devices</function> will find all of the devices on each bus. This should be called after <xref linkend="function.usbfindbusses">. Returns the number of changes since the previous call to this function (total of new device and devices removed).</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 94,100 ****
+              <paramdef>struct *usb_device <parameter>dev</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_open</function> is to be used to open up a device for use. <function>usb_open</function> must be called before attempting to perform any operations to the device.</para>
+        </refsect1>
+      </refentry>
+  
+--- 95,101 ----
+              <paramdef>struct *usb_device <parameter>dev</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_open</function> is to be used to open up a device for use. <function>usb_open</function> must be called before attempting to perform any operations to the device. Returns a handle used in future communication with the device.</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 111,117 ****
+              <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_close</function> closes a device opened with <xref linkend="function.usbopen">. No further operations may be performed on the handle after <function>usb_close</function> is called.</para>
+        </refsect1>
+      </refentry>
+  
+--- 112,118 ----
+              <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_close</function> closes a device opened with <xref linkend="function.usbopen">. No further operations may be performed on the handle after <function>usb_close</function> is called. Returns 0 on success or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 129,135 ****
+              <paramdef>int <parameter>configuration</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_set_configuration</function> sets the active configuration of a device. The <varname>configuration</varname> parameter is the value as specified in the descriptor field bConfigurationValue.</para>
+        </refsect1>
+      </refentry>
+  
+--- 130,136 ----
+              <paramdef>int <parameter>configuration</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_set_configuration</function> sets the active configuration of a device. The <varname>configuration</varname> parameter is the value as specified in the descriptor field bConfigurationValue. Returns 0 on success or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 147,153 ****
+              <paramdef>int <parameter>alternate</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_set_altinterface</function> sets the active alternate setting of the current interface. The <varname>alternate</varname> parameter is the value as specified in the descriptor field bAlternateSetting.</para>
+        </refsect1>
+      </refentry>
+  
+--- 148,154 ----
+              <paramdef>int <parameter>alternate</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_set_altinterface</function> sets the active alternate setting of the current interface. The <varname>alternate</varname> parameter is the value as specified in the descriptor field bAlternateSetting. Returns 0 on success or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 165,171 ****
+              <paramdef>unsigned int <parameter>ep</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_resetep</function> resets all state (like toggles) for the specified endpoint. The <varname>ep</varname> parameter is the value specified in the descriptor field bEndpointAddress.</para>
+        </refsect1>
+      </refentry>
+  
+--- 166,176 ----
+              <paramdef>unsigned int <parameter>ep</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_resetep</function> resets all state (like toggles) for the specified endpoint. The <varname>ep</varname> parameter is the value specified in the descriptor field bEndpointAddress. Returns 0 on success or &lt; 0 on error.</para>
+!         <note>
+!           <title>Deprecated</title>
+!           <para><function>usb_resetep</function> is deprecated. You probably want to use <xref linkend="function.usbclearhalt">.</para>
+!         </note>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 183,189 ****
+              <paramdef>unsigned int <parameter>ep</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_clear_halt</function> clears any halt status on the specified endpoint. The <varname>ep</varname> parameter is the value specified in the descriptor field bEndpointAddress.</para>
+        </refsect1>
+      </refentry>
+  
+--- 188,194 ----
+              <paramdef>unsigned int <parameter>ep</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_clear_halt</function> clears any halt status on the specified endpoint. The <varname>ep</varname> parameter is the value specified in the descriptor field bEndpointAddress. Returns 0 on success or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 200,206 ****
+              <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_reset</function> resets the specified device by sending a RESET down the port it is connected to.</para>
+          <note>
+            <title>Causes re-enumeration</title>
+            <para>After calling <function>usb_reset</function>, the device will need to re-enumerate and thusly, requires you to find the new device and open a new handle. The handle used to call <function>usb_reset</function> will no longer work.</para>
+--- 205,211 ----
+              <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_reset</function> resets the specified device by sending a RESET down the port it is connected to. Returns 0 on success or &lt; 0 on error.</para>
+          <note>
+            <title>Causes re-enumeration</title>
+            <para>After calling <function>usb_reset</function>, the device will need to re-enumerate and thusly, requires you to find the new device and open a new handle. The handle used to call <function>usb_reset</function> will no longer work.</para>
+***************
+*** 222,232 ****
+              <paramdef>int <parameter>interface</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_claim_interface</function> claims the interface with the Operating System. The interface parameter is the value as specified in the descriptor field bInterfaceNumber.</para>
+          <important>
+            <title>Must be called!</title>
+            <para><function>usb_claim_interface</function> <emphasis>must</emphasis> be called before you perform any operations related to this interface (like <xref linkend="function.usbsetaltinterface">, <xref linkend="function.usbbulkwrite">, etc).</para>
+          </important>
+        </refsect1>
+      </refentry>
+  
+--- 227,259 ----
+              <paramdef>int <parameter>interface</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_claim_interface</function> claims the interface with the Operating System. The interface parameter is the value as specified in the descriptor field bInterfaceNumber. Returns 0 on success or &lt; 0 on error.</para>
+          <important>
+            <title>Must be called!</title>
+            <para><function>usb_claim_interface</function> <emphasis>must</emphasis> be called before you perform any operations related to this interface (like <xref linkend="function.usbsetaltinterface">, <xref linkend="function.usbbulkwrite">, etc).</para>
+          </important>
++ 
++         <table>
++           <title>Return Codes</title>
++           <tgroup cols="2">
++             <thead>
++               <row>
++                 <entry>code</entry>
++                 <entry>description</entry>
++               </row>
++             </thead>
++             <tbody>
++               <row>
++                 <entry>-EBUSY</entry>
++                 <entry>Interface is not available to be claimed</entry>
++               </row>
++               <row>
++                 <entry>-ENOMEM</entry>
++                 <entry>Insufficient memory</entry>
++               </row>
++             </tbody>
++           </tgroup>
++         </table>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 244,250 ****
+              <paramdef>int <parameter>interface</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_release_interface</function> releases an interface previously claimed with <xref linkend="function.usbclaiminterface">. The interface parameter is the value as specified in the descriptor field bInterfaceNumber.</para>
+        </refsect1>
+      </refentry>
+    </reference>
+--- 271,277 ----
+              <paramdef>int <parameter>interface</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_release_interface</function> releases an interface previously claimed with <xref linkend="function.usbclaiminterface">. The interface parameter is the value as specified in the descriptor field bInterfaceNumber. Returns 0 on success or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+    </reference>
+***************
+*** 275,281 ****
+              <paramdef>int <parameter>timeout</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_control_msg</function> performs a control request to the default control pipe on a device. The parameters mirror the types of the same name in the USB specification.</para>
+        </refsect1>
+      </refentry>
+  
+--- 302,308 ----
+              <paramdef>int <parameter>timeout</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_control_msg</function> performs a control request to the default control pipe on a device. The parameters mirror the types of the same name in the USB specification. Returns number of bytes written/read or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 296,302 ****
+              <paramdef>size_t <parameter>buflen</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_get_string</function> retrieves the string descriptor specified by index and langid from a device. The string will be returned in Unicode as specified by the USB specification.</para>
+        </refsect1>
+      </refentry>
+  
+--- 323,329 ----
+              <paramdef>size_t <parameter>buflen</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_get_string</function> retrieves the string descriptor specified by index and langid from a device. The string will be returned in Unicode as specified by the USB specification. Returns the number of bytes returned in <varname>buf</varname> or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 316,322 ****
+              <paramdef>size_t <parameter>buflen</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_get_string_simple</function> is a wrapper around <function>usb_get_string</function> that retrieves the string description specified by index in the first language for the descriptor and converts it into C style ASCII.</para>
+        </refsect1>
+      </refentry>
+    </reference>
+--- 343,393 ----
+              <paramdef>size_t <parameter>buflen</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_get_string_simple</function> is a wrapper around <function>usb_get_string</function> that retrieves the string description specified by index in the first language for the descriptor and converts it into C style ASCII. Returns number of bytes returned in <varname>buf</varname> or &lt; 0 on error.</para>
+!       </refsect1>
+!     </refentry>
+! 
+!     <refentry id="function.usbgetdescriptor">
+!       <refnamediv>
+!         <refname>usb_get_descriptor</refname>
+!         <refpurpose>Retrieves a descriptor from a device's default control pipe</refpurpose>
+!       </refnamediv>
+!       <refsect1>
+!         <title>Description</title>
+!         <funcsynopsis>
+!           <funcprototype>
+!             <funcdef>int <function>usb_get_descriptor</function></funcdef>
+!             <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+!             <paramdef>unsigned char <parameter>type</parameter></paramdef>
+!             <paramdef>unsigned char <parameter>index</parameter></paramdef>
+!             <paramdef>void *<parameter>buf</parameter></paramdef>
+!             <paramdef>int <parameter>size</parameter></paramdef>
+!           </funcprototype>
+!         </funcsynopsis>
+!         <para><function>usb_get_descriptor</function> retrieves a descriptor from the device identified by the <varname>type</varname> and <varname>index</varname> of the descriptor from the default control pipe. Returns number of bytes read for the descriptor or &lt; 0 on error.</para>
+!         <para>See <xref linkend="function.usbgetdescriptorbyendpoint"> for a function that allows the control endpoint to be specified.</para>
+!       </refsect1>
+!     </refentry>
+! 
+!     <refentry id="function.usbgetdescriptorbyendpoint">
+!       <refnamediv>
+!         <refname>usb_get_descriptor_by_endpoint</refname>
+!         <refpurpose>Retrieves a descriptor from a device</refpurpose>
+!       </refnamediv>
+!       <refsect1>
+!         <title>Description</title>
+!         <funcsynopsis>
+!           <funcprototype>
+!             <funcdef>int <function>usb_get_descriptor_by_endpoint</function></funcdef>
+!             <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+!             <paramdef>int <parameter>ep</parameter></paramdef>
+!             <paramdef>unsigned char <parameter>type</parameter></paramdef>
+!             <paramdef>unsigned char <parameter>index</parameter></paramdef>
+!             <paramdef>void *<parameter>buf</parameter></paramdef>
+!             <paramdef>int <parameter>size</parameter></paramdef>
+!           </funcprototype>
+!         </funcsynopsis>
+!         <para><function>usb_get_descriptor_by_endpoint</function> retrieves a descriptor from the device identified by the <varname>type</varname> and <varname>index</varname> of the descriptor from the control pipe identified by <varname>ep</varname>. Returns number of bytes read for the descriptor or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+    </reference>
+***************
+*** 344,350 ****
+              <paramdef>int <parameter>timeout</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_bulk_write</function> performs a bulk write request to the endpoint specified by <varname>ep</varname>.</para>
+        </refsect1>
+      </refentry>
+  
+--- 415,421 ----
+              <paramdef>int <parameter>timeout</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_bulk_write</function> performs a bulk write request to the endpoint specified by <varname>ep</varname>. Returns number of bytes written on success or &lt; 0 on error.</para>
+        </refsect1>
+      </refentry>
+  
+***************
+*** 365,371 ****
+              <paramdef>int <parameter>timeout</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_bulk_read</function> performs a bulk read request to the endpoint specified by <varname>ep</varname>.</para>
+        </refsect1>
+      </refentry>
+    </reference>
+--- 436,539 ----
+              <paramdef>int <parameter>timeout</parameter></paramdef>
+            </funcprototype>
+          </funcsynopsis>
+!         <para><function>usb_bulk_read</function> performs a bulk read request to the endpoint specified by <varname>ep</varname>. Returns number of bytes read on success or &lt; 0 on error.</para>
+!       </refsect1>
+!     </refentry>
+!   </reference>
+! 
+!   <reference id="ref.interrupt">
+!     <title>Interrupt Transfers</title>
+!     <partintro>
+!       <para>This group of functions allow applications to send and receive data via interrupt pipes.</para>
+!     </partintro>
+! 
+!     <refentry id="function.usbinterruptwrite">
+!       <refnamediv>
+!         <refname>usb_interrupt_write</refname>
+!         <refpurpose>Write data to an interrupt endpoint</refpurpose>
+!       </refnamediv>
+!       <refsect1>
+!         <title>Description</title>
+!         <funcsynopsis>
+!           <funcprototype>
+!             <funcdef>int <function>usb_interrupt_write</function></funcdef>
+!             <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+!             <paramdef>int <parameter>ep</parameter></paramdef>
+!             <paramdef>char *<parameter>bytes</parameter></paramdef>
+!             <paramdef>int <parameter>size</parameter></paramdef>
+!             <paramdef>int <parameter>timeout</parameter></paramdef>
+!           </funcprototype>
+!         </funcsynopsis>
+!         <para><function>usb_interrupt_write</function> performs an interrupt write request to the endpoint specified by <varname>ep</varname>. Returns number of bytes written on success or &lt; 0 on error.</para>
+!       </refsect1>
+!     </refentry>
+! 
+!     <refentry id="function.usbinterruptread">
+!       <refnamediv>
+!         <refname>usb_interrupt_read</refname>
+!         <refpurpose>Read data from a interrupt endpoint</refpurpose>
+!       </refnamediv>
+!       <refsect1>
+!         <title>Description</title>
+!         <funcsynopsis>
+!           <funcprototype>
+!             <funcdef>int <function>usb_interrupt_read</function></funcdef>
+!             <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+!             <paramdef>int <parameter>ep</parameter></paramdef>
+!             <paramdef>char *<parameter>bytes</parameter></paramdef>
+!             <paramdef>int <parameter>size</parameter></paramdef>
+!             <paramdef>int <parameter>timeout</parameter></paramdef>
+!           </funcprototype>
+!         </funcsynopsis>
+!         <para><function>usb_interrupt_read</function> performs a interrupt read request to the endpoint specified by <varname>ep</varname>. Returns number of bytes read on success or &lt; 0 on error.</para>
+!       </refsect1>
+!     </refentry>
+!   </reference>
+! 
+!   <reference id="ref.nonportable">
+!     <title>Non Portable</title>
+!     <partintro>
+!       <para>These functions are non portable. They may expose some part of the USB API on one OS or perhaps a couple, but not all. They are all marked with the string _np at the end of the function name.</para>
+!       <para>A C preprocessor macro will be defined if the function is implemented. The form is LIBUSB_HAS_ prepended to the function name, without the leading "usb_", in all caps. For example, if usb_get_driver_np is implemented, LIBUSB_HAS_GET_DRIVER_NP will be defined.</para>
+!     </partintro>
+! 
+!     <refentry id="function.usbgetdrivernp">
+!       <refnamediv>
+!         <refname>usb_get_driver_np</refname>
+!         <refpurpose>Get driver name bound to interface</refpurpose>
+!       </refnamediv>
+!       <refsect1>
+!         <title>Description</title>
+!         <funcsynopsis>
+!           <funcprototype>
+!             <funcdef>int <function>usb_get_driver_np</function></funcdef>
+!             <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+!             <paramdef>int <parameter>interface</parameter></paramdef>
+!             <paramdef>char *<parameter>name</parameter></paramdef>
+!             <paramdef>int <parameter>namelen</parameter></paramdef>
+!           </funcprototype>
+!         </funcsynopsis>
+!         <para>This function will obtain the name of the driver bound to the interface specified by the parameter <parameter>interface</parameter> and place it into the buffer named <parameter>name</parameter> limited to <parameter>namelen</parameter> characters. Returns 0 on success or &lt; 0 on error.</para>
+!         <para>Implemented on Linux only.</para>
+!       </refsect1>
+!     </refentry>
+! 
+!     <refentry id="function.usbdetachkerneldrivernp">
+!       <refnamediv>
+!         <refname>usb_detach_kernel_driver_np</refname>
+!         <refpurpose>Detach kernel driver from interface</refpurpose>
+!       </refnamediv>
+!       <refsect1>
+!         <title>Description</title>
+!         <funcsynopsis>
+!           <funcprototype>
+!             <funcdef>int <function>usb_detach_kernel_driver_np</function></funcdef>
+!             <paramdef>usb_dev_handle *<parameter>dev</parameter></paramdef>
+!             <paramdef>int <parameter>interface</parameter></paramdef>
+!           </funcprototype>
+!         </funcsynopsis>
+!         <para>This function will detach a kernel driver from the interface specified by parameter <parameter>interface</parameter>. Applications using libusb can then try claiming the interface. Returns 0 on success or &lt; 0 on error.</para>
+!         <para>Implemented on Linux only.</para>
+        </refsect1>
+      </refentry>
+    </reference>
+Index: doc/intro.sgml
+===================================================================
+RCS file: /cvsroot/libusb/libusb/doc/intro.sgml,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -c -r1.4 -r1.5
+*** doc/intro.sgml	28 Jun 2002 22:29:53 -0000	1.4
+--- doc/intro.sgml	24 Nov 2003 19:48:23 -0000	1.5
+***************
+*** 2,8 ****
+    <chapter id="intro-overview">
+      <title>Overview</title>
+      <para>This documentation will give an overview of how the v0.1 libusb API works and relates to &usb;. Work is rapidly progressing on a newer version of libusb, to be v1.0, which will be a redesigned API and is intended to obsolete v0.1. You may want to check the <ulink url="http://libusb.sourceforge.net/">libusb</ulink> website to see if it is stable and recommended.</para>
+!     <para>This documentation assumes that you have a good understanding of &usb; and how it works. If you don't have a good understanding of USB, it is recommended you obtain the USB <ulink url="http://www.usb.org/developers/data/usbspec.zip">v1.1</ulink> and/or <ulink url="http://www.usb.orb/developers/data/usb_20.zip">v2.0</ulink> specs and read them.</para>
+      <para>libusb is geared towards &usb; 1.1, however from the perspective of libusb, &usb; 2.0 won't be a significant change for libusb</para>
+    </chapter>
+  
+--- 2,8 ----
+    <chapter id="intro-overview">
+      <title>Overview</title>
+      <para>This documentation will give an overview of how the v0.1 libusb API works and relates to &usb;. Work is rapidly progressing on a newer version of libusb, to be v1.0, which will be a redesigned API and is intended to obsolete v0.1. You may want to check the <ulink url="http://libusb.sourceforge.net/">libusb</ulink> website to see if it is stable and recommended.</para>
+!     <para>This documentation assumes that you have a good understanding of &usb; and how it works. If you don't have a good understanding of USB, it is recommended you obtain the USB <ulink url="http://www.usb.org/developers/docs/usbspec.zip">v1.1</ulink> and/or <ulink url="http://www.usb.org/developers/docs/usb_20.zip">v2.0</ulink> specs and read them.</para>
+      <para>libusb is geared towards &usb; 1.1, however from the perspective of libusb, &usb; 2.0 won't be a significant change for libusb</para>
+    </chapter>
+  
+Index: tests/testlibusb.c
+===================================================================
+RCS file: /cvsroot/libusb/libusb/tests/testlibusb.c,v
+retrieving revision 1.11
+retrieving revision 1.13
+diff -c -r1.11 -r1.13
+*** tests/testlibusb.c	17 Nov 2002 18:44:51 -0000	1.11
+--- tests/testlibusb.c	21 Jan 2003 08:56:35 -0000	1.13
+***************
+*** 69,75 ****
+    printf("bus/device  idVendor/idProduct\n");
+    for (bus = usb_busses; bus; bus = bus->next) {
+      for (dev = bus->devices; dev; dev = dev->next) {
+!       int i, ret;
+        char string[256];
+        usb_dev_handle *udev;
+  
+--- 69,75 ----
+    printf("bus/device  idVendor/idProduct\n");
+    for (bus = usb_busses; bus; bus = bus->next) {
+      for (dev = bus->devices; dev; dev = dev->next) {
+!       int ret, i;
+        char string[256];
+        usb_dev_handle *udev;
+  
+***************
+*** 101,106 ****
+--- 101,108 ----
+            else
+              printf("- Unable to fetch serial number string\n");
+          }
++ 
++ 	usb_close (udev);
+        }
+  
+        if (!dev->config) {
