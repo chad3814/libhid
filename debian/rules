@@ -74,8 +74,8 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	dh_shlibdeps
 	dh_makeshlibs
+	dh_shlibdeps -L$(CURDIR)/debian/tmp/usr/lib
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
