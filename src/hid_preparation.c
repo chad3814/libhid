@@ -21,7 +21,7 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
    * about the following.
    */
   byte const BUFLEN = 9;
-  char buffer[BUFLEN];
+  byte buffer[BUFLEN];
   
   TRACE("retrieving HID descriptor for "
       TRACEDEVICESTR "...", TRACEDEVICEARGS);
