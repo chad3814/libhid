@@ -1,3 +1,10 @@
+libhid (0.2.4-1) unstable; urgency=low
+
+  * New upstream release.
+  * Changed build dependency on gcc3 to versioned gcc packages.
+
+ -- martin f. krafft <madduck@debian.org>  Mon, 30 Aug 2004 22:24:34 +0200
+
 libhid (0.2.3-1) unstable; urgency=low
 
   * New upstream release.

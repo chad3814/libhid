@@ -8,7 +8,7 @@ libhid is (c) 2003-2004 by
 and distributed under the terms of the GNU General Public License.
 See the file ./COPYING in the source distribution for more information.
 
-Revision: $Id: README,v 1.4 2004/08/30 15:22:14 krafft Exp $
+Revision: $Id: README,v 1.5 2004/08/30 20:42:45 krafft Exp $
 
 Please send bugreports to <libhid@lists.ailab.ch>.
 
@@ -58,6 +58,9 @@ upgrade your compiler.
 
 Furthermore, libhid needs libusb version 0.1.8beta or newer. It does not work
 with libusb 1.0 at this moment.
+
+If you want to build the swig python existension, you will need swig 1.3 
+installed.
 
 Once these are installed, the package can be configured and compiled.
 Configuration happens as follows:

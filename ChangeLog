@@ -4,6 +4,8 @@ libhid ChangeLog
 2004-08-30  Martin F. Krafft (libhid@pobox.madduck.net)
 
   - Added autoconf check for gcc3, which is now required.
+	- Improved autoconf handling for swig.
+	- Updated Makefiles to use -fPIC.
 
 2004-06-19  Martin F. Krafft (libhid@pobox.madduck.net)
 
@@ -22,4 +24,4 @@ libhid ChangeLog
   - Replaced libhid-config with a pkg-config file
   - Reworked the autotools files
 
-Revision: $Id: ChangeLog,v 1.5 2004/08/30 13:42:12 krafft Exp $
+Revision: $Id: ChangeLog,v 1.6 2004/08/30 20:42:45 krafft Exp $
