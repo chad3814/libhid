@@ -34,10 +34,10 @@ libhid_la_SOURCES = \
 	hid_presentation.c \
 	debug.c
 
-bin_PROGRAMS = libhid_detach_device
+bin_PROGRAMS = libhid-detach-device
 libhid_detach_device_DEPENDENCIES = libhid.la
 libhid_detach_device_LDADD = libhid.la
-libhid_detach_device_SOURCES = libhid_detach_device.c
+libhid_detach_device_SOURCES = libhid-detach-device.c
 
 include_HEADERS = ../include/hid.h
 

@@ -99,6 +99,7 @@ AC_CONFIG_FILES([swig/Makefile])
 AC_CONFIG_FILES([test/Makefile])
 AC_CONFIG_FILES([doc/doxygen.rc])
 AC_CONFIG_FILES([doc/Makefile])
+AC_CONFIG_FILES([doc/man/Makefile])
 AC_CONFIG_FILES([doc/www/Makefile])
 AC_CONFIG_FILES([pkgconfig/libhid.pc])
 

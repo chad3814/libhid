@@ -1,7 +1,7 @@
 AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = www
+SUBDIRS = www man
 
 if DOXYGEN
 all-local: html
