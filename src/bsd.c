@@ -28,9 +28,9 @@ hid_return hid_os_force_claim(HIDInterface* const hidif, int const interface,
   }
 
   WARNING("code not tested on the BSD platform!");
-  TRACE("claiming " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("claiming USB device %s...", hidif->id);
   if (usb_claim_interface(hidif->dev_handle, interface) < 0) {
-    WARNING("failed to claim " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    WARNING("failed to claim USB device %s...", hidif->id);
     return HID_RET_FAIL_CLAIM_IFACE;
   }
   return HID_RET_SUCCESS;
