@@ -97,8 +97,6 @@ long FormatValue(long Value, uchar Size)
  * @pre Initialize HIDParser structure with ResetParser() before beginning
  *
  * @return TRUE when there is another item to parse.
- *
- * @todo Make endian conversion code a little more readable/portable
  */
 int HIDParse(HIDParser* pParser, HIDData* pData)
 {
@@ -111,7 +109,7 @@ int HIDParse(HIDParser* pParser, HIDData* pData)
     {
       pParser->Item=pParser->ReportDesc[pParser->Pos++];
       pParser->Value=0;
-#if SOL_WK || AIX || HPUX || _ARCH_PPC
+#ifdef WORDS_BIGENDIAN
 	{
 	  int i;
 	  unsigned long valTmp=0;
@@ -343,6 +341,8 @@ int FindObject(HIDParser* pParser, HIDData* pData)
  * Extract data from a report stored in Buf.
  * Use Value, Offset, Size and LogMax of pData.
  * @return Response in pData->Value.
+ *
+ * @todo Fix this "+8" business if there is only one report ID
  */
 void GetValue(const uchar* Buf, HIDData* pData)
 {
