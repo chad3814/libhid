@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_REVISION($Revision: 1.14 $)
+AC_REVISION($Revision: 1.15 $)
 AC_COPYRIGHT([Please see the ./COPYING file for license information.])
 
 AC_PREREQ(2.57)
@@ -53,6 +53,7 @@ MD_CHECK_OS
 MD_CHECK_LIBUSB018B
 
 AC_PROG_CC
+MD_CHECK_GCC3
 
 MD_CONF_DISTCC
 MD_CONF_CCACHE

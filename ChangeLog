@@ -1,6 +1,10 @@
 libhid ChangeLog
 ================
 
+2004-08-30  Martin F. Krafft (libhid@pobox.madduck.net)
+
+  - Added autoconf check for gcc3, which is now required.
+
 2004-06-19  Martin F. Krafft (libhid@pobox.madduck.net)
 
   - Fixed id member of HIDInterface struct to be 16 instead of 32 bytes.
@@ -18,4 +22,4 @@ libhid ChangeLog
   - Replaced libhid-config with a pkg-config file
   - Reworked the autotools files
 
-Revision: $Id: ChangeLog,v 1.4 2004/08/30 10:43:14 krafft Exp $
+Revision: $Id: ChangeLog,v 1.5 2004/08/30 13:42:12 krafft Exp $
