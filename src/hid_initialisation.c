@@ -1,3 +1,6 @@
+/*!@file
+ *@brief Initialization routines for libhid structures.
+ */
 #define HID_INTERNAL
 
 #include <hid.h>
@@ -6,8 +9,16 @@
 #include <debug.h>
 #include <assert.h>
 
+/*!@brief Programmers can check this with hid_is_initialized().
+ */
 static bool initialised = false;
 
+/*!@brief Initialize libhid: scan for USB busses and devices using libusb.
+ *
+ * Call this routine before making any other libhid calls.
+ *
+ * @return HID_RET_SUCCESS if everything was properly initialized.
+ */
 hid_return hid_init()
 {
   ASSERT(!hid_is_initialised());
@@ -33,6 +44,8 @@ hid_return hid_init()
   return HID_RET_SUCCESS;
 }
 
+/*!@brief Complement to hid_init(): cleans up after libhid.
+ */
 hid_return hid_cleanup()
 {
   ASSERT(hid_is_initialised());
@@ -42,6 +55,9 @@ hid_return hid_cleanup()
   return HID_RET_SUCCESS;
 }
 
+/*!@brief Check to see that hid_init() has been called.
+ * @return Non-zero if libhid has been initialized.
+ */
 bool hid_is_initialised()
 {
   return initialised;

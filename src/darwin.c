@@ -1,3 +1,6 @@
+/*!@file 
+ *@brief Mac OS X/Darwin-specific support routines.
+ */
 #define HID_INTERNAL
 
 #include <hid.h>

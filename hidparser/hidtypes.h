@@ -1,10 +1,9 @@
-/*
- * types.h
- *
- * Types definitions
+/*!@file
+ *@brief HID parser type definitions
  *
  * Header GPL 
- * -------------------------------------------------------------------------- */
+ * @todo Properly tag all files with GPL (as appropriate)
+ */
 
 #ifndef TYPE_H
 #define TYPE_H
@@ -17,7 +16,7 @@ extern "C" {
 
 /* 
  * Types
- * -------------------------------------------------------------------------- */
+ */
 #if !AIX
 typedef unsigned char  uchar;
 #endif
@@ -30,11 +29,11 @@ typedef short          wchar;
 
 /* 
  * Constants
- * -------------------------------------------------------------------------- */
-#define PATH_SIZE               10  /* Deep max for Path                      */
-#define USAGE_TAB_SIZE          50  /* Size of usage stack                    */
-#define MAX_REPORT             300  /* Including FEATURE, INPUT and OUTPUT    */
-#define REPORT_DSC_SIZE       6144  /* Size max of Report Descriptor          */
+ */
+#define PATH_SIZE               10 /*!< maximum depth for Path */
+#define USAGE_TAB_SIZE          50 /*!< Size of usage stack */
+#define MAX_REPORT             300 /*!< Including FEATURE, INPUT and OUTPUT */
+#define REPORT_DSC_SIZE       6144 /*!< Size max of Report Descriptor */
 
 /* 
  * Items
@@ -75,81 +74,73 @@ typedef short          wchar;
 
 #define ITEM_MASK             0xFC
 
-/* Attribut Flags */
+/* Attribute Flags */
 #define ATTR_DATA_CST         0x01
 #define ATTR_NVOL_VOL         0x80
 
-/* 
- * HIDNode struct
- *
+/*!
  * Describe a HID Path point 
- * -------------------------------------------------------------------------- */
+ */
 typedef struct
 {
   ushort UPage;
   ushort Usage;
 } HIDNode;
 
-/* 
- * HIDPath struct
- *
+/*!
  * Describe a HID Path
- * -------------------------------------------------------------------------- */
+ */
 typedef struct
 {
-  uchar   Size;             /* HID Path size                                  */
-  HIDNode Node[PATH_SIZE];  /* HID Path                                       */
+  uchar   Size;             /*!< HID Path size */
+  HIDNode Node[PATH_SIZE];  /*!< HID Path */
 } HIDPath;
 
-/* 
- * HIDData struct
- *
+/*!
  * Describe a HID Data with its location in report 
- * -------------------------------------------------------------------------- */
+ */
 typedef struct
 {
-  long    Value;            /* HID Object Value                               */
-  HIDPath Path;             /* HID Path                                       */
+  long    Value;            /*!< HID Object Value                             */
+  HIDPath Path;             /*!< HID Path                                     */
 
-  uchar   ReportID;         /* Report ID                                      */
-  uchar   Offset;           /* Offset of data in report                       */
-  uchar   Size;             /* Size of data in bit                            */
+  uchar   ReportID;         /*!< Report ID, (from incoming report) ???        */
+  uchar   Offset;           /*!< Offset of data in report                     */
+  uchar   Size;             /*!< Size of data in bit                          */
                             
-  uchar   Type;             /* Type : FEATURE / INPUT / OUTPUT                */
-  uchar   Attribute;        /* Report field attribute                         */
+  uchar   Type;             /*!< Type : FEATURE / INPUT / OUTPUT              */
+  uchar   Attribute;        /*!< Report field attribute                       */
                             
-  ulong   Unit;             /* HID Unit                                       */
-  char    UnitExp;          /* Unit exponent                                  */
-                                                                          
-  long    LogMin;           /* Logical Min                                    */
-  long    LogMax;           /* Logical Max                                    */
-  long    PhyMin;           /* Physical Min                                   */
-  long    PhyMax;           /* Physical Max                                   */
+  ulong   Unit;             /*!< HID Unit                                     */
+  char    UnitExp;          /*!< Unit exponent                                */
+
+  long    LogMin;           /*!< Logical Min                                  */
+  long    LogMax;           /*!< Logical Max                                  */
+  long    PhyMin;           /*!< Physical Min                                 */
+  long    PhyMax;           /*!< Physical Max                                 */
 } HIDData;
 
-/*
- * HIDParser struct
- * -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
 typedef struct
 {
-  uchar   ReportDesc[REPORT_DSC_SIZE];  /* Store Report Descriptor            */
-  ushort  ReportDescSize;               /* Size of Report Descriptor          */
-  ushort  Pos;                          /* Store current pos in descriptor    */
-  uchar   Item;                         /* Store current Item                 */
-  long    Value;                        /* Store current Value                */
+  uchar   ReportDesc[REPORT_DSC_SIZE];  /*!< Store Report Descriptor          */
+  ushort  ReportDescSize;               /*!< Size of Report Descriptor        */
+  ushort  Pos;                          /*!< Store current pos in descriptor  */
+  uchar   Item;                         /*!< Store current Item               */
+  long    Value;                        /*!< Store current Value              */
 
-  HIDData Data;                         /* Store current environment          */
+  HIDData Data;                         /*!< Store current environment        */
 
-  uchar   OffsetTab[MAX_REPORT][3];     /* Store ID, Type & offset of report  */
-  uchar   ReportCount;                  /* Store Report Count                 */
-  uchar   Count;                        /* Store local report count           */
+  uchar   OffsetTab[MAX_REPORT][3];     /*!< Store ID, type & offset of report*/
+  uchar   ReportCount;                  /*!< Store Report Count               */
+  uchar   Count;                        /*!< Store local report count         */
 
-  ushort  UPage;                        /* Global UPage                       */
-  HIDNode UsageTab[USAGE_TAB_SIZE];     /* Usage stack                        */
-  uchar   UsageSize;                    /* Design number of usage used        */
+  ushort  UPage;                        /*!< Global UPage                     */
+  HIDNode UsageTab[USAGE_TAB_SIZE];     /*!< Usage stack                      */
+  uchar   UsageSize;                    /*!< Design number of usage used      */
 
-  uchar   nObject;                      /* Count Objects in Report Descriptor */
-  uchar   nReport;                      /* Count Reports in Report Descriptor */
+  uchar   nObject;                      /*!< Count objects in Report Descriptor */
+  uchar   nReport;                      /*!< Count reports in Report Descriptor */
 } HIDParser;
 
 #ifdef __cplusplus

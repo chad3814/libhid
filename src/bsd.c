@@ -1,3 +1,6 @@
+/*!@file 
+ *@brief BSD-specific support routines.
+ */
 #define HID_INTERNAL
 
 #include <hid.h>

@@ -1,5 +1,5 @@
-/*
- * hidparser.c: HID Parser
+/*!@file
+ *@brief HID Parser
  *
  * This file is part of the MGE UPS SYSTEMS HID Parser.
  *
@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * -------------------------------------------------------------------------- */
+ */
 
 #include <string.h>
 #include "hidparser.h"
@@ -31,11 +31,10 @@
 
 const char ItemSize[4]={0,1,2,4};
 
-/*
- * ResetParser
- * Reset HIDParser structure for new parsing
+/*!
+ * Reset HIDParser structure for new parsing.
  * Keep Report descriptor data
- * -------------------------------------------------------------------------- */
+ */
 void ResetParser(HIDParser* pParser)
 {
   pParser->Pos=0;
@@ -50,17 +49,15 @@ void ResetParser(HIDParser* pParser)
   memset(&pParser->Data,0,sizeof(pParser->Data));
 }
 
-/*
- * GetReportOffset
- *
- * Return pointer on current offset value for Report designed by 
- * ReportID/ReportType
- * -------------------------------------------------------------------------- */
+/*!
+ * @return pointer on current offset value for Report designed by 
+ * @a ReportID and @a ReportType, or @a NULL if not found.
+ */
 uchar* GetReportOffset(HIDParser* pParser, 
                        const uchar ReportID, 
                        const uchar ReportType)
 {
-  uchar Pos=0;
+  ushort Pos=0;
   while(Pos<MAX_REPORT && pParser->OffsetTab[Pos][0]!=0)
   {
     if(pParser->OffsetTab[Pos][0]==ReportID 
@@ -80,10 +77,9 @@ uchar* GetReportOffset(HIDParser* pParser,
   return NULL;
 }
 
-/*
- * FormatValue(long Value, uchar Size)
+/*!
  * Format Value to fit with long format with respect of negative values
- * -------------------------------------------------------------------------- */
+ */
 long FormatValue(long Value, uchar Size)
 {
   if(Size==1) 
@@ -93,15 +89,16 @@ long FormatValue(long Value, uchar Size)
   return Value;
 }
 
-/*
- * HIDParse(HIDParser* pParser, HIDData* pData)
+/*!
+ * Analyze report descriptor stored in HIDParser struct and store
+ * local and global context.  Return in pData the last object found.
  *
- * Analyse Report descriptor stored in HIDParser struct and store local and
- * global context. 
- * Use ResetParser() to init HIDParser structure before beginning.
- * Return in pData the last object found.
- * Return TRUE when there is other Item to parse.
- * -------------------------------------------------------------------------- */
+ * @pre Initialize HIDParser structure with ResetParser() before beginning
+ *
+ * @return TRUE when there is another item to parse.
+ *
+ * @todo Make endian conversion code a little more readable/portable
+ */
 int HIDParse(HIDParser* pParser, HIDData* pData)
 {
   int Found=0;
@@ -113,7 +110,7 @@ int HIDParse(HIDParser* pParser, HIDData* pData)
     {
       pParser->Item=pParser->ReportDesc[pParser->Pos++];
       pParser->Value=0;
-#if SOL_WK || AIX || HPUX
+#if SOL_WK || AIX || HPUX || _ARCH_PPC
 	{
 	  int i;
 	  unsigned long valTmp=0;
@@ -214,7 +211,7 @@ int HIDParse(HIDParser* pParser, HIDData* pData)
         pParser->Data.Path.Node[pParser->Data.Path.Size].UPage=pParser->UsageTab[0].UPage;
         pParser->Data.Path.Node[pParser->Data.Path.Size].Usage=pParser->UsageTab[0].Usage;
         pParser->Data.Path.Size++;
-    
+	
         /* Unstack UPage/Usage from UsageTab (never remove the last) */
         if(pParser->UsageSize>0)
         {
@@ -271,6 +268,7 @@ int HIDParse(HIDParser* pParser, HIDData* pData)
       case ITEM_UNIT_EXP :
       {
         pParser->Data.UnitExp=(char)pParser->Value;
+	// Convert 4 bits signed value to 8 bits signed value
 	if (pParser->Data.UnitExp > 7)
 	  pParser->Data.UnitExp|=0xF0;
         break;
@@ -311,11 +309,10 @@ int HIDParse(HIDParser* pParser, HIDData* pData)
   return Found;
 }
 
-/*
- * FindObject
+/*!
  * Get pData characteristics from pData->Path or from pData->ReportID/Offset
  * Return TRUE if object was found
- * -------------------------------------------------------------------------- */
+ */
 int FindObject(HIDParser* pParser, HIDData* pData)
 {
   HIDData FoundData;
@@ -341,12 +338,11 @@ int FindObject(HIDParser* pParser, HIDData* pData)
   return 0;
 }
 
-/*
- * GetValue
+/*!
  * Extract data from a report stored in Buf.
  * Use Value, Offset, Size and LogMax of pData.
  * Return response in Value.
- * -------------------------------------------------------------------------- */
+ */
 void GetValue(const uchar* Buf, HIDData* pData)
 {
   int Bit=pData->Offset+8; /* First byte of report indicate report ID */
@@ -370,11 +366,10 @@ void GetValue(const uchar* Buf, HIDData* pData)
     pData->Value |= ~pData->LogMax;
 }
 
-/*
- * SetValue
+/*!
  * Set a data in a report stored in Buf. Use Value, Offset and Size of pData.
  * Return response in Buf.
- * -------------------------------------------------------------------------- */
+ */
 void SetValue(const HIDData* pData, uchar* Buf)
 {
   int Bit=pData->Offset+8; /* First byte of report indicate report ID */
