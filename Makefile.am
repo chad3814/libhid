@@ -7,7 +7,9 @@ dist_noinst_DATA = \
 	debian/copyright \
 	debian/libhid-dev.dirs \
 	debian/libhid-dev.docs \
+	debian/libhid-dev.files \
 	debian/libhid0.dirs \
+	debian/libhid0.files \
 	debian/rules
 
 dist_noinst_HEADERS = \
