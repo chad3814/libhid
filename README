@@ -84,9 +84,11 @@ installed. The following two Debian packages provide it:
   - libswig1.3.22 (1.3.22-3)
   - swig (1.3.22-3)
 
-To create man pages for the included utility programs, you need xsltproc.
+To create man pages for the included utility programs, you need xsltproc and
+the DocBook stylesheets.
 
   - xsltproc (1.1.12-5)
+  - docbook-xsl (1.66.1-1)
 
 Lastly, to compile the API documentation, you need doxygen, which is in the
 following Debian package:
