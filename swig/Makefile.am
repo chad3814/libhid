@@ -20,7 +20,7 @@ pkgpython_PYTHON = __init__.py
 __init__.py: hid.py
 	ln -f $< $@
 
-%py: %.i
+%.py: %.i
 	$(SWIG) $(SWIGFLAGS) $<
 	
 %_wrap.c: %.i

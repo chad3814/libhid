@@ -13,3 +13,4 @@ stamp-h1
 *.deb
 *.tar.gz
 .debian
+libhid-0.2.1/
