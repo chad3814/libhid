@@ -1,0 +1,85 @@
+Binary files libusb-0.1.7.orig/.linux.c.swp and libusb-0.1.7/.linux.c.swp differ
+diff -Nru libusb-0.1.7.orig/linux.c libusb-0.1.7/linux.c
+--- libusb-0.1.7.orig/linux.c	2002-10-25 19:35:26.000000000 +0200
++++ libusb-0.1.7/linux.c	2004-01-20 18:25:02.000000000 +0100
+@@ -15,6 +15,8 @@
+ #include <sys/time.h>
+ #include <dirent.h>
+ 
++#include <linux/usbdevice_fs.h>
++
+ #include "linux.h"
+ #include "usbi.h"
+ 
+@@ -83,6 +85,46 @@
+   return 0;
+ }
+ 
++int usb_detach_kernel_driver(usb_dev_handle *dev, int interface)
++{
++  if (usb_debug > 0)
++    fprintf(stderr, "trying to detach kernel driver from interface %d on %s/%s...\n",
++                    interface, dev->bus->dirname, dev->device->filename);
++
++  struct usbdevfs_ioctl command = { 0, USBDEVFS_DISCONNECT, 0 };
++  if (ioctl (dev->fd, USBDEVFS_IOCTL, &command) < 0)
++    USB_ERROR_STR(-errno, "could not detach kernel driver from interface %d: %s",
++        interface, strerror(errno));
++
++  if (usb_debug > 0)
++    fprintf(stderr, "successfully detached kernel driver from interface %d on %s/%s...\n",
++                    interface, dev->bus->dirname, dev->device->filename);
++
++  return 0;
++}
++
++int usb_force_claim_interface(usb_dev_handle *dev, int interface, int retries)
++{
++  int ret;
++  
++  while ((ret = usb_claim_interface(dev, interface)) != 0 && retries-- > 0)
++  {
++    if (usb_debug > 0)
++      fprintf(stderr, "failed to claim interface %d on %s/%s, "
++                      "trying %d more time(s).\n",
++              interface, dev->bus->dirname, dev->device->filename, retries);
++    
++    if ((ret = usb_detach_kernel_driver(dev, interface)) < 0)
++      return ret;
++  }
++  
++  if (ret == 0 && usb_debug > 0)
++    fprintf(stderr, "successfully claimed interface %d on %s/%s.\n",
++              interface, dev->bus->dirname, dev->device->filename);
++
++  return ret;
++}
++
+ int usb_release_interface(usb_dev_handle *dev, int interface)
+ {
+   int ret;
+diff -Nru libusb-0.1.7.orig/usb.h.in libusb-0.1.7/usb.h.in
+--- libusb-0.1.7.orig/usb.h.in	2002-11-17 19:44:02.000000000 +0100
++++ libusb-0.1.7/usb.h.in	2004-01-20 18:33:22.000000000 +0100
+@@ -7,6 +7,10 @@
+ 
+ #include <dirent.h>
+ 
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif // HAVE_CONFIG_H
++
+ /*
+  * USB spec information
+  *
+@@ -253,6 +259,10 @@
+ 	int value, int index, char *bytes, int size, int timeout);
+ int usb_set_configuration(usb_dev_handle *dev, int configuration);
+ int usb_claim_interface(usb_dev_handle *dev, int interface);
++#ifdef LINUX_API
++int usb_detach_kernel_driver(usb_dev_handle *dev, int interface);
++int usb_force_claim_interface(usb_dev_handle *dev, int interface, int retries);
++#endif // LINUX_API
+ int usb_release_interface(usb_dev_handle *dev, int interface);
+ int usb_set_altinterface(usb_dev_handle *dev, int alternate);
+ int usb_resetep(usb_dev_handle *dev, unsigned int ep);
