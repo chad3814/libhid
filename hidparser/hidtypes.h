@@ -22,7 +22,7 @@ extern "C" {
 typedef unsigned char  uchar;
 #endif
 
-#if HPUX
+#if HPUX || __APPLE__
 typedef unsigned long  ulong;
 #endif
 
