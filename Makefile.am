@@ -18,9 +18,7 @@ dist_noinst_HEADERS = \
 	include/debug.h \
 	include/hid_helpers.h \
 	include/macros.h \
-	include/os.h \
-	hidparser/hidparser.h \
-	hidparser/hidtypes.h
+	include/os.h
 
 test:: test/test_libhid
 	make -C test run

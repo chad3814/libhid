@@ -50,8 +50,8 @@ libhid_config_LDADD = -lhid
 
 include_HEADERS = ../include/hid.h
 
-#doc::
-#	make -C ../doc
+../hidparser/libhidparser.la::
+	make -C ../hidparser libhidparser.la
 
 cvsclean:: mrproper
 mrproper:: maintainer-clean

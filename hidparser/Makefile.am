@@ -6,8 +6,7 @@ noinst_LTLIBRARIES = libhidparser.la
 libhidparser_la_SOURCES = hidparser.c
 libhidparser_la_LDFLAGS = -static
 
-#doc::
-#	make -C ../doc
+include_HEADERS = hidparser.h hidtypes.h
 
 cvsclean:: mrproper
 mrproper:: maintainer-clean

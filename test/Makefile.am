@@ -11,6 +11,9 @@ test_libhid_LDADD = ../src/libhid.la
 ../src/libhid.la::
 	make -C ../src libhid.la
 
+../hidparser/libhidparser.la::
+	make -C ../hidparser libhidparser.la
+
 debug:: test_libhid
 	libtool --mode=execute gdb -q $<
 
