@@ -1,9 +1,11 @@
 #define HID_INTERNAL
 
 #include <hid.h>
+#include <hid_helpers.h>
 
 #include <debug.h>
 #include <assert.h>
+#include <macros.h>
 
 hid_return hid_write_identification(FILE* const out,
     HIDInterface const* const hidif)
@@ -75,8 +77,7 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif)
 
   hid_reset_parser(hidif);
   
-  TRACE("iterating the parse tree for interface %d of USB device on %s/%s...",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("iterating the parse tree for " TRACEDEVICESTR "...", TRACEDEVICEARGS);
       
   unsigned int i = 0;
 

@@ -35,10 +35,6 @@ int main(void)
   int path1[] = { 0xffa00001, 0xffa00002, 0xffa10003 };
   int path2[] = { 0xffa00001, 0xffa00002, 0x0 };
   int path3[] = { 0xffa00001, 0xffa00002, 0xffa10004 };
-  double res;
-  hid_set_item_value(&hid, path1, 3, res);
-  //hid_set_item_value(&hid, path2, 3, res);
-  hid_set_item_value(&hid, path3, 3, res);
 
   ret = hid_close(&hid);
 

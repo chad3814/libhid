@@ -5,6 +5,7 @@
 
 #include <debug.h>
 #include <assert.h>
+#include <macros.h>
 
 static void hid_prepare_parse_path(HIDInterface* const hidif,
     int const path[], unsigned int const depth)
@@ -16,9 +17,8 @@ static void hid_prepare_parse_path(HIDInterface* const hidif,
 
   unsigned int i = 0;
 
-  TRACE("preparing search path of depth %d for parse tree of interface %d "
-        "of USB device on %s/%s...", depth, hidif->interface,
-        hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("preparing search path of depth %d for parse tree of "
+      TRACEDEVICESTR "...", depth, TRACEDEVICEARGS);
   for (; i < depth; ++i) {
     hidif->hid_data->Path.Node[i].UPage = path[i] >> 16;
     hidif->hid_data->Path.Node[i].Usage = path[i] & 0x0000ffff;
@@ -26,9 +26,8 @@ static void hid_prepare_parse_path(HIDInterface* const hidif,
 
   hidif->hid_data->Path.Size = depth;
 
-  TRACE("search path prepared for parse tree of interface %d "
-      "of USB device on %s/%s.", hidif->interface,
-      hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("search path prepared for parse tree of "
+      TRACEDEVICESTR ".", TRACEDEVICEARGS);
 }
 
 hid_return hid_init_parser(HIDInterface* const hidif)
@@ -36,8 +35,8 @@ hid_return hid_init_parser(HIDInterface* const hidif)
   ASSERT(hid_is_initialised());
   ASSERT(hid_is_opened(hidif));
 
-  TRACE("initialising the HID parser for interface %d of USB device on %s/%s.",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("initialising the HID parser for "
+      TRACEDEVICESTR "...", TRACEDEVICEARGS);
 
   TRACE("allocating space for HIDData structure...");
   hidif->hid_data = (HIDData*)malloc(sizeof(HIDData));
@@ -55,8 +54,8 @@ hid_return hid_init_parser(HIDInterface* const hidif)
   }
   TRACE("successfully allocated memory for HIDParser strcture.");
 
-  NOTICE("successfully initialised the HID parser for interface %d of USB device on %s/%s.",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  NOTICE("successfully initialised the HID parser for "
+      TRACEDEVICESTR ".", TRACEDEVICEARGS);
   
   return HID_RET_SUCCESS;
 }
@@ -68,18 +67,16 @@ hid_return hid_prepare_parser(HIDInterface* const hidif)
   ASSERT(hidif->hid_parser);
   ASSERT(hidif->hid_data);
   
-  TRACE("setting up the HID parser for interface %d of USB device on %s/%s...",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("setting up the HID parser for " TRACEDEVICESTR "...", TRACEDEVICEARGS);
 
   hid_reset_parser(hidif);
   
   /* TODO: the return value here should be used, no? */
-  TRACE("parsing the HID tree of interface %d of USB device on %s/%s...",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("parsing the HID tree of " TRACEDEVICESTR "...", TRACEDEVICEARGS);
   HIDParse(hidif->hid_parser, hidif->hid_data);
 
-  NOTICE("successfully set up the HID parser for interface %d of USB device on %s/%s.",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  NOTICE("successfully set up the HID parser for "
+      TRACEDEVICESTR ".", TRACEDEVICEARGS);
 
   return HID_RET_SUCCESS;
 }
@@ -100,8 +97,7 @@ void hid_reset_parser(HIDInterface* const hidif)
     return;
   }
 
-  TRACE("resetting the HID parser for interface %d of USB device on %s/%s...",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("resetting the HID parser for " TRACEDEVICESTR "...", TRACEDEVICEARGS);
   ResetParser(hidif->hid_parser);
 }
 

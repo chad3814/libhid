@@ -6,6 +6,7 @@
 
 #include <debug.h>
 #include <assert.h>
+#include <macros.h>
 
 static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
 {
@@ -13,8 +14,8 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
   ASSERT(hid_is_opened(hidif));
   ASSERT(hidif->hid_parser);
 
-  TRACE("initialising the HID descriptor for interface %d of USB device on %s/%s.",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("initialising the HID descriptor for "
+      TRACEDEVICESTR "...", TRACEDEVICEARGS);
 
   /* TODO: if BUFLEN is a standard for HID descriptors, export it to somewhere
    * central
@@ -22,21 +23,24 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
   byte const BUFLEN = 9;
   char buffer[BUFLEN];
   
-  TRACE("retrieving HID descriptor from device");
-  int len = usb_control_msg(hidif->dev_handle, USB_ENDPOINT_IN+1,
-      USB_REQ_GET_DESCRIPTOR, (USB_DT_HID << 8) + 0, 0,
-      buffer, BUFLEN, USB_TIMEOUT);
+  TRACE("retrieving HID descriptor for "
+      TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  int len = usb_control_msg(hidif->dev_handle,
+      USB_ENDPOINT_IN+1,
+      USB_REQ_GET_DESCRIPTOR,
+      (USB_DT_HID << 8) + 0, 0,
+      buffer, BUFLEN,
+      USB_TIMEOUT);
 
   if (len < 0) {
-    WARNING("failed to get HID descriptor for interface %d of USB device on %s/%s.",
-        hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+    WARNING("failed to get HID descriptor for " 
+        TRACEDEVICESTR ".", TRACEDEVICEARGS);
     return HID_RET_NOT_HID_DEVICE;
   }
 
   if (len < BUFLEN) {
-    WARNING("HID descriptor for interface %d of USB device on %s/%s is too short: "
-            "expected: %d bytes; got: %d bytes.\n", hidif->interface,
-        hidif->device->bus->dirname, hidif->device->filename, BUFLEN, len);
+    WARNING("HID descriptor for " TRACEDEVICESTR " is too short; "
+        "expected: %d bytes; got: %d bytes.\n", TRACEDEVICEARGS, BUFLEN, len);
     return HID_RET_HID_DESC_SHORT;
   }
 
@@ -45,8 +49,8 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
    */
   hidif->hid_parser->ReportDescSize = buffer[7] | (buffer[8] << 8);
 
-  NOTICE("successfully initialised HID descriptor for interface %d of USB device on %s/%s.",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  NOTICE("successfully initialised HID descriptor for "
+      TRACEDEVICESTR ".", TRACEDEVICEARGS);
 
   return HID_RET_SUCCESS;
 }
@@ -57,39 +61,40 @@ static hid_return hid_prepare_report_descriptor(HIDInterface* const hidif)
   ASSERT(hid_is_opened(hidif));
   ASSERT(hidif->hid_parser);
 
-  TRACE("initialising the report descriptor for interface %d of USB device on %s/%s.",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  TRACE("initialising the report descriptor for "
+      TRACEDEVICESTR "...", TRACEDEVICEARGS);
 
   if (hidif->hid_parser->ReportDescSize > REPORT_DSC_SIZE) {
-    ERROR("report descriptor size for interface %d of USB device on %s/%s "
-          "exceeds maximum size: %d > %d\n", hidif->interface,
-          hidif->device->bus->dirname, hidif->device->filename,
+    ERROR("report descriptor size for " TRACEDEVICESTR
+          " exceeds maximum size: %d > %d.\n", TRACEDEVICEARGS,
           hidif->hid_parser->ReportDescSize, REPORT_DSC_SIZE);
     return HID_RET_REPORT_DESC_LONG;
   }
 
-  TRACE("retrieving report descriptor from device");
-  int len = usb_control_msg(hidif->dev_handle, USB_ENDPOINT_IN+1,
-      USB_REQ_GET_DESCRIPTOR, (USB_DT_REPORT << 8) + 0, 0,
+  TRACE("retrieving report descriptor for "
+      TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  int len = usb_control_msg(hidif->dev_handle,
+      USB_ENDPOINT_IN+1,
+      USB_REQ_GET_DESCRIPTOR,
+      (USB_DT_REPORT << 8) + 0, 0,
       hidif->hid_parser->ReportDesc, hidif->hid_parser->ReportDescSize,
       USB_TIMEOUT);
 
   if (len < 0) {
-    WARNING("failed to get report descriptor for interface %d of USB device on %s/%s.",
-        hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+    WARNING("failed to get report descriptor for "
+        TRACEDEVICESTR "...", TRACEDEVICEARGS);
     return HID_RET_FAIL_GET_REPORT;
   }
 
   if (len < hidif->hid_parser->ReportDescSize) {
-    WARNING("HID descriptor for interface %d of USB device on %s/%s is too short: "
-            "expected: %d bytes; got: %d bytes.\n", hidif->interface,
-        hidif->device->bus->dirname, hidif->device->filename,
+    WARNING("HID descriptor for " TRACEDEVICESTR " is too short; "
+        "expected: %d bytes; got: %d bytes.\n", TRACEDEVICEARGS,
         hidif->hid_parser->ReportDescSize, len);
     return HID_RET_REPORT_DESC_SHORT;
   }
 
-  NOTICE("successfully initialised report descriptor for interface %d of USB device on %s/%s.",
-      hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
+  NOTICE("successfully initialised report descriptor for "
+      TRACEDEVICESTR ".", TRACEDEVICEARGS);
 
   return HID_RET_SUCCESS;
 }

@@ -3,10 +3,10 @@
 #include <hid.h>
 #include <hid_helpers.h>
 #include <os.h>
-#include <macros.h>
 
 #include <debug.h>
 #include <assert.h>
+#include <macros.h>
 
 enum USBMatchFlags {
   USB_MATCH_NONE = 0x0,
@@ -218,9 +218,11 @@ hid_return hid_close(HIDInterface* const hidif)
 
   if (!hidif) return HID_RET_INVALID_INTERFACE;
 
-  if (hid_is_opened(hidif)) {
+  int ret;
 
-    TRACE("closing " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+  TRACE("closing " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+
+  if (hid_is_opened(hidif)) {
 
     hid_reset_parser(hidif);
     //usb_reset(hidif->dev_handle);
@@ -229,11 +231,14 @@ hid_return hid_close(HIDInterface* const hidif)
     /*if (usb_release_interface(hidif->dev_handle, hidif->interface) < 0)
       WARNING("failed to release " TRACEDEVICESTR ".", TRACEDEVICEARGS);*/
 
-    TRACE("closing " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-    if (usb_close(hidif->dev_handle) < 0)
+    TRACE("closing handle of " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+    ret = usb_close(hidif->dev_handle);
+    if (ret < 0) {
       WARNING("failed to close " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-    NOTICE("successfully closed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-
+    }
+    else {
+      NOTICE("successfully closed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+    }
   }
 
   TRACE("freeing memory allocated for HID parser...");
@@ -242,6 +247,8 @@ hid_return hid_close(HIDInterface* const hidif)
     
   TRACE("resetting HIDInterface...");
   hid_reset_HIDInterface(hidif);
+
+  if (ret < 0) return HID_RET_FAIL_CLOSE_DEVICE;
 
   return HID_RET_SUCCESS;
 }
