@@ -2,7 +2,7 @@ AC_DEFUN([MD_CHECK_SWIG],
   [
     MD_CHECK_ARG_ENABLE(swig,
     [
-      SWIG_PROG($1)
+      AC_PROG_SWIG($1)
       if [[ -x $SWIG ]]; then
         SWIG_BIN=$SWIG
         AC_SUBST(SWIG_BIN)
