@@ -2,7 +2,7 @@
 # doxygen configuration file for the factory++ library
 # author: martin f. krafft <krafft@ailab.ch>
 #
-# $Id: doxygen.rc.in,v 1.1 2004/09/11 16:51:44 krafft Exp $
+# $Id$
 #
 
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded 
@@ -382,7 +382,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = ../src ../include .
+INPUT                  = ../src ../include ../hidparser .
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
