@@ -23,8 +23,7 @@ endif
 
 lib_LTLIBRARIES = libhid.la
 libhid_la_DEPENDENCIES = ../hidparser/libhidparser.la
-libhid_la_LIBADD = ../hidparser/libhidparser.la
-libhid_la_LDADD = -lusb
+libhid_la_LIBADD = -lusb ../hidparser/libhidparser.la
 libhid_la_SOURCES = \
   $(OS_SUPPORT_SOURCE) \
 	hid_initialisation.c \
