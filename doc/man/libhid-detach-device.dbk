@@ -72,7 +72,7 @@ and docbook-xsl in your Build-Depends control field.
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>&dhpackage;</command>
-      <replaceable>dead:beef</replaceable>
+      <replaceable> dead:beef</replaceable>
     </cmdsynopsis>
   </refsynopsisdiv>
   <refsect1>

@@ -5,6 +5,7 @@ dist_man1_MANS = libhid-detach-device.1
 
 #TODO: must be determined automatically...
 DB2MAN = /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
+#DB2MAN = /sw/share/xml/xsl/docbook-xsl/manpages/docbook.xsl
 #DB2MAN = /usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
 XP = xsltproc -''-nonet
 %.1: %.dbk
