@@ -40,7 +40,10 @@ mrproper:: maintainer-clean
 	rm -rf install
 	rm -f $(wildcard */Makefile.in)
 	rm -f $(wildcard *~)
+
+clean-local::
 	rm -f $(distdir).tar.gz
 	rm -f $(wildcard *.deb)
+	rm -rf .debinstall
 
 .PHONY: cvsclean mrproper test
