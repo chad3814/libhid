@@ -7,6 +7,11 @@
 #include <debug.h>
 #include <assert.h>
 
+/*! @todo This code does not seem to properly retrieve descriptors for devices
+ * with multiple interfaces. We probably need to parse each interface a little
+ * more to determine which endpoints we want to talk to with usb_control_msg
+ * (EP1IN can't be right for everything).
+ */
 static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
 {
   ASSERT(hid_is_opened(hidif));
@@ -44,8 +49,8 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
    */
   hidif->hid_parser->ReportDescSize = buffer[7] | (buffer[8] << 8);
 
-  NOTICE("successfully initialised HID descriptor for USB device %s.",
-      hidif->id);
+  NOTICE("successfully initialised HID descriptor for USB device %s (%d bytes).",
+      hidif->id, hidif->hid_parser->ReportDescSize);
 
   return HID_RET_SUCCESS;
 }
