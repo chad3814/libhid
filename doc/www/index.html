@@ -28,7 +28,7 @@ you want to write one, please <a
 href="mailto:libhid-discuss@lists.ailab.ch">contact us</a>!). Until one is
 ready, you are welcome to download the software and try it out, it should be
 easy to use if you have some knowledge of C and are willing to read someone
-else 's code. Documentation does not yet exist, but we are working to provide
+else's code. Documentation does not yet exist, but we are working to provide
 it using <a href="http://www.doxygen.org" target="_blank">Doxygen</a> (again,
 if you want to help, please <a
 href="mailto:libhid-discuss@lists.ailab.ch">contact us</a>!).</p>
@@ -83,15 +83,28 @@ list!</p>
 <p>libhid is available through various ways. In the following, we list the
 possibilities in decreasing order of preference/currency:</p>
 
-<h3>CVS</h3>
+<h3>Subversion (svn)</h3>
 
-<p>The CVS tree contains the most recent version of libhid. You can check it
-out in read-only mode with the following commands (the password is empty, so
-just hit enter when prompted):</p>
+<p>The <a href="http://subversion.tigris.org/" target="_blank">Subversion</a>
+tree will be the preferred development repository from here forward.
+The CVS version history is available in the Subversion repository as
+well.</p>
+
+<p>To check out the latest version of libhid into the directory
+<code>libhid-svn</code>, ensure that Subversion is installed, and use the
+following command:</p>
 
 <code>
-cvs -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external login<br />
-cvs -z3 -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external co libhid 
+svn co svn://svn.debian.org/libhid/trunk libhid-svn
+</code>
+
+<p>To retrieve a particular released (or otherwise tagged) version of
+libhid, simply modify the checkout URL. You may have to browse with
+viewcvs (see below) to find the exact tag name. As an example, let's
+retrieve version 0.2.7-1:</p>
+
+<code>
+svn co svn://svn.debian.org/libhid/tags/libhid_0_2_7-1 libhid-0.2.7-1
 </code>
 
 <p>Instructions on how to compile the code are available in the <a
@@ -99,14 +112,29 @@ href="./README" target="_blank">README</a> file. Please do not hesitate to
 write to the <a href="mailto:libhid-discuss@lists.ailab.ch">mailing list</a>
 if you have questions, comments, or problems.</p>
 
+<p>The Subversion tree can also be viewed <a
+href="http://svn.debian.org/viewcvs/libhid/">online</a> via viewcvs.</p>
+
+<p>If you want to contribute, please send a patch or two. We cannot give out
+write access to the repository just like that, but if you show us a patch,
+we'll conclude that you are serious about developing libhid. Your
+account would then be added to the libhid project on Alioth, effectively
+giving you write access.</p>
+
+<h3>CVS</h3>
+
+<p>The CVS tree contains all changes to libhid through October 2004. You can
+check it out in read-only mode with the following commands (the password is
+empty, so just hit enter when prompted):</p>
+
+<code>
+cvs -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external login<br />
+cvs -z3 -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external co libhid 
+</code>
+
 <p>In addition, the CVS tree can be viewed <a
 href="http://cvs.ailab.ch/cgi-bin/viewcvs.cgi/libhid/"
 target="_blank">online</a>.</p>
-
-<p>If you want to contribute, please send a patch or two. We cannot give out
-write access to the CVS just like that, but if you show us a patch, we'll
-conclude that you are serious about developing libhid, and you'll get your
-account.</p>
 
 <h3>Debian</h3>
 
