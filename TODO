@@ -57,6 +57,8 @@ MKR: Martin Krafft
 
 - [MKR] Debian integration
 
+- [MKR] CVS commit mails
+
 [done 2004.02.11] [MKR] libhid-config
 
 [done 2004.02.11] [MKR] reintegration of hidparser into libhid core.
