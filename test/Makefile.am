@@ -15,7 +15,7 @@ debug:: test_libhid
 	libtool --mode=execute gdb -q $<
 
 run:: test_libhid
-  libtool --mode=execute ./$<
+	libtool --mode=execute ./$<
 
 cvsclean:: mrproper
 mrproper:: maintainer-clean

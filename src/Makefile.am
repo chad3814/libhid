@@ -1,6 +1,6 @@
 AM_CFLAGS =
-AM_CPPFLAGS = @LIBUSBINCLUDE@ -I../include
-AM_LDFLAGS = -L. @LIBUSBLIB@ -lusb -lhidparser
+AM_CPPFLAGS = @LIBUSBINCLUDE@ -I../include -I../hidparser
+AM_LDFLAGS = -L. @LIBUSBLIB@ -lusb
 
 if LINUX_API
 OS_SUPPORT = linux.c
@@ -30,6 +30,8 @@ override AM_CPPFLAGS = $(AM_CPPFLAGS_) \
 	-DCOMPILEDATE="\"`date`\""
 
 lib_LTLIBRARIES = libhid.la
+libhid_la_DEPENDENCIES = ../hidparser/libhidparser.la
+libhid_la_LIBADD = ../hidparser/libhidparser.la
 libhid_la_SOURCES = \
   $(OS_SUPPORT) \
 	hid_initialisation.c \

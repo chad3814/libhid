@@ -1,4 +1,4 @@
-SUBDIRS = src test
+SUBDIRS = hidparser src test
 
 dist_noinst_DATA = \
 	debian/changelog \
@@ -16,7 +16,9 @@ dist_noinst_HEADERS = \
 	include/debug.h \
 	include/hid_helpers.h \
 	include/macros.h \
-	include/os.h
+	include/os.h \
+	hidparser/hidparser.h \
+	hidparser/hidtypes.h
 
 test:: test/test_libhid
 	make -C test run

@@ -1,0 +1,112 @@
+Desc: Presentation and use of MGE UPS SYSTEMS HID Parser
+File: hidparser.txt
+Date: 6 March 2003
+Auth: Arnaud Quette <arnaud.quette@mgeups.com>
+
+Introduction
+============
+
+This file describes MGE UPS SYSTEMS Human Interface Device (HID) Parser,
+and its use within opensource projects.
+
+Those files are distributed under GPL. For more legal information, please
+read COPYING file which is part of this package.
+
+
+General HID presentation
+========================
+
+Human Interface Device (HID) allows to describe the internal structure of
+a device, and to consider this device as an objects tree. This may be
+compared to an SNMP tree.
+
+HID is mostly used to describe USB devices (such as keyboard, mice, UPS and
+monitor), but may also be used over a serial link. This is what MGE UPS
+SYSTEMS has done with SHUT (Serial HID UPS Transfer).
+
+In order to use MGE UPS SYSTEMS HID Parser, you need to understand the HID.
+For more information about HID and SHUT, please refer to:
+
+- USB.org official HID Information: http://www.usb.org/developers/hidpage/
+- MGE UPS SYSTEMS Simplified SHUT protocol: 
+http://www.exploits.org/nut/library/protocols/mge/51029473zaac.pdf
+http://penguin.harrison.k12.co.us/mirrors/nut/library/protocols/mge/51029473zaac.pdf 
+
+
+HID Parser presentation
+=======================
+
+This package is composed of 5 files:
+
+- COPYING: GNU GENERAL PUBLIC LICENSE v2 (complete license information for
+MGE UPS SYSTEMS HID Parser)
+- hidtypes.h: HID types definitions
+- hidparser.h:  HID Parser header file
+- hidparser.c: HID Parser core file
+- hidparser.txt: the present document
+
+
+Using the HID Parser
+=====================
+
+In order to use the HID Parser, you need to have access to the encapsulation
+layer (USB or SHUT) in order to obtain the various descriptors needed:
+- HID descriptor,
+- Device descriptor,
+- and the most important: the report descriptor. This one describe what data
+are present in the device, and how to obtain those (ie which report to query).
+
+You also need this encapsulation layers for the various Get and Set queries
+to be issued to the device.
+
+Here is the right way to call HID Parser's functions:
+1) declare a HIDParser and a HIDData structures:
+
+static HIDParser hParser;
+static HIDData   hData;
+
+2) Initialise HIDParser structure (note that raw_buf is an unsigned char array
+containing the report descriptor of the device ; and value is its size):
+
+ResetParser(&hParser);
+hParser.ReportDescSize = value;
+memcpy(hParser.ReportDesc, raw_buf, value);
+
+3) Parse HID information:
+
+HIDParse(&hParser, &hData);
+
+4) Finding HID objects:
+
+You will need to fill the path of this object in HIDData structure, in the form
+[Usage_Page, Usage_code] for each node of the path, ie:
+UPS.PowerSummary.PresentStatus.ACPresent
+=> [0x84, 0x00].[0x84, 0x24].[0x84, 0x02].[0x85, 0xd0]
+
+5) Getting HID object's value:
+
+Using the encapsulation layer, you need to get the report with ID according to
+hData.ReportID and put it in a "raw_buf".
+
+Next, you can use:
+GetValue((const unsigned char *) raw_buf, &hData);
+
+The object's value is now available in hData.Value.
+
+6) For a more complete example of integration, have a look at mge-shut driver
+sources in Network UPS Tools (http://www.exploits.org/nut/).
+
+
+Other important information
+===========================
+
+MGE UPS SYSTEMS has developed this HID Parser for its own use, which means
+for supporting the HID Power Devices Class (UPS description). Thus, it may not
+be supporting other device class in a fine way. You are encouraged to improve
+this support by submitting patch to the maintainers or to MGE UPS SYSTEMS,
+which will forward those to the GPL project maintainers.
+
+This parser is under integration in a bigger opensource project, call libHID,
+which will provide HID support using libUSB and SHUT encapsulation for all
+POSIX compliant platforms.
+

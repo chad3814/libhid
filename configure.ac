@@ -19,7 +19,7 @@ AH_TOP(
 #     if not backward compatible, iface_age = bin_age = 0
 #
 AC_INIT(libhid, 0.1.10.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.8 $)
+AC_REVISION($Revision: 1.9 $)
 
 AM_INIT_AUTOMAKE
 
@@ -186,6 +186,7 @@ AC_CHECK_HEADERS([hidparser.h])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([src/Makefile])
+AC_CONFIG_FILES([hidparser/Makefile])
 AC_CONFIG_FILES([src/config.c])
 AC_CONFIG_FILES([test/Makefile])
 
