@@ -90,6 +90,8 @@ MD_CONF_FLAGS(
   [$OS_LDFLAGS $LIBUSB_LIBS]
 )
 
+MD_CONF_DB2MAN
+
 ##### OUTPUT #################################################################
 
 AC_CONFIG_FILES([Makefile])
