@@ -1,0 +1,26 @@
+# Sun 2005-01-15 - Jason Watson
+# while trying to build on RedHat Enterprise 3 with automake-1.6, I ran into this error from automake.
+# the following patch resolved the issue by simply renaming the var so that it doesn't end with "_SOURCES"
+# uname -a = Linux localhost.localdomain 2.4.21-15.EL #1 Thu Apr 22 00:27:41 EDT 2004 i686 i686 i386 GNU/Linux
+# automake --verson = automake (GNU automake) 1.6.3
+###################################################################
+#
+# $ automake --add-missing
+# doc/Makefile.am:16: invalid unused variable name: `DOXY_SOURCES'
+#
+###################################################################
+diff -urN libhid-0.2.10.orig/doc/Makefile.am libhid-0.2.10.new/doc/Makefile.am
+--- libhid-0.2.10.orig/doc/Makefile.am    2004-11-09 07:55:06.000000000 -0500
++++ libhid-0.2.10.new/doc/Makefile.am    2005-01-12 23:47:12.000000000 -0500
+@@ -9,13 +9,13 @@
+EXTRA_DIST = frontpage.dox
+-DOXY_SOURCES = \
++DOXY_SOURCES1 = \
+    $(wildcard ../src/*.c) \
+    $(wildcard ../include/*.h) \
+    $(wildcard ../hidparser/*.[ch]) \
+    $(wildcard *.dox)
+-.stamp_doxygen: $(DOXY_SOURCES) doxygen.rc
++.stamp_doxygen: $(DOXY_SOURCES1) doxygen.rc
+    doxygen doxygen.rc
+    @touch $@

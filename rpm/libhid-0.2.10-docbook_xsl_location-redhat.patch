@@ -1,0 +1,20 @@
+# Sun 2005-01-15 - Jason Watson
+# on RedHat systems, the docbook.xsl file is in a different location
+#
+# uname -a = Linux localhost.localdomain 2.4.21-15.EL #1 Thu Apr 22 00:27:41 EDT 2004 i686 i686 i386 GNU/Linux
+###################################################################
+
+diff -urN libhid-0.2.10.orig/doc/man/Makefile.am libhid-0.2.10.new/doc/man/Makefile.am
+--- libhid-0.2.10.orig/doc/man/Makefile.am    2005-01-15 17:36:11.000000000 -0500
++++ libhid-0.2.10.new/doc/man/Makefile.am    2005-01-15 18:15:17.000000000 -0500
+@@ -4,9 +4,9 @@
+dist_man1_MANS = libhid-detach-device.1
+#TODO: must be determined automatically...
+-DB2MAN = /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
++#DB2MAN = /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
+#DB2MAN = /sw/share/xml/xsl/docbook-xsl/manpages/docbook.xsl
+-#DB2MAN = /usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
++DB2MAN = /usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
+XP = xsltproc -''-nonet
+%.1: %.dbk
+    $(XP) $(DB2MAN) $<

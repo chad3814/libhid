@@ -1,0 +1,52 @@
+# Sun 2005-01-15 - Jason Watson
+# while trying to build on RedHat Enterprise 3 with automake-1.6, I ran into this error from automake.
+# the following patch resolved the issue by more explicitly defining the variables within conditionals
+# uname -a = Linux localhost.localdomain 2.4.21-15.EL #1 Thu Apr 22 00:27:41 EDT 2004 i686 i686 i386 GNU/Linux
+# automake --verson = automake (GNU automake) 1.6.3
+###################################################################
+#
+# $ automake --add-missing
+# src/Makefile.am:5: AM_CFLAGS was already defined in condition TRUE, which implies condition OS_BSD_FALSE OS_DARWIN_TRUE OS_LINUX_FALSE
+#   AM_CFLAGS (User, where = src/Makefile.am:5) +=
+#   {
+#     TRUE => @OS_CFLAGS@ -fPIC
+#   }
+# src/Makefile.am:6: AM_LDFLAGS was already defined in condition TRUE, which implies condition OS_BSD_FALSE OS_DARWIN_TRUE OS_LINUX_FALSE
+#   AM_LDFLAGS (User, where = src/Makefile.am:6) +=
+#   {
+#     TRUE => @OS_LDFLAGS@
+#   }
+#
+###################################################################
+
+diff -urN libhid-0.2.10.orig/src/Makefile.am libhid-0.2.10.new/src/Makefile.am
+--- libhid-0.2.10.orig/src/Makefile.am    2004-11-09 07:06:28.000000000 -0500
++++ libhid-0.2.10.new/src/Makefile.am    2005-01-12 23:51:08.000000000 -0500
+@@ -2,21 +2,25 @@
+ACLOCAL_AMFLAGS = -I m4
+AM_CPPFLAGS =
+-AM_CFLAGS = @OS_CFLAGS@ -fPIC
+-AM_LDFLAGS = @OS_LDFLAGS@
+if OS_LINUX
+OS_SUPPORT_SOURCE = linux.c
++AM_CFLAGS = @OS_CFLAGS@ -fPIC
++AM_LDFLAGS = @OS_LDFLAGS@
+else
+if OS_BSD
+OS_SUPPORT_SOURCE = bsd.c
++AM_CFLAGS = @OS_CFLAGS@ -fPIC
++AM_LDFLAGS = @OS_LDFLAGS@
+else
+if OS_DARWIN
+OS_SUPPORT_SOURCE = darwin.c
+-AM_CFLAGS += -no-cpp-precomp
+-AM_LDFLAGS += -lIOKit -framework "CoreFoundation"
++AM_CFLAGS = @OS_CFLAGS@ -fPIC -no-cpp-precomp
++AM_LDFLAGS = @OS_LDFLAGS@ -lIOKit -framework "CoreFoundation"
+else
+OS_SUPPORT =
++AM_CFLAGS = @OS_CFLAGS@ -fPIC
++AM_LDFLAGS = @OS_LDFLAGS@
+endif
+endif
+endif
