@@ -1,3 +1,10 @@
+libhid (0.2.10-1) unstable; urgency=low
+
+  * Fixed lack of libusb dependency of libhid.la, which caused compile
+    problems in unknown circumstances.
+
+ -- martin f. krafft <madduck@debian.org>  Thu, 30 Dec 2004 06:59:05 +0100
+
 libhid (0.2.9-1) unstable; urgency=low
 
   * New upstream release (closes: Bug#280555).
