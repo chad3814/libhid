@@ -76,8 +76,6 @@ AC_C_STRINGIZE
 
 MD_CONF_DEBUGGING
 MD_CONF_COMPILER
-MD_CONF_FLAGS([-I../include -I../hidparser $LIBUSB_CFLAGS], [$LIBUSB_LIBS])
-
 AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "linux")
 AM_CONDITIONAL(OS_BSD, test "$MD_OS" = "bsd")
 AM_CONDITIONAL(OS_DARWIN, test "$MD_OS" = "darwin")
@@ -85,7 +83,12 @@ AM_CONDITIONAL(OS_DARWIN, test "$MD_OS" = "darwin")
 MD_CHECK_SWIG([1.3])
 MD_CHECK_DOXYGEN
 
-MD_CONF_FLAGS([-I../include])
+MD_CONF_FLAGS(
+  [-I../include -I../hidparser],
+  [$OS_CFLAGS $LIBUSB_CFLAGS],
+  [],
+  [$OS_LDFLAGS $LIBUSB_LIBS]
+)
 
 ##### OUTPUT #################################################################
 
@@ -100,6 +103,8 @@ AC_CONFIG_FILES([doc/www/Makefile])
 AC_CONFIG_FILES([pkgconfig/libhid.pc])
 
 AC_OUTPUT
+
+MD_DEBUG_BUILDVARS
 
 # COPYRIGHT --
 #

@@ -26,6 +26,8 @@ run: test_libhid
 
 clean-local:
 	rm -f $(wildcard *.loT)
+	rm -f $(wildcard *.i)
+	rm -f $(wildcard *.s)
 
 # COPYRIGHT --
 #

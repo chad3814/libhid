@@ -48,6 +48,8 @@ run: $(pyexec_LTLIBRARIES) startup.py
 clean-local:
 	rm -f $(wildcard *.py) $(wildcard *.pyc)
 	rm -f $(wildcard *.c)
+	rm -f $(wildcard *.i)
+	rm -f $(wildcard *.s)
 	rm -f $(wildcard *.o)
 	rm -f $(wildcard *.so)
 	rm -f $(wildcard *.lo)

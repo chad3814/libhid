@@ -16,7 +16,7 @@ int main(void)
 {
   //hid_write_library_config(stdout);
   
-  hid_set_debug(HID_DEBUG_NOTRACES);
+  hid_set_debug(HID_DEBUG_ALL);
   hid_set_debug_stream(stderr);
   hid_set_usb_debug(0);
 
@@ -32,7 +32,7 @@ int main(void)
     return 1;
   }
 
-  char* serial = "01816";
+  char* serial = "01518";
   HIDInterfaceMatcher matcher = { 0x06c2, 0x0038, match_serial_number, (void*)serial, strlen(serial)+1 };
 
   ret = hid_force_open(hid, 0, &matcher, 3);

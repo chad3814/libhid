@@ -42,6 +42,8 @@ include_HEADERS = ../include/hid.h
 .PHONY: clean-local
 clean-local:
 	rm -f $(wildcard *.loT)
+	rm -f $(wildcard *.i)
+	rm -f $(wildcard *.s)
 
 # COPYRIGHT --
 #
