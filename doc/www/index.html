@@ -116,10 +116,13 @@ if you have questions, comments, or problems.</p>
 href="http://svn.debian.org/viewcvs/libhid/">online</a> via viewcvs.</p>
 
 <p>If you want to contribute, please send a patch or two. We cannot give out
-write access to the repository just like that, but if you show us a patch,
-we'll conclude that you are serious about developing libhid. Your
-account would then be added to the libhid project on Alioth, effectively
-giving you write access.</p>
+write access to the Subversion tree just like that, but if you show us
+a patch, we'll conclude that you are serious about developing libhid, and give
+you permission. You will need an account on <a href="http://alioth.debian.org"
+target="_blank">Alioth</a>. You can <a
+href="http://alioth.debian.org/account/register.php"
+target="_blank">Alioth</a> for free (and need not be affiliated with
+Debian).</p>
 
 <h3>CVS</h3>
 
@@ -143,8 +146,8 @@ use my (madduck) repository to always get the latest versions. Simply add the
 following to your <tt>/etc/apt/sources.list</tt> file:</p>
 
 <code>
-deb http://people.debian.org/~madduck/stage ./<br />
-deb-src http://people.debian.org/~madduck/stage ./
+deb     http://people.debian.org/~madduck/packages/stage/libhid ./<br />
+deb-src http://people.debian.org/~madduck/packages/stage/libhid ./
 </code>
 
 <p>and then install it. You may leave out <tt>python-hid</tt> if you do not
@@ -157,7 +160,7 @@ want the Python bindings:</p>
 <h3>Tarball</h3>
 
 <p>Of course, libhid is available as a tarball from <a
-href="http://people.debian.org/~madduck/stage/pool/libhid/"
+href="http://people.debian.org/~madduck/packages/stage/libhid/source"
 target="_blank">the Debian repository</a>. Simply find the latest file with
 the extension <tt>.orig.tar.gz</tt>, download it, unpack it, and then do
 the standard</p>
