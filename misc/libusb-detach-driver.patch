@@ -21,7 +21,7 @@ diff -Nru libusb-0.1.7.orig/linux.c libusb-0.1.7/linux.c
 +    fprintf(stderr, "trying to detach kernel driver from interface %d on %s/%s...\n",
 +                    interface, dev->bus->dirname, dev->device->filename);
 +
-+  struct usbdevfs_ioctl command = { 0, USBDEVFS_DISCONNECT, 0 };
++  struct usbdevfs_ioctl command = { interface, USBDEVFS_DISCONNECT, NULL };
 +  if (ioctl (dev->fd, USBDEVFS_IOCTL, &command) < 0)
 +    USB_ERROR_STR(-errno, "could not detach kernel driver from interface %d: %s",
 +        interface, strerror(errno));
