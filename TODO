@@ -49,6 +49,8 @@ MKR: Martin Krafft
 
 - documentation
 
+- README file
+
 - dealing with multiple configuration descriptors (if necessary)
 
 - dealing with physical descriptors (if necessary)
