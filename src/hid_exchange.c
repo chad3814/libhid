@@ -116,6 +116,8 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
   hid_get_report_size(hidif, hidif->hid_data->ReportID,
 		      hidif->hid_data->Type, &size);
 
+  ASSERT(size <= 32); /* remove when buffer situation is fixed. */
+
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN + USB_TYPE_CLASS + USB_RECIP_INTERFACE,
       HID_REPORT_GET,
