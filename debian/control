@@ -9,6 +9,7 @@ Package: libhid-dev
 Section: libdevel
 Architecture: any
 Depends: libhid0 (= ${Source-Version}), libusb-dev (>= 1:0.1.8)
+Suggests: pkg-config
 Description: userspace USB HID development files
  libhid provides a generic and flexible way to access and interact with USB
  HID devices, much like libusb does for plain USB devices. It is based on
@@ -22,7 +23,6 @@ Package: libhid0
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}
-Suggests: pkg-config
 Description: userspace USB HID access library
  libhid provides a generic and flexible way to access and interact with USB
  HID devices, much like libusb does for plain USB devices. It is based on

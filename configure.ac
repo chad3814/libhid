@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_REVISION($Revision: 1.18 $)
+AC_REVISION($Revision: 1.19 $)
 AC_COPYRIGHT([Please see the ./COPYING file for license information.])
 
 AC_PREREQ(2.57)
@@ -91,6 +91,8 @@ AC_CONFIG_FILES([src/Makefile])
 AC_CONFIG_FILES([hidparser/Makefile])
 AC_CONFIG_FILES([swig/Makefile])
 AC_CONFIG_FILES([test/Makefile])
+AC_CONFIG_FILES([doc/Makefile])
+AC_CONFIG_FILES([doc/www/Makefile])
 AC_CONFIG_FILES([pkgconfig/libhid.pc])
 
 AC_OUTPUT

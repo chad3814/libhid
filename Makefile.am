@@ -4,7 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 if PYTHONWRAPPER
   MAYBE_PYTHONWRAPPER = swig
 endif
-SUBDIRS = hidparser src $(MAYBE_PYTHONWRAPPER) test
+SUBDIRS = hidparser src $(MAYBE_PYTHONWRAPPER) doc test
 
 dist_noinst_HEADERS = \
 	include/assert.h \

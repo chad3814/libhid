@@ -1,6 +1,11 @@
 libhid ChangeLog
 ================
 
+2004-09-10  Martin F. Krafft (libhid@pobox.madduck.net)
+
+  - Changed list addresses and contact information.
+	- Added a preliminary webpage for libhid: doc/www/index.html
+
 2004-09-09  Martin F. Krafft (libhid@pobox.madduck.net)
 
   - Added autoconf enable argument for swig.
@@ -32,4 +37,4 @@ libhid ChangeLog
   - Replaced libhid-config with a pkg-config file
   - Reworked the autotools files
 
-Revision: $Id: ChangeLog,v 1.7 2004/09/09 16:15:11 krafft Exp $
+Revision: $Id: ChangeLog,v 1.8 2004/09/10 12:33:00 krafft Exp $

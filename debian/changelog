@@ -1,3 +1,13 @@
+libhid (0.2.6-1) unstable; urgency=low
+
+  * New upstream release.
+  * Added suggestion for pkg-config for libhid-dev.
+  * Removed suggestion for pkg-config from libhid0.
+
+    ** NOT YET UPLOADED **
+
+ -- martin f. krafft <madduck@debian.org>  Fri, 10 Sep 2004 14:06:11 +0200
+
 libhid (0.2.5-1) unstable; urgency=low
 
   * New upstream release (closes: Bug#270781).

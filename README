@@ -8,9 +8,9 @@ libhid is (c) 2003-2004 by
 and distributed under the terms of the GNU General Public License.
 See the file ./COPYING in the source distribution for more information.
 
-Revision: $Id: README,v 1.5 2004/08/30 20:42:45 krafft Exp $
+Revision: $Id: README,v 1.6 2004/09/10 12:33:00 krafft Exp $
 
-Please send bugreports to <libhid@lists.ailab.ch>.
+Please send bugreports to <libhid-discuss@lists.ailab.ch>.
 
 Introduction
 ------------
@@ -34,7 +34,7 @@ available):
 
 You are welcome to sign up with the libhid mailing list at
   
-  http://lists.ailab.ch/mailman/listinfo/libhid
+  http://lists.ailab.ch/mailman/listinfo/libhid-discuss
 
 for support.
 
@@ -100,7 +100,7 @@ Note that the library is not (yet) complete and it's not thoroughly tested.
 However, given the effort and grief we went through in writing it, we would
 like to make it available to folks, get people to test it, and hopefully have
 some peeps submit improvements. If you have any suggestions, please write to
-us at libhid@lists.ailab.ch.
+us at libhid-discuss@lists.ailab.ch.
 
 It's not yet documented, although the usage should be fairly straight
 forward. We are hoping that someone steps forward and offers to document the
@@ -111,7 +111,7 @@ Furthermore, we are always looking for people willing to help out. In
 particular, we would love to find someone willing to maintain the website.
 We are also looking to rewrite the MGE HIDParser and implement new
 functionality. If you are interested, please contact us at
-libhid@lists.ailab.ch.
+libhid-discuss@lists.ailab.ch.
 
 Credits
 -------
