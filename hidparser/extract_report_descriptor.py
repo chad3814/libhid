@@ -72,13 +72,47 @@ def parse_tag(desc, index = 0):
     bSize = (1 << (desc[index] & 0x3)) / 2
     bType = (desc[index] >> 2) & 0x3
     bTag  = (desc[index] >> 4) & 0xF
+
     print "[0x%04x]" % index,
+
+    data = 0
     for byte in range(bSize+1):
         print "0x%02x" % desc[index+byte],
+	if byte > 0:
+	    data = desc[index+byte] << (8*(byte-1)) | data
+
+    # FIXME: sign-extend data if necessary
+
+    if bSize > 0:
+        print "(value: 0x%x)" % data,
     print
+
     print "  bSize = %d byte(s)" % bSize
-    print "  bType = 0x%02x (%s)" % (bType, ('Main', 'Global', 'Local', 'Reserved')[bType])
-    print "  bTag  = 0x%02x" % bTag
+    print "  bType = 0x%02x (%s)" \
+        % (bType, ('Main', 'Global', 'Local', 'Reserved')[bType])
+    print "  bTag  = 0x%02x" % bTag,
+
+    if bType == 0:	# Main
+    	print "(%s)" % ('Input', 'Output', 'Collection', 'Feature', \
+	    'End Collection')[bTag-8],
+
+	if bTag == 0x0a: # Collection type
+	    if data <= 6:
+	        print "(%s)" % ('Physical', 'Application', 'Logical', 'Report', \
+	            'Named Array', 'Usage Switch', 'Usage Modifier')[data],
+            else:
+	        print "(Vendor defined: 0x%x)" % data,
+    elif bType == 1:	# Global
+	print "(%s)" % ('Usage page', 'Logical Minimum', 'Logical Maximum', \
+	    'Physical Minimum', 'Physical Maximum', 'Unit Exponent', 'Unit', \
+	    'Report Size', 'Report ID', 'Report Count', 'Push', 'Pop')[bTag],
+    elif bType == 2:	# Local
+        print "(%s)" % ('Usage', 'Usage Minimum', 'Usage Maximum', \
+	    'Designator Index', 'Designator Minimum', 'Designator Maximum', \
+	    'String Index', 'String Minimum', 'String Maximum', \
+	    'Delimiter')[bTag],
+    print
+    print
     return bSize + 1
 
 def tokenize_descriptor(desc):
@@ -90,7 +124,7 @@ def main():
     if(len(sys.argv) > 1):
         fname = sys.argv[1]
     else:
-        fname = '../ref/test_libhid_output/Apple_17_inch_Studio_Display'
+        fname = '../ref/test_libhid_output/MGE_Pulsar_Evolution_500'
 
     f = open(fname, 'r')
     desc_bytes = extract_bytes(f)
