@@ -59,7 +59,11 @@ MKR: Martin Krafft
 
 - [MKR] export of USB_TIMEOUT parameter
 
-- [MKR] claim interface before matching device
+[done 2004.03.25] [MKR] use libusb-config properly
+
+[done 2004.03.25] [MKR] implement libhid-config properly
+
+[done 2004.03.25] [MKR] claim interface before matching device
 
 [done 2004.02.11] [MKR] CVS commit mails
 
