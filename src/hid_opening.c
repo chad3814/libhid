@@ -244,12 +244,14 @@ hid_return hid_close(HIDInterface* const hidif)
   if(hidif->hid_parser) free(hidif->hid_parser);
   if(hidif->hid_data) free(hidif->hid_data);
     
+  if (ret == 0)
+    NOTICE("successfully closed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+
   TRACE("resetting HIDInterface...");
   hid_reset_HIDInterface(hidif);
 
   if (ret < 0) return HID_RET_FAIL_CLOSE_DEVICE;
 
-  NOTICE("successfully closed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
   return HID_RET_SUCCESS;
 }
 
