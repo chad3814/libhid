@@ -192,7 +192,7 @@ hid_return hid_force_open(HIDInterface* const hidif, int const interface,
   hidif->interface = interface;
 
   TRACE("claiming " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-  hid_os_force_claim(hidif, interface, match, retries);
+  ret = hid_os_force_claim(hidif, interface, match, retries);
   if (ret != HID_RET_SUCCESS) {
     WARNING("failed to claim " TRACEDEVICESTR ".", TRACEDEVICEARGS);
     hid_close(hidif);
