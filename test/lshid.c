@@ -46,7 +46,7 @@ bool device_iterator (struct usb_dev_handle const* usbdev, void* custom, unsigne
   
   /* only here to prevent the unused warning */
   /* TODO remove */
-  len = (unsigned int)custom;
+  len = *((unsigned int*)custom);
  
   /* Obtain the device's full path */
   sprintf(current_dev_path, "%s/%s", usbdev->bus->dirname, usbdev->device->filename);
