@@ -2,11 +2,13 @@
 
 #include <hid.h>
 
-#include <debug.h>
 #include <assert.h>
 
 void hid_write_library_config(FILE* const outstream)
 {
+  ASSERT(outstream);
+  if (!outstream) return;
+
   fprintf(outstream, "library:                        @PACKAGE@ (@host@)\n");
   fprintf(outstream, "version:                        @VERSION@\n");
   fprintf(outstream, "libtool age (interface/binary): "
