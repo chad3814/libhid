@@ -3,6 +3,12 @@ libhid ChangeLog
 
 2004-09-10  Martin F. Krafft (libhid@pobox.madduck.net)
 
+  - Fixed several non-POSIX uses of regular expressions in autotools files
+	- Replaced expr by $((...)) shell semantics
+	- Added override for autoconf Swig version check
+
+2004-09-10  Martin F. Krafft (libhid@pobox.madduck.net)
+
   - Changed list addresses and contact information.
 	- Added a preliminary webpage for libhid: doc/www/index.html
   - Debian: Added suggestion for pkg-config for libhid-dev.
@@ -39,4 +45,4 @@ libhid ChangeLog
   - Replaced libhid-config with a pkg-config file
   - Reworked the autotools files
 
-Revision: $Id: ChangeLog,v 1.9 2004/09/10 12:33:47 krafft Exp $
+Revision: $Id: ChangeLog,v 1.10 2004/09/15 06:43:12 krafft Exp $

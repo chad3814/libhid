@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_REVISION($Revision: 1.20 $)
+AC_REVISION($Revision: 1.21 $)
 AC_COPYRIGHT([Please see the ./COPYING file for license information.])
 
 AC_PREREQ(2.57)
@@ -15,8 +15,8 @@ AC_PREREQ(2.57)
 m4_define([IFACE_AGE], [0])
 m4_define([BIN_AGE],   [0])
 m4_define([MD_INIT_NAME], m4_esyscmd([set -- `head -1 README` && echo -n $1]))
-m4_define([MD_INIT_VERSION], m4_esyscmd([expr "`head -1 debian/changelog`" : '.*(\([^-]\+\)-[0-9]\+).*' | tr -d "\n"]).IFACE_AGE.BIN_AGE)
-m4_define([MD_INIT_ADDRESS], m4_esyscmd([grep -i bugreports\ to README | sed -e 's,.*<\([^>]\+\).*,\1,' | tr -d "\n"]))
+m4_define([MD_INIT_VERSION], m4_esyscmd([head -1 debian/changelog | sed -e 's,.*(\([^-]*\)-[0-9]*).*,\1,' | tr -d "\n"]).IFACE_AGE.BIN_AGE)
+m4_define([MD_INIT_ADDRESS], m4_esyscmd([grep -i bugreports\ to README | sed -e 's,.*<\([^>]*\).*,\1,' | tr -d "\n"]))
 
 AC_INIT(MD_INIT_NAME, MD_INIT_VERSION, MD_INIT_ADDRESS)
 

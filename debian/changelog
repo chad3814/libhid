@@ -1,3 +1,10 @@
+libhid (0.2.7-1) unstable; urgency=low
+
+  * New upstream version.
+  * Added Arnaud Quette <aquette@debian.org> as Co-Maintainer.
+
+ -- martin f. krafft <madduck@debian.org>  Mon, 13 Sep 2004 16:52:39 +0200
+
 libhid (0.2.6-2) unstable; urgency=low
 
   * Fixed build dependencies on gcc. Suboptimal, but this is better than 
