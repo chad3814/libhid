@@ -40,6 +40,11 @@ void hid_delete_HIDInterface(HIDInterface** const ixs)
 
 void hid_reset_HIDInterface(HIDInterface* const hidif)
 {
+  if (!hidif) {
+    ERROR("cannot reset NULL HIDInterface.");
+    return;
+  }
+
   hidif->dev_handle = NULL;
   hidif->device = NULL;
   hidif->interface = -1;
