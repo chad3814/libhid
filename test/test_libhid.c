@@ -103,10 +103,10 @@ int main(void)
    *
    * libhid uses the MGE hidparser, which parses the HID usage tree and places
    * the available usages at its leafs (leaves?). The path information can be
-   * read from the `lsusb -vvv` output (unconfirmed), or by inspecting the
-   * output of hid_dump_tree. In the output, 0x80 denotes an input endoint
-   * (sent by the device), and 0x90 an output endpoint (sent to the device).
-   * These are then used to communicate with the device.
+   * read from the `lsusb -vvv` output, or by inspecting the output of
+   * hid_dump_tree. In the output, 0x80 denotes an input endoint (sent by the
+   * device), and 0x90 an output endpoint (sent to the device). These are then
+   * used to communicate with the device.
    *
    * In the example of the Phidgets QuadServoController (www.phidgets.com, and
    * libphidgets.alioth.debian.org), the following two paths identify the
@@ -116,6 +116,58 @@ int main(void)
    *   int const PATH_IN[PATHLEN] = { 0xffa00001, 0xffa00002, 0xffa10003 };
    *   int const PATH_OUT[PATHLEN] = { 0xffa00001, 0xffa00002, 0xffa10004 };
    *
+   * This is derived from the output of `lsusb -d 0x06c2:0x0038 -vvv` as
+   * follows. You need to run `libhid_detach_device 06c2:0038` before lsusb
+   * will output this info:
+   *
+   *   Bus 001 Device 028: ID 06c2:0038 GLAB Chester 4-Motor PhidgetServo v3.0
+   *   Device Descriptor:
+   *     [...]
+   *     Configuration Descriptor:
+   *       [...]
+   *       Interface Descriptor:
+   *         [...]
+   *         iInterface
+   *           HID Device Descriptor:
+   *           [...]
+   *              Report Descriptor:
+   *              [...]
+   *                Item(Global): Usage Page, data= [ 0xa0 0xff ] 65440
+   *                [...]
+   *                Item(Local ): Usage, data= [ 0x01 ] 1
+   *                [...]
+   *                
+   *                Item(Local ): Usage, data= [ 0x02 ] 2
+   *                [...]
+   *                
+   *                Item(Global): Usage Page, data= [ 0xa1 0xff ] 65441
+   *                [...]
+   *                
+   *                Item(Local ): Usage, data= [ 0x03 ] 3
+   *                [...]
+   *                Item(Main  ): Input, data= [ 0x02 ] 2
+   *                [...]
+   *                
+   *                Item(Local ): Usage, data= [ 0x04 ] 4
+   *                [...]
+   *                Item(Main  ): Output, data= [ 0x02 ] 2
+   *                [...]
+   *
+   * So working backwards,
+   *   "Item(Main) Output" is usage 4 of usage page 65441,
+   *   which is rooted at "Item(Local) ... 2" of usage page 65440,
+   *   which is rooted at "Item(Local) ... 1" of usage page 65440
+   *
+   * A path component is 32 bits, the high 16 bits identify the usage page,
+   * and the low 16 bits the item number. Thus (now working forwards):
+   *
+   *   65440 << 16 + 1      -> 0xffa00001
+   *   65440 << 16 + 2      -> 0xffa00002
+   *   65441 << 16 + 4      -> 0xffa10004
+   *
+   * which gives the path the the output usage of the HID. The input usage may
+   * be found analogously.
+   * 
    * Now, to send 6 bytes:
    *
    *   unsigned char const SEND_PACKET_LEN = 6;

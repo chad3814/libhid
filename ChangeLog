@@ -18,6 +18,8 @@ libhid ChangeLog
 	- added GCC handling for unused parameters
 	- updated TODO list
 	- added prelimiary python test code (does not read/write yet).
+	- added src/libhid_detach_device.c, a simple programme (installed to
+		$prefix/bin) which can detach devices to make lsusb -vvv work.
 
 2004-09-15  Martin F. Krafft (libhid@pobox.madduck.net)
 

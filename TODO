@@ -85,6 +85,8 @@ MKR: Martin Krafft
 
 - dealing with physical descriptors (if necessary)
 
+- enable matching by bus location (e.g. 001/015) instead of vendor IDs
+
 - make code C99 compatible (to support --enable-pedantic -Werror)
   * variable declaration should be first in functions
   * variadic macros are not supported
