@@ -2,7 +2,6 @@
 %{
 #include <compiler.h>
 #include <hid.h>
-#include <hid_swig_helpers.h>
 %}
 
 %include "exception.i"
@@ -16,7 +15,6 @@
 }
 
 %include "hid.h"
-%include "hid_swig_helpers.h"
 
 /* COPYRIGHT --
  *
