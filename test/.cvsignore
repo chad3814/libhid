@@ -1,8 +1,0 @@
-.deps
-.libs
-Makefile
-Makefile.in
-test_libhid
-test_libhid.static
-*.a
-*.o
