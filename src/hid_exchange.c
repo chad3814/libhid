@@ -100,7 +100,7 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
   ASSERT(hid_is_initialised());
   ASSERT(hid_is_opened(hidif));
 
-  int size;
+  unsigned int size;
   unsigned char buffer[32]; /* FIXME: dyn alloc or argument */
 
   if (!hid_is_opened(hidif)) {
@@ -124,14 +124,14 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
       HID_REPORT_GET,
       hidif->hid_data->ReportID + (HID_RT_FEATURE << 8),
       hidif->interface,
-      buffer, size, USB_TIMEOUT);
+      (char*)buffer, size, USB_TIMEOUT);
 
   if (len < 0) {
     WARNING("failed to retrieve report from USB device %s.", hidif->id);
     return HID_RET_FAIL_GET_REPORT;
   }
 
-  if (len != size) {
+  if ((unsigned)len != size) {
     WARNING("failed to retrieve complete report from USB device %s; "
         "requested: %d bytes, got: %d bytes.", hidif->id, 
         size, len);
@@ -168,7 +168,7 @@ hid_return hid_set_item_value(HIDInterface* const hidif UNUSED,
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.
- * libhid is (c) 2003-2004
+ * libhid is (c) 2003-2005
  *   Martin F. Krafft <libhid@pobox.madduck.net>
  *   Charles Lepple <clepple@ghz.cc>
  *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>

@@ -39,7 +39,7 @@ int main(void)
    * Then the match will only be on vendor and product ID.
    */
 
-  HIDInterfaceMatcher matcher = { 0x06c2, 0x0038, NULL, NULL, 0 };
+  HIDInterfaceMatcher matcher = { 0x0925, 0x1237, NULL, NULL, 0 };
 
   /* see include/debug.h for possible values */
   hid_set_debug(HID_DEBUG_ALL);
@@ -208,7 +208,7 @@ int main(void)
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.
- * libhid is (c) 2003-2004
+ * libhid is (c) 2003-2005
  *   Martin F. Krafft <libhid@pobox.madduck.net>
  *   Charles Lepple <clepple@ghz.cc>
  *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>

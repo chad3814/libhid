@@ -25,7 +25,7 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
       USB_ENDPOINT_IN+1,
       USB_REQ_GET_DESCRIPTOR,
       (USB_DT_HID << 8) + 0, 0,
-      buffer, BUFLEN,
+      (char*)buffer, BUFLEN,
       USB_TIMEOUT);
 
   if (len < 0) {
@@ -70,7 +70,7 @@ static hid_return hid_prepare_report_descriptor(HIDInterface* const hidif)
       USB_ENDPOINT_IN+1,
       USB_REQ_GET_DESCRIPTOR,
       (USB_DT_REPORT << 8) + 0, 0,
-      hidif->hid_parser->ReportDesc, hidif->hid_parser->ReportDescSize,
+      (char*)hidif->hid_parser->ReportDesc, hidif->hid_parser->ReportDescSize,
       USB_TIMEOUT);
 
   if (len < 0) {
@@ -129,7 +129,7 @@ hid_return hid_prepare_interface(HIDInterface* const hidif)
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.
- * libhid is (c) 2003-2004
+ * libhid is (c) 2003-2005
  *   Martin F. Krafft <libhid@pobox.madduck.net>
  *   Charles Lepple <clepple@ghz.cc>
  *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>

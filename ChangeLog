@@ -1,6 +1,11 @@
 libhid ChangeLog
 ================
 
+2005-02-20  Martin F. Krafft (libhid@pobox.madduck.net)
+	- Removed dependency on libswigpy, which is deprecated.
+	- integrated more patches by Andreas Jochens <aj@andaco.de> to fix
+	  compilation issues with gcc 4. Thanks, Andreas!
+
 2004-11-10  Martin F. Krafft (libhid@pobox.madduck.net)
 
 	- integrated patch by Andreas Jochens <aj@andaco.de> to fix compilation

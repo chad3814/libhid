@@ -2,16 +2,18 @@ AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
 AM_CPPFLAGS = -I/usr/include/python2.3/ -I../include -DHID_INTERNAL -DSWIG
-AM_CFLAGS = -fPIC
-AM_LDFLAGS = -shared ../src/libhid.la -lusb -lswigpy
+AM_CFLAGS = -fPIC -fno-strict-aliasing
+AM_LDFLAGS = -shared ../src/libhid.la -lusb
 
 SWIG = @SWIG_BIN@
-SWIGFLAGS = -python -noruntime -I../include
+SWIGFLAGS = -python -I../include
 
 # swig produces crap code :)
 override CFLAGS := $(subst -Werror,,$(CFLAGS))
 
 dist_noinst_DATA = hid.i
+
+pkgpyexec_LTLIBRARIES = _hid.la
 
 nodist__hid_la_SOURCES = hid_wrap.c
 _hid_la_DEPENDENCIES = ../src/libhid.la
@@ -28,14 +30,15 @@ __init__.py: hid.py
 	$(SWIG) $(SWIGFLAGS) $<
 	
 %_wrap.c: %.py
-	sed -i -e 's/PyObject \*self/PyObject *self UNUSED/' $@
+	sed -i -e 's/PyObject \*self/& UNUSED/' \
+	       -e 's/int flags)/int flags UNUSED)/' \
+				 -e '1i#include <compiler.h>' $@
 
 ../src/libhid.la::
 	@$(MAKE) -sC ../src libhid.la
 
 dist_noinst_PYTHON = test_libhid.py
 
-pkgpyexec_LTLIBRARIES = _hid.la
 .PHONY: run test
 run test: test_libhid.py $(pkgpyexec_LTLIBRARIES)
 	python ./$<
@@ -64,13 +67,13 @@ clean-local:
 	rm -f $(wildcard *_wrap.c) $(wildcard *_wrap.i)
 	rm -f $(wildcard *.o)
 	rm -f $(wildcard *.so)
-	rm -f $(wildcard *.lo)
+	rm -f $(wildcard *.lo *.loT)
 	rm -f $(wildcard *.la)
 
 # COPYRIGHT --
 #
 # This file is part of libhid, a user-space HID access library.
-# libhid is (c) 2003-2004
+# libhid is (c) 2003-2005
 #   Martin F. Krafft <libhid@pobox.madduck.net>
 #   Charles Lepple <clepple@ghz.cc>
 #   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>

@@ -31,7 +31,7 @@ void trace_usb_dev_handle(FILE* const out, usb_dev_handle const* const usbdev_h)
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.
- * libhid is (c) 2003-2004
+ * libhid is (c) 2003-2005
  *   Martin F. Krafft <libhid@pobox.madduck.net>
  *   Charles Lepple <clepple@ghz.cc>
  *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>

@@ -102,7 +102,7 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif)
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.
- * libhid is (c) 2003-2004
+ * libhid is (c) 2003-2005
  *   Martin F. Krafft <libhid@pobox.madduck.net>
  *   Charles Lepple <clepple@ghz.cc>
  *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
