@@ -8,7 +8,7 @@
 #include <hid.h>
 #include <debug.h>
 
-#define ASSERT(a) if (!a && hid_debug_stream && hid_debug_level & HID_DEBUG_ASSERTS) \
+#define ASSERT(a) if (!(a) && hid_debug_stream && hid_debug_level & HID_DEBUG_ASSERTS) \
   fprintf(hid_debug_stream, "*** ASSERTION FAILURE in %s() [%s:%d]: %s\n", \
       __FUNCTION__, __FILE__, __LINE__, #a)
 
