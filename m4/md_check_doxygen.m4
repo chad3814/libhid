@@ -1,5 +1,6 @@
 AC_DEFUN([MD_CHECK_DOXYGEN],
   [
+    AM_CONDITIONAL([DOXYGEN], [false])
     MD_CHECK_ARG_WITH(doxygen, doxygen,
       [
         AC_CHECK_PROG(HAVE_doxygen, $path, yes)
@@ -8,7 +9,6 @@ AC_DEFUN([MD_CHECK_DOXYGEN],
           AM_CONDITIONAL([DOXYGEN], [true])
         else
           AC_MSG_WARN([$path not found. not using doxygen.])
-          AM_CONDITIONAL([DOXYGEN], [false])
         fi
       ])
   ])

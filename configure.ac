@@ -20,7 +20,7 @@ m4_define([MD_INIT_ADDRESS], m4_esyscmd([grep -i bugreports\ to README | sed -e 
 
 AC_INIT(MD_INIT_NAME, MD_INIT_VERSION, MD_INIT_ADDRESS)
 
-AC_CONFIG_HEADER([config.h])
+AM_CONFIG_HEADER([config.h])
 AC_CONFIG_SRCDIR([include/hid.h])
 AC_CONFIG_AUX_DIR([.])
 
