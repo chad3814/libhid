@@ -1,6 +1,6 @@
 AM_CFLAGS =
-AM_CPPFLAGS = -I/usr/local/include -I../include
-AM_LDFLAGS = 
+AM_CPPFLAGS = @LIBUSBINCLUDE@ -I../include
+AM_LDFLAGS = -L. @LIBUSBLIB@ -lusb -lhidparser
 
 if LINUX_API
 OS_SUPPORT = linux.c
@@ -34,6 +34,11 @@ libhid_la_SOURCES = \
 	hid_presentation.c \
 	config.c \
 	debug.c
+
+bin_PROGRAMS = libhid-config
+libhid_config_SOURCES = libhid-config.c
+libhid_config_DEPENDENCIES = libhid.la
+libhid_config_LDADD = -lhid
 
 include_HEADERS = ../include/hid.h
 

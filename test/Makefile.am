@@ -1,28 +1,21 @@
-AM_CPPFLAGS = -I/usr/local/include -I../include
+AM_CPPFLAGS = -I../include
 AM_CFLAGS =
-AM_LDFLAGS = -L/usr/local/lib -lhidparser -lusb
+AM_LDFLAGS =
 
-noinst_PROGRAMS = test_libhid test_libhid.static
+noinst_PROGRAMS = test_libhid
 
 test_libhid_SOURCES = test_libhid.c
 test_libhid_DEPENDENCIES = ../src/libhid.la
 test_libhid_LDADD = ../src/libhid.la
 
-test_libhid_static_SOURCES = test_libhid.c
-test_libhid_static_DEPENDENCIES = ../src/.libs/libhid.a
-test_libhid_static_LDADD = ../src/.libs/libhid.a
-
-../src/.libs/libhid.a::
-	make -C ../src libhid.la
-
 ../src/libhid.la::
 	make -C ../src libhid.la
 
-debug:: test_libhid.static
-	gdb -q $<
+debug:: test_libhid
+	libtool --mode=execute gdb -q $<
 
 run:: test_libhid
-	env LD_LIBRARY_PATH="`pwd`/src/.libs" ./test_libhid
+  libtool --mode=execute ./$<
 
 cvsclean:: mrproper
 mrproper:: maintainer-clean

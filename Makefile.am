@@ -19,7 +19,7 @@ dist_noinst_HEADERS = \
 	include/os.h
 
 test:: test/test_libhid
-	$<
+	make -C test run
 
 test/test_libhid::
 	make -C test

@@ -123,7 +123,7 @@ hid_return hid_write_identification(FILE* const out,
 
 hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif);
 
-void write_library_config(FILE* const outstream);
+void hid_write_library_config(FILE* const outstream);
 
 #ifdef __cplusplus
 }

@@ -5,6 +5,7 @@
 #  error "this file is only supposed to be used from within libhid."
 #endif // HID_INTERNAL
 
+#include <hid.h>
 #include <debug.h>
 
 #define ASSERT(a) if (!a && hid_debug_stream && hid_debug_level & HID_DEBUG_ASSERTS) \

@@ -21,7 +21,7 @@ cflags_set=${CFLAGS+set}
 #     if not backward compatible, iface_age = bin_age = 0
 #
 AC_INIT(libhid, 0.1.10.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.5 $)
+AC_REVISION($Revision: 1.6 $)
 
 AM_INIT_AUTOMAKE
 
@@ -108,7 +108,6 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
 AC_HEADER_STDC
-AC_CHECK_HEADERS([usb.h hidparser.h])
 
 AC_HEADER_STDBOOL
 AC_C_CONST
@@ -129,6 +128,56 @@ else
   BIGENDIAN="0"
 fi
 AC_SUBST(BIGENDIAN)
+
+AC_ARG_WITH(usb-prefix, AC_HELP_STRING([--with-usb-prefix=PATH],
+      [specify path to libusb installation ]),
+  [
+    if test -d "$withval/lib"; then
+      LIBUSBLIB="-L${withval}/lib"
+    else
+      LIBUSBLIB="-L${withval}"
+    fi
+
+    if test -d "$withval/include"; then
+      LIBUSBINCLUDE="-I${withval}/include"
+    elif test -d "$withval/../include"; then
+      LIBUSBINCLUDE="-I${withval}/../include"
+    else
+      LIBUSBINCLUDE="-I${withval}"
+    fi
+  ]
+)
+
+AC_SUBST(LIBUSBLIB)
+AC_SUBST(LIBUSBINCLUDE)
+
+saved_CPPFLAGS=$CPPFLAGS
+saved_LDFLAGS=$LDFLAGS
+
+AC_CHECK_HEADERS([usb.h])
+CPPFLAGS="$LIBUSBINCLUDE $CPPFLAGS"
+LDFLAGS="$LIBUSBLIB $LDFLAGS -lusb"
+
+AC_MSG_CHECKING(for libusb version)
+AC_LINK_IFELSE(
+  [
+    #include <usb.h>
+
+    int main(void)
+    {
+      usb_dev_handle* dev;
+      usb_detach_kernel_driver_np(dev, 0);
+      return 0;
+    }
+  ],
+  AC_MSG_RESULT(ok (>= 0.1.8beta)),
+  AC_MSG_ERROR(libhid requires libusb version 0.1.8beta or greater)
+)
+
+CPPFLAGS=$saved_CPPFLAGS
+LDFLAGS=$saved_LDFLAGS
+
+AC_CHECK_HEADERS([hidparser.h])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([src/Makefile])
