@@ -1,4 +1,4 @@
-libhid (1.01-1) unstable; urgency=low
+libhid (0.1.10-1) unstable; urgency=low
 
   * Initial release.
     closes: Bug#227984
