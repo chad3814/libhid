@@ -5,10 +5,11 @@ AM_CPPFLAGS =
 AM_CFLAGS =
 AM_LDFLAGS =
 
-noinst_PROGRAMS = test_libhid
+noinst_PROGRAMS = test_libhid lshid
 test_libhid_SOURCES = test_libhid.c
 test_libhid_DEPENDENCIES = ../src/libhid.la
 test_libhid_LDADD = ../src/libhid.la
+
 lshid_SOURCES = lshid.c
 lshid_DEPENDENCIES = ../src/libhid.la
 lshid_LDADD = ../src/libhid.la
