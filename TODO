@@ -5,6 +5,22 @@ AQU: Arnaud Quette
 CLE: Charles Lepple
 MKR: Martin Krafft
 
+- [Nobody] HID Parser rewritte
+    The current HID Parser used is the one given by MGE UPS SYSTEMS.
+    Various problems and limitation have been reached with this one,
+    mainly due to the fact that it has been designed and optimised
+    for MGE's devices.
+
+    This rewritte should not impact the few programs currently using
+    libhid as the parser calls are encapsulated (the current API
+    shouldn't change).
+    
+    For the purpose of the rewritte, MGE's HID Parser and Linux (located
+    in hid-core and hiddev) can serve as bases. Moreover, the kernel hackers
+    involved in these (Paul Stewart and Vojtech Pavlik) might join us
+    in this effort...
+    AQU will try to contact theim when he has time.
+
 - [AQU] implement SHUT marshalling (encapsulation)
     libhid currently only support USB encapsulation
     through libusb. SHUT simply encaps HID in SHUT frames
@@ -21,7 +37,7 @@ MKR: Martin Krafft
     HID_new_Interface(int mode) with mode=MODE_USB or MODE_SHUT)
     that link the device' marshalling to the right one (usb or shut)
 
-    MKR suggested suggested a proper registration architecture (e.g.
+    MKR suggested a proper registration architecture (e.g.
     loadable dlls and function pointers).
 
     Note that this is not a high priority, but more a wish
