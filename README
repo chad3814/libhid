@@ -1,29 +1,113 @@
 libhid README
 =============
 
-Revision: $Id: README,v 1.2 2004/05/25 21:37:52 krafft Exp $
+libhid is (c) 2004 by
+  Martin F. Krafft <libhid@pobox.madduck.net>
+  Charles Lepple <clepple@ghz.cc>
+  Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
+and distributed under the terms of the GNU General Public License.
+See the file ./COPYING in the source distribution for more information.
+
+Revision: $Id: README,v 1.3 2004/08/30 14:58:03 krafft Exp $
 
 Please send bugreports to <libhid@lists.ailab.ch>.
 
 Introduction
 ------------
 
-Notes
------
+libhid is a rewrite of libHID[0] and aims to provide the same functionality
+from a more organised framework. It aims to provide a layer of abstraction for
+accessing HID-class devices over USB or serial lines (similar to what libusb
+provides for the base USB protocol).
+
+0. http://www.ghz.cc/~clepple/libHID/doc/html/
+
+libhid has been designed because it is needed in two other projects
+(libphdigets and nut). As such, it does not have a complete featureset yet but
+is rather a work in progress (alpha state). We invite everyone to contribute
+or get in touch with us for additional features.
+
+Please find more information on the project website (once information becomes 
+available):
+
+  http://libhid.alioth.debian.org
+
+Configuration
+-------------
+
+To configure the package, you will need the following software. In parentheses
+are the versions used by the developers. Previous versions may work, but are
+not supported. The names directly correspond to the Debian packages providing
+the software.
+
+  - libtool     (1.5.2-1)
+  - automake1.8 (1.8.3-1)
+  - autoconf    (2.59-3)
+  - pkg-config  (0.15.0-4)
+
+Furthermore, libhid needs libusb version 0.1.8beta or newer. It does not work
+with libusb 1.0 at this moment.
+
+Once these are installed, the package can be configured and compiled.
+Configuration happens as follows:
+
+  $ ./autogen.sh [args]
+
+where [args] is a space-separated list of the following:
+
+  --prefix=/usr/local       installs the software under /usr/local
+  --enable-debug            enables debugging symbols in the library
+  --enable-maintainer-mode  enables automatic regeneration of configure and
+                            Makefile scripts
+  --disable-shared          only creates a library object for static
+                            linking, which shortens compile time. generally,
+                            this is not necessary.
+More options are available. Consult the `./configure --help` output.
+
+For most purposes, it suffices to issue the following command:
+  
+  $ ./autogen.sh --enable-debug
+
+The recommended way to install the software (see below) requires you to
+issue the following command:
+  
+  $ ./autogen.sh --enable-debug --prefix=/usr/local/stow/libhid
+
+Following the configuration, the package can be build and installed as usual:
+
+  $ make
+  $ su           # if needed
+  # make install
+
+Help wanted
+-----------
 
 Note that the library is not (yet) complete and it's not thoroughly tested.
-However, given the effort and grief I went through in writing it, I would
+However, given the effort and grief we went through in writing it, we would
 like to make it available to folks, get people to test it, and hopefully have
 some peeps submit improvements. If you have any suggestions, please write to
-me at krafft@ailab.ch.
+us at libhid@lists.ailab.ch.
 
 It's not yet documented, although the usage should be fairly straight
-forward. I am hoping to find someone else to document it as I suck at
-documentation and as the author, it's exceptionally difficult to stay
-didactically correct.
+forward. We are hoping that someone steps forward and offers to document the
+work. It generally results in better documentation, when it's not written by
+the authors.
+
+Furthermore, we are always looking for people willing to help out. In
+particular, we would love to find someone willing to maintain the website.
+We are also looking to rewrite the MGE HIDParser and implement new
+functionality. If you are interested, please contact us at
+libhid@lists.ailab.ch.
 
 Credits
 -------
+
+The original library was written by Charles Lepple and Arnaud Quette. Martin
+Krafft later joined and lead the rewrite.
+
+The library uses the HIDParser framework made available by MGE[1].
+
+1. http://www.mgeups.com/opensource/projects/hidparser.htm
 
 Usage
 -----

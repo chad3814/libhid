@@ -17,6 +17,8 @@ _hid_la_LDFLAGS = -module
 
 nodist_pkgpython_PYTHON = __init__.py
 
+EXTRA_DIST = README
+
 __init__.py: hid.py
 	ln -f $< $@
 
