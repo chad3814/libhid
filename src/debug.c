@@ -14,17 +14,17 @@ struct usb_dev_handle {
   void *impl_info;
 };
 
-HIDDebugLevel debug_level = HID_DEBUG_NONE;
-FILE* debug_stream = NULL;
+HIDDebugLevel hid_debug_level = HID_DEBUG_NONE;
+FILE* hid_debug_stream = NULL;
 
 void hid_set_debug(HIDDebugLevel const level)
 {
-  debug_level = level;
+  hid_debug_level = level;
 }
 
 void hid_set_debug_stream(FILE* const outstream)
 {
-  debug_stream = outstream;
+  hid_debug_stream = outstream;
 }
 
 void hid_set_usb_debug(int const level)

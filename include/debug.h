@@ -8,15 +8,17 @@
 #include <hid.h>
 #include <usb.h>
 
-#define DEBUGPRINTF(t, s, a...) fprintf(debug_stream, "%s: %s(): ", t, __FUNCTION__); \
-                                fprintf(debug_stream, s "\n", ##a);
-#define TRACE(s, a...) if (debug_stream && debug_level & HID_DEBUG_TRACES) { DEBUGPRINTF("  TRACE", s, ##a) }
-#define NOTICE(s, a...) if (debug_stream && debug_level & HID_DEBUG_NOTICES) { DEBUGPRINTF(" NOTICE", s, ##a) }
-#define WARNING(s, a...) if (debug_stream && debug_level & HID_DEBUG_WARNINGS) { DEBUGPRINTF("WARNING", s, ##a) }
-#define ERROR(s, a...) if (debug_stream && debug_level & HID_DEBUG_ERRORS) { DEBUGPRINTF("  ERROR", s, ##a) }
+HIDDebugLevel hid_debug_level;
+FILE* hid_debug_stream;
 
-HIDDebugLevel debug_level;
-FILE* debug_stream;
+#define DEBUGPRINTF(t, s, a...) if (hid_debug_stream) { \
+                                  fprintf(hid_debug_stream, "%s: %s(): ", t, __FUNCTION__); \
+                                  fprintf(hid_debug_stream, s "\n", ##a); \
+                                }
+#define TRACE(s, a...) if (hid_debug_level & HID_DEBUG_TRACES) { DEBUGPRINTF("  TRACE", s, ##a) }
+#define NOTICE(s, a...) if (hid_debug_level & HID_DEBUG_NOTICES) { DEBUGPRINTF(" NOTICE", s, ##a) }
+#define WARNING(s, a...) if (hid_debug_level & HID_DEBUG_WARNINGS) { DEBUGPRINTF("WARNING", s, ##a) }
+#define ERROR(s, a...) if (hid_debug_level & HID_DEBUG_ERRORS) { DEBUGPRINTF("  ERROR", s, ##a) }
 
 void trace_usb_bus(FILE* const out, struct usb_bus const* const usbbus);
 void trace_usb_device(FILE* const out, struct usb_device const* const usbdev);
