@@ -1,6 +1,7 @@
 #ifndef __INCLUDED_HID_H__
 #define __INCLUDED_HID_H__
 
+#include <compiler.h>
 #include <stdio.h>
 #include <usb.h>
 #include <hidparser.h>
@@ -130,7 +131,7 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif);
 }
 #endif
 
-#endif // __INCLUDED_HID_H__
+#endif /* __INCLUDED_HID_H__ */
 
 /* COPYRIGHT --
  *

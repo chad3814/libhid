@@ -3,7 +3,7 @@
 
 #ifndef HID_INTERNAL
 #  error "this file is only supposed to be used from within libhid."
-#endif // HID_INTERNAL
+#endif /* HID_INTERNAL */
 
 #include <hid.h>
 
@@ -22,7 +22,7 @@ hid_return hid_extract_value(HIDInterface* const hidif,
 hid_return hid_format_path(char* const buffer, unsigned int length,
     int const path[], unsigned int const depth);
 
-#endif // __INCLUDED_HID_HELPERS_H__
+#endif /* __INCLUDED_HID_HELPERS_H__ */
 
 /* COPYRIGHT --
  *

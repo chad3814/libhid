@@ -40,7 +40,7 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
     return HID_RET_FAIL_GET_REPORT;
   }
 
-  if (len != size) {
+  if (len != (signed)size) {
     WARNING("failed to retrieve complete report from USB device %s; "
         "requested: %d bytes, got: %d bytes.", hidif->id, size, len);
     return HID_RET_FAIL_GET_REPORT;
@@ -82,7 +82,7 @@ hid_return hid_set_output_report(HIDInterface* const hidif, int const path[],
     return HID_RET_FAIL_SET_REPORT;
   }
 
-  if (len != size) {
+  if (len != (signed)size) {
     WARNING("failed to send complete report to USB device %s; "
         "requested: %d bytes, sent: %d bytes.", hidif->id, 
         size, len);
@@ -145,16 +145,19 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
   return HID_RET_SUCCESS;
 }
 
-hid_return hid_get_item_string(HIDInterface* const hidif, int const path[],
-    unsigned int const depth, char *const value, unsigned int const maxlen)
+hid_return hid_get_item_string(HIDInterface* const hidif UNUSED,
+    int const path[] UNUSED, unsigned int const depth UNUSED,
+    char *const value UNUSED, unsigned int const maxlen UNUSED)
 {
   bool const not_yet_implemented = false;
   ASSERT(not_yet_implemented);
   return HID_RET_SUCCESS;
 }
 
-hid_return hid_set_item_value(HIDInterface* const hidif, int const path[],
-    unsigned int const depth, double const value)
+
+hid_return hid_set_item_value(HIDInterface* const hidif UNUSED,
+    int const path[] UNUSED, unsigned int const depth UNUSED,
+    double const value UNUSED)
 {
   bool const not_yet_implemented = false;
   ASSERT(not_yet_implemented);

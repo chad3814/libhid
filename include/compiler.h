@@ -1,16 +1,11 @@
-#ifndef __INCLUDED_ASSERT_H__
-#define __INCLUDED_ASSERT_H__
+#ifndef __INCLUDED_COMPILER_H__
+#define __INCLUDED_COMPILER_H__
 
-#ifndef HID_INTERNAL
-#  error "this file is only supposed to be used from within libhid."
-#endif /* HID_INTERNAL */
-
-#include <hid.h>
-#include <debug.h>
-
-#define ASSERT(a) if (!(a) && hid_debug_stream && hid_debug_level & HID_DEBUG_ASSERTS) \
-  fprintf(hid_debug_stream, "*** ASSERTION FAILURE in %s() [%s:%d]: %s\n", \
-      __FUNCTION__, __FILE__, __LINE__, #a)
+#if defined __GNUC__ || defined SWIG
+#  define UNUSED __attribute__((unused))
+#else
+#  define UNUSED
+#endif
 
 #endif /* __INCLUDED_DEBUG_H__ */
 

@@ -1,12 +1,15 @@
 AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
-AM_CPPFLAGS = -I/usr/include/python2.3/ -I../include -DHID_INTERNAL
+AM_CPPFLAGS = -I/usr/include/python2.3/ -I../include -DHID_INTERNAL -DSWIG
 AM_CFLAGS = -fPIC
 AM_LDFLAGS = -shared ../src/libhid.la -lusb -lswigpy
 
 SWIG = @SWIG_BIN@
-SWIGFLAGS = -python -c -I../include
+SWIGFLAGS = -python -noruntime -I../include
+
+# swig produces crap code :)
+override CFLAGS := $(subst -Werror ,,$(CFLAGS))
 
 dist_noinst_DATA = hid.i
 
@@ -27,6 +30,7 @@ __init__.py: hid.py
 	
 %_wrap.c: %.i
 	$(SWIG) $(SWIGFLAGS) $<
+	sed -i -e 's/PyObject \*self/PyObject *self UNUSED/' $@
 
 ../src/libhid.la::
 	@$(MAKE) -sC ../src libhid.la
@@ -48,8 +52,9 @@ run: $(pyexec_LTLIBRARIES) startup.py
 clean-local:
 	rm -f $(wildcard *.py) $(wildcard *.pyc)
 	rm -f $(wildcard *.c)
-	rm -f $(wildcard *.i)
 	rm -f $(wildcard *.s)
+# only delete _wrap.i files, not the python sources
+	rm -f $(wildcard *_wrap.i)
 	rm -f $(wildcard *.o)
 	rm -f $(wildcard *.so)
 	rm -f $(wildcard *.lo)

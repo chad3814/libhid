@@ -29,9 +29,9 @@ AM_MAINTAINER_MODE
 
 ##### CONFIGURE ARGUMENTS ####################################################
 
-MD_ARG_ENABLE_CUSTOM(pedantic, pedantic compiler checks, yes)
+MD_ARG_ENABLE_CUSTOM(pedantic, pedantic compiler checks, no)
 MD_ARG_ENABLE_CUSTOM(warnings, proper compiler warnings, yes)
-MD_ARG_ENABLE_CUSTOM(werror, compiler warnings as errors, no)
+MD_ARG_ENABLE_CUSTOM(werror, compiler warnings as errors, yes)
 MD_ARG_ENABLE_CUSTOM(debug, debugging, no)
 MD_ARG_ENABLE_CUSTOM(gdbdebug, gdb-enhanced debugging symbols, no)
 

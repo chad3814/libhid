@@ -89,7 +89,7 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif)
     for (i = 0; i < hidif->hid_data->Path.Size; ++i) {
       fprintf(out, "0x%08x", (hidif->hid_data->Path.Node[i].UPage << 16)
           | hidif->hid_data->Path.Node[i].Usage);
-      if (i < hidif->hid_data->Path.Size - 1) fputc('.', out);
+      if ((signed)i < hidif->hid_data->Path.Size - 1) fputc('.', out);
     }
     fprintf(out, "; type: 0x%02x\n", hidif->hid_data->Type);
   }

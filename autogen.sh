@@ -1,9 +1,9 @@
 #!/bin/sh -ex
 
 libtoolize --force &> /dev/null
-aclocal -I m4
+aclocal-1.9 -I m4 || aclocal-1.8 -I m4 || aclocal -I m4
 autoheader
-automake --add-missing
+automake-1.9 --add-missing || automake-1.8 --add-missing || automake --add-missing
 autoconf
 exec ./configure "$@"
 
