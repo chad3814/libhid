@@ -19,8 +19,14 @@ endif
 endif
 
 AM_CPPFLAGS_ := $(AM_CPPFLAGS)
-override AM_CPPFLAGS = $(AM_CPPFLAGS_) -DCPPFLAGS="\"$(AM_CPPFLAGS_)\"" \
-	-DCFLAGS="\"$(AM_CFLAGS)\"" -DLDFLAGS="\"$(AM_LDFLAGS)\"" \
+CPPFLAGSFILLER := $(shell test ! -z "$(CPPFLAGS)" && echo ' ')
+CFLAGSFILLER := $(shell test ! -z "$(CFLAGS)" && echo ' ')
+LDFLAGSFILLER := $(shell test ! -z "$(LDFLAGS)" && echo ' ')
+
+override AM_CPPFLAGS = $(AM_CPPFLAGS_) \
+  -DCPPFLAGS="\"$(CPPFLAGS)$(CPPFLAGSFILLER)$(AM_CPPFLAGS_)\"" \
+	-DCFLAGS="\"$(CFLAGS)$(CFLAGSFILLER)$(AM_CFLAGS)\"" \
+	-DLDFLAGS="\"$(LDFLAGS)$(LDFLAGSFILLER)$(AM_LDFLAGS)\"" \
 	-DCOMPILEDATE="\"`date -R`\""
 
 lib_LTLIBRARIES = libhid.la

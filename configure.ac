@@ -11,8 +11,6 @@ AH_TOP(
 #undef LIBHID_VERSION
 )
 
-cflags_set=${CFLAGS+set}
-
 # Making releases:
 #   Version string: major.minor.micro.iface_age.bin_age
 #
@@ -21,7 +19,7 @@ cflags_set=${CFLAGS+set}
 #     if not backward compatible, iface_age = bin_age = 0
 #
 AC_INIT(libhid, 0.1.10.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.6 $)
+AC_REVISION($Revision: 1.7 $)
 
 AM_INIT_AUTOMAKE
 
@@ -61,6 +59,18 @@ AM_MAINTAINER_MODE
 AC_CONFIG_HEADER([config.h])
 AC_PROG_LIBTOOL
 
+debug_default=yes
+AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug=yes/no],
+      [turn on debugging (default=$debug_default)]),
+      ,
+      enable_debug=$debug_default
+)
+
+if test "x$enable_debug" = "xyes"; then
+  CFLAGS=`echo $CFLAGS | sed -e 's,-g[[^ ]]\+,-g,g'`
+  CFLAGS=`echo $CFLAGS | sed -e 's,-O[[0-9]]\+,-O0,g'`
+fi
+
 AC_MSG_CHECKING(for target OS)
 case $host in
   *-linux*)
@@ -94,13 +104,6 @@ AM_CONDITIONAL(BSD_API, test "$os_support" = "bsd")
 AM_CONDITIONAL(DARWIN_API, test "$os_support" = "darwin")
 
 AC_SUBST(OSLIBS)
-
-debug_default=yes
-AC_ARG_ENABLE(debug, [  --enable-debug=[no/yes] turn on debugging [default=$debug_default]],,enable_debug=$debug_default)
-
-if test "x$enable_debug" = "xyes"; then
-  test "$cflags_set" = set || CFLAGS="$CFLAGS -gstabs+ -O0"
-fi
 
 AC_PROG_CC
 AC_PROG_CC_STDC
