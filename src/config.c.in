@@ -2,12 +2,14 @@
 
 #include <hid.h>
 
-#include <assert.h>
+#include <debug.h>
 
 void hid_write_library_config(FILE* const outstream)
 {
-  ASSERT(outstream);
-  if (!outstream) return;
+  if (!outstream) {
+    ERROR("cannot write library configuration to NULL output stream.");
+    return;
+  }
 
   fprintf(outstream, "library:                 @PACKAGE@ (@host@)\n");
   fprintf(outstream, "version:                 @VERSION@\n");
@@ -20,4 +22,104 @@ void hid_write_library_config(FILE* const outstream)
   fprintf(outstream, "CFLAGS:                  %s\n", CFLAGS);
   fprintf(outstream, "LDFLAGS:                 %s\n", LDFLAGS);
   fprintf(outstream, "installation prefix:     @prefix@\n");
+}
+
+void hid_write_library_name(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library name to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "@PACKAGE@\n");
+}
+
+void hid_write_library_arch(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library architecture to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "@host@\n");
+}
+
+void hid_write_library_version(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library version to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "@VERSION@\n");
+}
+
+void hid_write_library_full_version(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write full library version to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "@PACKAGE@ @VERSION@ (@host@)\n");
+}
+
+void hid_write_library_libtool_age(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library libtool age to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "interface: @LIBHID_INTERFACE_AGE@\n");
+  fprintf(outstream, "binary: @LIBHID_BINARY_AGE@\n");
+}
+
+void hid_write_library_compile_date(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library compile date to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "%s\n", COMPILEDATE);
+}
+
+void hid_write_library_bugreport_address(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library compile date to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "@PACKAGE_BUGREPORT@\n");
+}
+
+void hid_write_library_prefix(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library prefix to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "@prefix@\n");
+}
+
+void hid_write_library_cppflags(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library CPPFLAGS to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "-I@prefix@/include\n");
+}
+
+void hid_write_library_ldflags(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library LDFLAGS to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "-L@prefix@/libs -lhid\n");
+}
+
+void hid_write_library_libtool_libs(FILE* const outstream)
+{
+  if (!outstream) {
+    ERROR("cannot write library libtool libs to NULL output stream.");
+    return;
+  }
+  fprintf(outstream, "@prefix@/lib/@PACKAGE@.la\n");
 }
