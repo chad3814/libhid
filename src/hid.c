@@ -1,6 +1,7 @@
 #define HID_INTERNAL
 
 #include <hid.h>
+#include <os.h>
 
 #include <debug.h>
 #include <assert.h>
@@ -346,6 +347,16 @@ static void reset_hid_parser(HIDInterface* hidif)
   ASSERT(hid_is_opened(hidif));
   ASSERT(hidif->hid_parser);
 
+  if (!hid_is_opened(hidif)) {
+    WARNING("the device has not been opened.");
+    return;
+  }
+
+  if (!hidif->hid_parser) {
+    WARNING("the HID parser has not been initialised.");
+    return;
+  }
+
   TRACE("resetting the HID parser for interface %d of USB device on %s/%s...",
       hidif->interface, hidif->device->bus->dirname, hidif->device->filename);
   ResetParser(hidif->hid_parser);
@@ -415,16 +426,16 @@ hid_return hid_open(HIDInterface* hidif, int const interface,
   hid_return ret = get_usb_handle(hidif, match);
   if (ret != HID_RET_SUCCESS) return ret;
 
-  TRACE("claiming interface %d on USB device %s/%s...", interface,
+  TRACE("claiming interface %d of USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
   if (usb_claim_interface(hidif->dev_handle, interface) < 0) {
-    WARNING("failed to claim interface %d on USB device %s/%s...", interface,
+    WARNING("failed to claim interface %d of USB device %s/%s...", interface,
               hidif->device->bus->dirname, hidif->device->filename);
     hid_close(hidif);
     return HID_RET_FAIL_CLAIM_IFACE;
   }
   hidif->interface = interface;
-  NOTICE("successfully claimed interface %d on USB device %s/%s...", interface,
+  NOTICE("successfully claimed interface %d of USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
   
   /* TODO: what's this anyway?
@@ -434,7 +445,7 @@ hid_return hid_open(HIDInterface* hidif, int const interface,
 
   init_interface(hidif);
 
-  NOTICE("successfully initialised interface %d on USB device %s/%s...", interface,
+  NOTICE("successfully initialised interface %d of USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
 
   return HID_RET_SUCCESS;
@@ -454,18 +465,18 @@ hid_return hid_force_open(HIDInterface* hidif, int const interface,
   hid_return ret = get_usb_handle(hidif, match);
   if (ret != HID_RET_SUCCESS) return ret;
 
-  TRACE("forcefully claiming interface %d on USB device %s/%s (%dd retries)...",
-      interface, hidif->device->bus->dirname, hidif->device->filename,
-      retries);
-  if (usb_force_claim_interface(hidif->dev_handle, 0, retries) < 0) {
-    WARNING("failed %dd times to claim interface %d on USB device %s/%s...",
-        retries, interface,
+  TRACE("claiming interface %d of USB device %s/%s...", interface,
+      hidif->device->bus->dirname, hidif->device->filename);
+  hid_os_force_claim(hidif, interface, match, retries);
+  if (ret != HID_RET_SUCCESS) {
+    WARNING("failed to claim interface %d of USB device %s/%s...", interface,
         hidif->device->bus->dirname, hidif->device->filename);
     hid_close(hidif);
-    return HID_RET_FAIL_CLAIM_IFACE;
+    return ret;
   }
+
   hidif->interface = interface;
-  NOTICE("successfully claimed interface %d on USB device %s/%s...", interface,
+  NOTICE("successfully claimed interface %d of USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
  
   /* TODO: what's this anyway?
@@ -475,7 +486,7 @@ hid_return hid_force_open(HIDInterface* hidif, int const interface,
 
   init_interface(hidif);
 
-  NOTICE("successfully initialised interface %d on USB device %s/%s...", interface,
+  NOTICE("successfully initialised interface %d of USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
 
   return HID_RET_SUCCESS;
@@ -596,20 +607,29 @@ hid_return hid_get_item_value(HIDInterface* hidif,
                               int const path[], unsigned int const depth,
                               double *const value)
 {
+  ASSERT(hid_is_initialised());
+  ASSERT(hid_is_opened(hidif));
+  ASSERT(value);
+
+  if (!hid_is_opened(hidif)) {
+    WARNING("the device has not been opened.");
+    return HID_RET_NOT_OPENED;
+  }
+
   hidif->hid_data->Type = ITEM_INPUT;
   hidif->hid_data->ReportID = 0;
 
   find_object(hidif, path, depth);
 
-  char raw_buf[10000];
+  char raw_buf[2];
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN + USB_TYPE_VENDOR + USB_RECIP_INTERFACE,
       HID_REPORT_GET,
       hidif->hid_data->ReportID + (HID_RT_INPUT << 8),
       hidif->interface,
-      raw_buf, 10000, USB_TIMEOUT);
+      raw_buf, 2, USB_TIMEOUT);
 
-  printf("len: %d\n", len);
+  printf("len: %d, err: %s\n", len, usb_strerror());
 
 
 /* char raw_buf[10000];
@@ -649,7 +669,7 @@ hid_return hid_write_identification(FILE* out, HIDInterface const* hidif)
   ASSERT(out);
 
   if (!hid_is_opened(hidif)) {
-    WARNING("the ddevice has not been opened.");
+    WARNING("the device has not been opened.");
     return HID_RET_NOT_OPENED;
   }
 
@@ -703,6 +723,11 @@ hid_return hid_dump_tree(FILE* out, HIDInterface* hidif)
   ASSERT(hid_is_initialised());
   ASSERT(hid_is_opened(hidif));
   ASSERT(out);
+
+  if (!hid_is_opened(hidif)) {
+    WARNING("the device has not been opened.");
+    return HID_RET_NOT_OPENED;
+  }
 
   reset_hid_parser(hidif);
   
