@@ -48,7 +48,7 @@ typedef struct HIDInterface_t {
   struct usb_dev_handle *dev_handle;
   struct usb_device *device;
   int interface;
-  char id[16];
+  char id[32];
   HIDData* hid_data;
   HIDParser* hid_parser;
 } HIDInterface;
