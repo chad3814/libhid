@@ -1,29 +1,28 @@
 #define HID_INTERNAL
 
 #include <debug.h>
+#include <assert.h>
 
-HIDDebugLevel debug_level = HID_DEBUG_NONE;
-FILE* debug_stream = NULL;
-
+/* NOTE: included from libusb/usbi.h. UGLY, i know, but so is libusb! */
 struct usb_dev_handle {
   int fd;
-
   struct usb_bus *bus;
   struct usb_device *device;
-
   int config;
   int interface;
   int altsetting;
-
   void *impl_info;
 };
+
+HIDDebugLevel debug_level = HID_DEBUG_NONE;
+FILE* debug_stream = NULL;
 
 void hid_set_debug(HIDDebugLevel const level)
 {
   debug_level = level;
 }
 
-void hid_set_debug_stream(FILE* outstream)
+void hid_set_debug_stream(FILE* const outstream)
 {
   debug_stream = outstream;
 }

@@ -2,10 +2,8 @@
 #define __INCLUDED_ASSERT_H__
 
 #ifndef HID_INTERNAL
-#  error "libhid's " __FILE__ " is only supposed to be used from within libhid."
+#  error "this file is only supposed to be used from within libhid."
 #endif // HID_INTERNAL
-
-#include <hid.h>
 
 #define ASSERT(a) if (!a && debug_stream && debug_level & HID_DEBUG_ASSERTS) \
   fprintf(debug_stream, "*** ASSERTION FAILURE in %s() [%s:%d]: %s\n", \

@@ -4,9 +4,11 @@
 
 bool match_serial_number(struct usb_dev_handle const* usbdev, void* custom, unsigned int len)
 {
+  return true;
   char* buffer = (char*)malloc(len);
   usb_get_string_simple(usbdev, usb_device(usbdev)->descriptor.iSerialNumber,
       buffer, len);
+  printf("DEBUG: %d: %s\n", __LINE__, usb_strerror());
   bool ret = strncmp(buffer, (char*)custom, len) == 0;
   free(buffer);
   return ret;
@@ -34,12 +36,9 @@ int main(void)
   int path2[] = { 0xffa00001, 0xffa00002, 0x0 };
   int path3[] = { 0xffa00001, 0xffa00002, 0xffa10004 };
   double res;
-  hid_get_item_value(&hid, path1, 3, &res);
-  printf("result: %g\n", res);
-  hid_get_item_value(&hid, path2, 3, &res);
-  printf("result: %g\n", res);
-  hid_get_item_value(&hid, path3, 3, &res);
-  printf("result: %g\n", res);
+  hid_set_item_value(&hid, path1, 3, res);
+  //hid_set_item_value(&hid, path2, 3, res);
+  hid_set_item_value(&hid, path3, 3, res);
 
   ret = hid_close(&hid);
 

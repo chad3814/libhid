@@ -3,6 +3,25 @@
 
 AC_PREREQ(2.58)
 
+AH_TOP(
+#undef LINUX_API
+#undef BSD_API
+#undef DARWIN_API
+
+#undef LIBHID_MAJOR_VERSION
+#undef LIBHID_MINOR_VERSION
+#undef LIBHID_MICRO_VERSION
+#undef LIBHID_INTERFACE_AGE
+#undef LIBHID_BINARY_AGE
+#undef LIBHID_VERSION
+#undef LT_RELEASE
+#undef LT_CURRENT
+#undef LT_REVISION
+#undef LT_AGE
+)
+
+cflags_set=${CFLAGS+set}
+
 # Making releases:
 #   Version string: major.minor.micro.iface_age.bin_age
 #
@@ -10,12 +29,10 @@ AC_PREREQ(2.58)
 #     if functions were added, iface_age = 0
 #     if not backward compatible, iface_age = bin_age = 0
 #
-AC_INIT(libhid, 0.1.90.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.3 $)
+AC_INIT(libhid, 0.1.91.0.0, libhid@lists.ailab.ch)
+AC_REVISION($Revision: 1.4 $)
 
 AM_INIT_AUTOMAKE
-
-#AC_DEFINE_UNQUOTED(AC_PACKAGE_VERSION, $AC_PACKAGE_VERSION)
 
 LIBHID_MAJOR_VERSION=`echo $AC_PACKAGE_VERSION | cut -d. -f1`
 LIBHID_MINOR_VERSION=`echo $AC_PACKAGE_VERSION | cut -d. -f2`
@@ -31,12 +48,6 @@ AC_SUBST(LIBHID_INTERFACE_AGE)
 AC_SUBST(LIBHID_BINARY_AGE)
 AC_SUBST(LIBHID_VERSION)
 
-#AC_DEFINE_UNQUOTED(LIBHID_MAJOR_VERSION, $LIBHID_MAJOR_VERSION)
-#AC_DEFINE_UNQUOTED(LIBHID_MINOR_VERSION, $LIBHID_MINOR_VERSION)
-#AC_DEFINE_UNQUOTED(LIBHID_MICRO_VERSION, $LIBHID_MICRO_VERSION)
-#AC_DEFINE_UNQUOTED(LIBHID_INTERFACE_AGE, $LIBHID_INTERFACE_AGE)
-#AC_DEFINE_UNQUOTED(LIBHID_BINARY_AGE, $LIBHID_BINARY_AGE)
-
 LIBHID_MICRO_VERSION_NUM=`echo $LIBHID_MICRO_VERSION | sed 's/[[a-zA-Z]]//g'`
 
 LT_RELEASE=$LIBHID_MAJOR_VERSION.$LIBHID_MINOR_VERSION
@@ -51,9 +62,11 @@ AC_SUBST(LT_AGE)
 
 VERSION=$LIBHID_VERSION
 
-AC_CONFIG_HEADER([config.h])
+AM_MAINTAINER_MODE
 
-AC_CANONICAL_HOST
+AC_CONFIG_HEADER([config.h])
+AC_PROG_LIBTOOL
+
 AC_MSG_CHECKING(for target OS)
 case $host in
   *-linux*)
@@ -78,7 +91,8 @@ case $host in
     OSLIBS="-lIOKit"
     ;;
   *)
-    AC_MSG_RESULT(unknown);;
+    AC_MSG_RESULT(unknown)
+    AC_MSG_ERROR(libhid is not supported on $host)
 esac
 
 AM_CONDITIONAL(LINUX_API, test "$os_support" = "linux")
@@ -87,7 +101,6 @@ AM_CONDITIONAL(DARWIN_API, test "$os_support" = "darwin")
 
 AC_SUBST(OSLIBS)
 
-dnl declare --enable-* args and collect ac_help strings
 debug_default=yes
 AC_ARG_ENABLE(debug, [  --enable-debug=[no/yes] turn on debugging [default=$debug_default]],,enable_debug=$debug_default)
 
@@ -99,30 +112,14 @@ AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-AC_PROG_LIBTOOL
 
-#AC_HEADER_DIRENT
 AC_HEADER_STDC
-#AC_CHECK_HEADERS([fcntl.h limits.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h])
-#AC_CHECK_HEADERS([usb.h])
+AC_CHECK_HEADERS([usb.h hidparser.h])
 
 AC_HEADER_STDBOOL
 AC_C_CONST
-#AC_C_INLINE
-#AC_TYPE_SIZE_T
 
-#AC_PROG_GCC_TRADITIONAL
-#AC_FUNC_MMAP
-#AC_FUNC_MALLOC
-#AC_FUNC_MEMCMP
-#AC_CHECK_FUNCS([memset strchr strdup strtoul])
-
-#AC_CHECK_SIZEOF(char)
-#AC_CHECK_SIZEOF(short)
-#AC_CHECK_SIZEOF(long)
-#AC_CHECK_SIZEOF(int)
-#AC_CHECK_SIZEOF(void *)
-#AC_CHECK_SIZEOF(long long)
+AC_CHECK_FUNCS([strncmp])
 
 if test "x$GCC" = "xyes"; then
   if ! echo " $CFLAGS " | grep -q '[ 	]-Wall[ 	]'; then

@@ -4,10 +4,10 @@
 #include <os.h>
 
 #include <debug.h>
+#include <assert.h>
 
-hid_return hid_os_force_claim(HIDInterface* hidif, int const interface,
-                              HIDInterfaceMatcher const* match,
-                              unsigned short retries)
+hid_return hid_os_force_claim(HIDInterface* const hidif, int const interface,
+    HIDInterfaceMatcher const* const match, unsigned short retries)
 {
   int ret;
 

@@ -19,13 +19,17 @@ endif
 endif
 
 lib_LTLIBRARIES = libhid.la
-libhid_la_SOURCES = hid.c debug.c $(OS_SUPPORT)
+libhid_la_SOURCES = \
+  $(OS_SUPPORT) \
+	hid_initialisation.c \
+	hid_preparation.c \
+	hid_opening.c \
+	hid_parsing.c \
+	hid_exchange.c \
+	hid_presentation.c \
+	debug.c
 
-include_HEADERS = \
-  ../include/hid.h \
-	../include/os.h \
-	../include/debug.h \
-	../include/assert.h
+include_HEADERS = ../include/hid.h
 
 #doc::
 #	make -C ../doc

@@ -4,10 +4,10 @@
 #include <os.h>
 
 #include <debug.h>
+#include <assert.h>
 
-hid_return hid_os_force_claim(HIDInterface* hidif, int const interface,
-                              HIDInterfaceMatcher const* match,
-                              unsigned short retries)
+hid_return hid_os_force_claim(HIDInterface* const hidif, int const interface,
+    HIDInterfaceMatcher const* const match, unsigned short retries)
 {
   WARNING("code not tested on the Darwin platform!");
   TRACE("claiming interface %d of USB device %s/%s...", interface,
