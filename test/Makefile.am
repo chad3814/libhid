@@ -1,6 +1,6 @@
+AM_CPPFLAGS = -I/usr/local/include -I../include
 AM_CFLAGS =
 AM_LDFLAGS = -L/usr/local/lib -lhidparser -lusb
-AM_CPPFLAGS = -I/usr/local/include -I../include
 
 noinst_PROGRAMS = test_libhid test_libhid.static
 

@@ -1,6 +1,6 @@
 AM_CFLAGS =
-AM_CXXFLAGS = $(AM_CFLAGS)
 AM_CPPFLAGS = -I/usr/local/include -I../include
+AM_LDFLAGS = 
 
 if LINUX_API
 OS_SUPPORT = linux.c
@@ -10,13 +10,18 @@ OS_SUPPORT = bsd.c
 else
 if DARWIN_API
 OS_SUPPORT = darwin.c
-CFLAGS_EXT = -no-cpp-precomp
-LDADDS = -lIOKit -framework "CoreFoundation"
+AM_CFLAGS += -no-cpp-precomp
+AM_LDFLAGS += -lIOKit -framework "CoreFoundation"
 else
 OS_SUPPORT =
 endif
 endif
 endif
+
+AM_CPPFLAGS_ := $(AM_CPPFLAGS)
+override AM_CPPFLAGS = $(AM_CPPFLAGS_) -DCPPFLAGS="\"$(AM_CPPFLAGS_)\"" \
+	-DCFLAGS="\"$(AM_CFLAGS)\"" -DLDFLAGS="\"$(AM_LDFLAGS)\"" \
+	-DCOMPILEDATE="\"`date -R`\""
 
 lib_LTLIBRARIES = libhid.la
 libhid_la_SOURCES = \
@@ -27,6 +32,7 @@ libhid_la_SOURCES = \
 	hid_parsing.c \
 	hid_exchange.c \
 	hid_presentation.c \
+	config.c \
 	debug.c
 
 include_HEADERS = ../include/hid.h

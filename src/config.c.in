@@ -1,0 +1,21 @@
+#define HID_INTERNAL
+
+#include <hid.h>
+
+#include <debug.h>
+#include <assert.h>
+
+void hid_write_library_config(FILE* const outstream)
+{
+  fprintf(outstream, "library:                        @PACKAGE@ (@host@)\n");
+  fprintf(outstream, "version:                        @VERSION@\n");
+  fprintf(outstream, "libtool age (interface/binary): "
+                     "@LIBHID_INTERFACE_AGE@/"
+                     "@LIBHID_BINARY_AGE@\n");
+  fprintf(outstream, "compilation date:               %s\n", COMPILEDATE);
+  fprintf(outstream, "bugreport address:              @PACKAGE_BUGREPORT@\n");
+  fprintf(outstream, "CPPFLAGS:                       %s\n", CPPFLAGS);
+  fprintf(outstream, "CFLAGS:                         %s\n", CFLAGS);
+  fprintf(outstream, "LDFLAGS:                        %s\n", LDFLAGS);
+  fprintf(outstream, "installation prefix:            @prefix@\n");
+}
