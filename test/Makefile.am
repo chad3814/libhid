@@ -6,7 +6,7 @@ noinst_PROGRAMS = test_libhid test_libhid.static
 
 test_libhid_SOURCES = test_libhid.c
 test_libhid_DEPENDENCIES = ../src/libhid.la
-test_libhid_LDADD = -L../src -lhid
+test_libhid_LDADD = ../src/libhid.la
 
 test_libhid_static_SOURCES = test_libhid.c
 test_libhid_static_DEPENDENCIES = ../src/.libs/libhid.a
@@ -22,7 +22,7 @@ debug:: test_libhid.static
 	gdb -q $<
 
 run:: test_libhid
-	./test_libhid
+	env LD_LIBRARY_PATH="`pwd`/src/.libs" ./test_libhid
 
 cvsclean:: mrproper
 mrproper:: maintainer-clean
