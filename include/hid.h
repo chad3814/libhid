@@ -78,11 +78,11 @@ void hid_set_debug(HIDDebugLevel const level);
 void hid_set_debug_stream(FILE* const outstream);
 void hid_set_usb_debug(int const level);
 
-hid_return hid_init();
-
 HIDInterface hid_new_HIDInterface();
 
 void hid_reset_HIDInterface(HIDInterface* const hidif);
+
+hid_return hid_init();
 
 hid_return hid_cleanup();
 

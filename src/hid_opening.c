@@ -154,13 +154,14 @@ hid_return hid_open(HIDInterface* const hidif, int const interface,
   hid_return ret = hid_get_usb_handle(hidif, match);
   if (ret != HID_RET_SUCCESS) return ret;
 
+  hidif->interface = interface;
+
   TRACE("claiming " TRACEDEVICESTR ".", TRACEDEVICEARGS);
   if (usb_claim_interface(hidif->dev_handle, interface) < 0) {
     WARNING("failed to claim " TRACEDEVICESTR ".", TRACEDEVICEARGS);
     hid_close(hidif);
     return HID_RET_FAIL_CLAIM_IFACE;
   }
-  hidif->interface = interface;
   NOTICE("successfully claimed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
   
   /* TODO: what's this anyway?
@@ -170,7 +171,7 @@ hid_return hid_open(HIDInterface* const hidif, int const interface,
 
   hid_prepare_interface(hidif);
 
-  NOTICE("successfully initialised " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully opened " TRACEDEVICESTR ".", TRACEDEVICEARGS);
 
   return HID_RET_SUCCESS;
 }
@@ -188,6 +189,8 @@ hid_return hid_force_open(HIDInterface* const hidif, int const interface,
   hid_return ret = hid_get_usb_handle(hidif, match);
   if (ret != HID_RET_SUCCESS) return ret;
 
+  hidif->interface = interface;
+
   TRACE("claiming " TRACEDEVICESTR ".", TRACEDEVICEARGS);
   hid_os_force_claim(hidif, interface, match, retries);
   if (ret != HID_RET_SUCCESS) {
@@ -196,7 +199,6 @@ hid_return hid_force_open(HIDInterface* const hidif, int const interface,
     return ret;
   }
 
-  hidif->interface = interface;
   NOTICE("successfully claimed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
  
   /* TODO: what's this anyway?
@@ -206,7 +208,7 @@ hid_return hid_force_open(HIDInterface* const hidif, int const interface,
 
   hid_prepare_interface(hidif);
 
-  NOTICE("successfully initialised " TRACEDEVICESTR ".", TRACEDEVICEARGS);
+  NOTICE("successfully opened " TRACEDEVICESTR ".", TRACEDEVICEARGS);
 
   return HID_RET_SUCCESS;
 }
