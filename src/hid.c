@@ -499,10 +499,10 @@ hid_return hid_close(HIDInterface* hidif)
 
   if (!hidif) return HID_RET_INVALID_INTERFACE;
 
-  TRACE("closing interface %d of USB device on %s/%s...", hidif->interface, 
-      hidif->device->bus->dirname, hidif->device->filename);
-
   if (hid_is_opened(hidif)) {
+
+    TRACE("closing interface %d of USB device on %s/%s...", hidif->interface, 
+        hidif->device->bus->dirname, hidif->device->filename);
 
     reset_hid_parser(hidif);
     //usb_reset(hidif->dev_handle);
