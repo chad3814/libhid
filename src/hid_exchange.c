@@ -116,6 +116,7 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
   hidif->hid_data->Type = ITEM_FEATURE;
   hidif->hid_data->ReportID = 0;
 
+  /* TODO: i think this and the buffer stuff should be passed in */
   hid_find_object(hidif, path, depth);
   size = *GetReportOffset(hidif->hid_parser,
 			  hidif->hid_data->ReportID,
