@@ -1,7 +1,7 @@
 Source: libhid
 Priority: optional
 Maintainer: martin f. krafft <madduck@debian.org>
-Build-Depends: debhelper (>= 4.0.0), libusb-dev (>= 0.1.8)
+Build-Depends: debhelper (>= 4.0.0), libusb-dev (>= 1:0.1.8)
 Standards-Version: 3.6.1
 
 Package: libhid-dev
