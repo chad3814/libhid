@@ -2,7 +2,7 @@ AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
 AM_CPPFLAGS = -I/usr/include/python2.3/ -I../include -DHID_INTERNAL
-AM_CFLAGS = -fpic
+AM_CFLAGS = -fPIC
 AM_LDFLAGS = -shared ../src/libhid.la -lusb -lswigpy
 
 SWIG = @SWIG_BIN@
