@@ -3,6 +3,8 @@
 Makefile
 Makefile.in
 *.lo
+*.loT
 *.la
 config.c
 libhid-config
+.*.swp
