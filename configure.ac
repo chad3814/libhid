@@ -11,7 +11,7 @@ AC_PREREQ(2.58)
 #     if not backward compatible, iface_age = bin_age = 0
 #
 AC_INIT(libhid, 0.1.90.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.1 $)
+AC_REVISION($Revision: 1.2 $)
 
 AM_INIT_AUTOMAKE
 
@@ -53,7 +53,8 @@ VERSION=$LIBHID_VERSION
 
 AC_CONFIG_HEADER([config.h])
 
-AC_MSG_CHECKING(for what USB OS support)
+AC_CANONICAL_HOST
+AC_MSG_CHECKING(for target OS)
 case $host in
   *-linux*)
     AC_DEFINE(LINUX_API, [], [define if building for Linux])
@@ -76,6 +77,8 @@ case $host in
     AC_MSG_RESULT(Darwin and/or MacOS 10)
     OSLIBS="-lIOKit"
     ;;
+  *)
+    AC_MSG_RESULT(unknown);;
 esac
 
 AM_CONDITIONAL(LINUX_API, test "$os_support" = "linux")
@@ -105,7 +108,7 @@ AC_HEADER_STDC
 
 AC_HEADER_STDBOOL
 AC_C_CONST
-#AC_C_INLINE
+AC_C_INLINE
 #AC_TYPE_SIZE_T
 
 #AC_PROG_GCC_TRADITIONAL

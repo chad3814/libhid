@@ -6,7 +6,7 @@ noinst_PROGRAMS = test_libhid test_libhid.static
 
 test_libhid_SOURCES = test_libhid.c
 test_libhid_DEPENDENCIES = ../src/libhid.la
-test_libhid_LDADD = -L../src -lhid libusb.a
+test_libhid_LDADD = -L../src -lhid libusb.a -lefence
 
 test_libhid_static_SOURCES = test_libhid.c
 test_libhid_static_DEPENDENCIES = ../src/.libs/libhid.a

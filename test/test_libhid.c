@@ -3,21 +3,20 @@
 
 int main(void) {
 
-  hid_init();
+  hid_return ret = hid_init();
 
   HIDInterface hid;
-  HIDInterfaceMatcher matcher;
-  byte bus, device;
+  HIDInterfaceMatcher matcher = { 0x06c2, HID_ID_MATCH_ANY, NULL };
 
-  hid_find(matcher, &bus, &device);
-  hid_open(&hid, bus, device);
+  ret = hid_prepare_interface(&hid);
 
-  if (!hid_is_opened(&hid))
-    fprintf(stderr, "opening failed.\n");
+  ret = hid_force_open(&hid, &matcher, 3);
 
-  hid_close(&hid);
+  ret = hid_write_identification(stderr, &hid);
+
+  ret = hid_close(&hid);
   
-  hid_cleanup();
+  ret = hid_cleanup();
   
   return 0;
 }

@@ -19,7 +19,7 @@ endif
 endif
 
 lib_LTLIBRARIES = libhid.la
-libhid_la_SOURCES = hid.c error.c $(OS_SUPPORT)
+libhid_la_SOURCES = hid.c debug.c $(OS_SUPPORT)
 
 include_HEADERS = ../include/hid.h
 
