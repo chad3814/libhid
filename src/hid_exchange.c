@@ -9,6 +9,9 @@
 #include <debug.h>
 #include <assert.h>
 
+/* FIXME: Temporary solution, while waiting for hidparser re inclusion in libhid! */
+uchar* GetReportOffset(HIDParser* pParser, const uchar ReportID, const uchar ReportType);
+
 hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
     unsigned int const depth, char* const buffer, unsigned int const size)
 {
