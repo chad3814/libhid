@@ -1,4 +1,4 @@
-AM_CPPFLAGS = `libusb-config --cflags` -I../include -I../hidparser
+AM_CPPFLAGS = -I../include -I../hidparser `libusb-config --cflags`
 AM_CFLAGS =
 AM_LDFLAGS =
 
