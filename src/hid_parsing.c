@@ -120,6 +120,45 @@ hid_return hid_find_object(HIDInterface* const hidif,
   return HID_RET_NOT_FOUND;
 }
 
+hid_return hid_extract_value(HIDInterface* const hidif,
+    unsigned char *const buffer, double *const value)
+{
+  TRACE("extracting data value...");
+
+  /* Extract the data value */
+  GetValue(buffer, hidif->hid_data);
+
+  /* FIXME: unit conversion and exponent?! */
+  *value = hidif->hid_data->Value;
+	
+  return HID_RET_SUCCESS;
+}
+
+hid_return hid_get_report_size(HIDInterface* const hidif,
+    unsigned int const reportID, unsigned int const reportType,
+    unsigned int *size)
+{
+  ASSERT(hid_is_initialised());
+  ASSERT(hid_is_opened(hidif));
+  ASSERT(hidif->hid_parser);
+
+  if (!hid_is_opened(hidif)) {
+    WARNING("the device has not been opened.");
+    return HID_RET_NOT_OPENED;
+  }
+
+  if (!hidif->hid_parser) {
+    WARNING("the HID parser has not been initialised.");
+    return HID_RET_NOT_INITIALISED;
+  }
+
+  /* FIXME: GetReportOffset has to be rewritten! */
+  size = *GetReportOffset(hidif->hid_parser,
+			  reportID, reportType);
+	
+  return HID_RET_SUCCESS;
+}
+
 hid_return hid_format_path(char* const buffer, unsigned int length,
     int const path[], unsigned int const depth)
 {

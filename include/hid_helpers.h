@@ -14,6 +14,11 @@ void hid_reset_parser(HIDInterface* const hidif);
 hid_return hid_prepare_parser(HIDInterface* const hidif);
 hid_return hid_find_object(HIDInterface* const hidif,
     int const path[], unsigned int const depth);
+hid_return hid_get_report_size(HIDInterface* const hidif,
+    unsigned int const reportID, unsigned int const reportType,
+    unsigned int *size);
+hid_return hid_extract_value(HIDInterface* const hidif,
+    unsigned char *const buffer, double *const value);
 hid_return hid_format_path(char* const buffer, unsigned int length,
     int const path[], unsigned int const depth);
 

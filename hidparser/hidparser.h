@@ -57,6 +57,11 @@ void GetValue(const uchar* Buf, HIDData* pData);
  * -------------------------------------------------------------------------- */
 void SetValue(const HIDData* pData, uchar* Buf);
 
+/*
+ * GetReportOffset
+ * -------------------------------------------------------------------------- */
+uchar* GetReportOffset(HIDParser* pParser, const uchar ReportID,
+                       const uchar ReportType);
 
 #ifdef __cplusplus
 } /* extern "C" */

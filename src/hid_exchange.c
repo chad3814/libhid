@@ -9,9 +9,6 @@
 #include <debug.h>
 #include <assert.h>
 
-/* FIXME: Temporary solution, while waiting for hidparser re inclusion in libhid! */
-uchar* GetReportOffset(HIDParser* pParser, const uchar ReportID, const uchar ReportType);
-
 hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
     unsigned int const depth, char* const buffer, unsigned int const size)
 {
@@ -118,9 +115,8 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
 
   /* TODO: i think this and the buffer stuff should be passed in */
   hid_find_object(hidif, path, depth);
-  size = *GetReportOffset(hidif->hid_parser,
-			  hidif->hid_data->ReportID,
-			  hidif->hid_data->Type);
+  hid_get_report_size(hidif, hidif->hid_data->ReportID,
+		      hidif->hid_data->Type, &size);
 
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN + USB_TYPE_CLASS + USB_RECIP_INTERFACE,
@@ -138,6 +134,10 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
     WARNING("failed to retrieve complete report to " TRACEDEVICESTR
         "; requested: %d bytes, got: %d bytes.", TRACEDEVICEARGS, 
         size, len);
+    return HID_RET_FAIL_GET_REPORT;
+  }
+
+  if (hid_extract_value(hidif, buffer, value) != HID_RET_SUCCESS) {
     return HID_RET_FAIL_GET_REPORT;
   }
 
