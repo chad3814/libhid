@@ -47,7 +47,7 @@ not supported. The names directly correspond to the Debian packages providing
 the software.
 
   - libtool     (1.5.6-1)
-  - automake1.8 (1.8.5-1) (automake1.9 works fine)
+  - automake1.8 (1.8.5-1)
   - autoconf    (2.59-7)
   - pkg-config  (0.15.0-4)
   - gcc         (3.3.4-2)
@@ -55,6 +55,21 @@ the software.
 You should be able to use an earlier gcc 3.x compiler, or even a 2.x one (but
 *please*, not 2.96). However, when experiencing compilation problems, please
 upgrade your compiler.
+
+On Debian systems, automake1.8 works as well as automake1.9. A slight problem
+exists if automake1.4 is installed as it takes a higher priority than any
+younger version in the alternatives system. If you can, purge that package,
+it's trash. If, however, you need it, then you may want to consider pointing
+/usr/bin/automake elsewhere:
+
+  update-alternatives --set automake /usr/bin/automake-1.8
+
+(or use -1.9). When you (finally) remove automake1.4, you can surrender
+management back to the alternatives system:
+
+  update-alternatives --auto automake
+
+Make sure to check the version with `automake --version` before going on.
 
 Furthermore, libhid needs libusb version 0.1.8beta or newer. It does not work
 with libusb 1.0 at this moment. The following two Debian packages provide the
