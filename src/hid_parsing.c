@@ -3,6 +3,8 @@
 #include <hid.h>
 #include <hid_helpers.h>
 
+#include <string.h>
+
 #include <debug.h>
 #include <assert.h>
 
