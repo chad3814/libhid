@@ -1,5 +1,5 @@
 #
-# doxygen configuration file for the factory++ library
+# doxygen configuration file for the libhid library
 # author: martin f. krafft <krafft@ailab.ch>
 #
 # $Id$
@@ -1106,3 +1106,5 @@ DOT_CLEANUP            = YES
 # used. If set to NO the values of all tags below this one will be ignored.
 
 SEARCHENGINE           = YES
+
+# vim:filetype=conf
