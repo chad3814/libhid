@@ -29,10 +29,12 @@ hid_return hid_os_force_claim(HIDInterface* const hidif, int const interface,
 
   WARNING("code not tested on the Darwin platform!");
   TRACE("claiming USB device %s...", hidif->id);
+#if 1
   if (usb_claim_interface(hidif->dev_handle, interface) < 0) {
     WARNING("failed to claim USB device %s...", hidif->id);
-    return HID_RET_FAIL_CLAIM_IFACE;
+    /* return HID_RET_FAIL_CLAIM_IFACE; */
   }
+#endif
   return HID_RET_SUCCESS;
 }
 
