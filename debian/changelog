@@ -1,7 +1,7 @@
-libhid (0.2.7-3) unstable; urgency=medium
+libhid (0.2.8-1) unstable; urgency=medium
 
-  * Argh. Forgot to set the urgency to medium since subversion depends on this
-    upload. Memo to self: don't do these things at 3:30 am.
+  * New upstream version.
+  * Added test file to ./examples.
 
  -- martin f. krafft <madduck@debian.org>  Fri, 22 Oct 2004 03:32:55 +0200
 

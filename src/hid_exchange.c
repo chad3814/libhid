@@ -4,6 +4,7 @@
 #include <hid_helpers.h>
 #include <os.h>
 #include <constants.h>
+#include <compiler.h>
 
 #include <debug.h>
 #include <assert.h>

@@ -1,4 +1,4 @@
-libhid to do list
+libhid to-do list
 -----------------
 
 AQU: Arnaud Quette
@@ -70,21 +70,28 @@ MKR: Martin Krafft
     http://ailab.ch/pipermail/libhid-discuss/2004-September/000206.html
     http://ailab.ch/pipermail/libhid-discuss/2004-September/000211.html
 
-- pkg-config
+- [CLE] documentation (doxygen)
 
 - [MKR] hotplug scripts
+  - what kind of hotplug scripts?
 
-- documentation
+- [MKR] improve debugging code
 
-- README file
+- export of USB_TIMEOUT parameter
+
+- README file improvements
 
 - dealing with multiple configuration descriptors (if necessary)
 
 - dealing with physical descriptors (if necessary)
 
-- [MKR] export of USB_TIMEOUT parameter
+- make code C99 compatible (to support --enable-pedantic -Werror)
+  * variable declaration should be first in functions
+  * variadic macros are not supported
+  * ...
 
-- [MKR] deal with all the compiler warnings
+Done items
+----------
 
 [done 2004.05.26] [MKR] fix lintian warnings about ldconfig
 
@@ -101,3 +108,7 @@ MKR: Martin Krafft
 [done 2004.02.11] [MKR] libhid-config
 
 [done 2004.02.11] [MKR] reintegration of hidparser into libhid core.
+
+[done 2004.11.09] [MKR] pkg-config
+
+[done 2004.11.09] [MKR] deal with all the compiler warnings

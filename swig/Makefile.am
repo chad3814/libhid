@@ -9,7 +9,7 @@ SWIG = @SWIG_BIN@
 SWIGFLAGS = -python -noruntime -I../include
 
 # swig produces crap code :)
-override CFLAGS := $(subst -Werror ,,$(CFLAGS))
+override CFLAGS := $(subst -Werror,,$(CFLAGS))
 
 dist_noinst_DATA = hid.i
 

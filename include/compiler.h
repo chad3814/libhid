@@ -1,6 +1,10 @@
 #ifndef __INCLUDED_COMPILER_H__
 #define __INCLUDED_COMPILER_H__
 
+#ifndef HID_INTERNAL
+#  error "this file is only supposed to be used from within libhid."
+#endif /* HID_INTERNAL */
+
 #if defined __GNUC__ || defined SWIG
 #  define UNUSED __attribute__((unused))
 #else

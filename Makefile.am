@@ -11,6 +11,7 @@ dist_noinst_HEADERS = \
 	include/constants.h \
 	include/debug.h \
 	include/hid_helpers.h \
+	include/compiler.h \
 	include/os.h
 
 pkgconfigdir = $(libdir)/pkgconfig

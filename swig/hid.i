@@ -1,5 +1,6 @@
 %module hid
 %{
+#include <compiler.h>
 #include <hid.h>
 %}
 

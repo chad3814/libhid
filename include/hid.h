@@ -1,7 +1,6 @@
 #ifndef __INCLUDED_HID_H__
 #define __INCLUDED_HID_H__
 
-#include <compiler.h>
 #include <stdio.h>
 #include <usb.h>
 #include <hidparser.h>
