@@ -15,7 +15,8 @@ hid_return hid_write_identification(FILE* const out,
   }
 
   if (!out) {
-    ERROR("cannot write HIDinterface identification to NULL output stream.");
+    ERROR("cannot write HIDinterface identification of USB device %s "
+        "to NULL output stream.", hidif->id);
     return HID_RET_INVALID_PARAMETER;
   }
   
@@ -70,7 +71,8 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif)
   }
 
   if (!out) {
-    ERROR("cannot dump HIDinterface tree to NULL output stream.");
+    ERROR("cannot dump HIDinterface tree of USB device %s to NULL output stream.",
+        hidif->id);
     return HID_RET_INVALID_PARAMETER;
   }
   

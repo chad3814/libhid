@@ -43,7 +43,8 @@ hid_return hid_init_parser(HIDInterface* const hidif)
   TRACE("allocating space for HIDData structure...");
   hidif->hid_data = (HIDData*)malloc(sizeof(HIDData));
   if (!hidif->hid_data) {
-    ERROR("failed to allocate memory for HIDData structure.");
+    ERROR("failed to allocate memory for HIDData structure of USB device %s.",
+        hidif->id);
     return HID_RET_FAIL_ALLOC;
   }
   TRACE("successfully allocated memory for HIDData strcture.");
@@ -51,7 +52,8 @@ hid_return hid_init_parser(HIDInterface* const hidif)
   TRACE("allocating space for HIDParser structure...");
   hidif->hid_parser = (HIDParser*)malloc(sizeof(HIDParser));
   if (!hidif->hid_parser) {
-    ERROR("failed to allocate memory for HIDParser structure.");
+    ERROR("failed to allocate memory for HIDParser structure of USB device %s.",
+        hidif->id);
     return HID_RET_FAIL_ALLOC;
   }
   TRACE("successfully allocated memory for HIDParser strcture.");
@@ -132,7 +134,7 @@ hid_return hid_find_object(HIDInterface* const hidif,
   byte const ITEMSIZE = sizeof("0xdeadbeef");
   char* buffer = (char*)malloc(depth * ITEMSIZE);
   hid_format_path(buffer, depth * ITEMSIZE, path, depth); 
-  WARNING("can't find requested item %s.\n", buffer);
+  WARNING("can't find requested item %s of USB device %s.\n", buffer, hidif->id);
   free(buffer);
   
   return HID_RET_NOT_FOUND;
@@ -149,12 +151,14 @@ hid_return hid_extract_value(HIDInterface* const hidif,
   ASSERT(hidif->hid_data);
 
   if (!buffer) {
-    ERROR("cannot extract value into NULL raw buffer.");
+    ERROR("cannot extract value from USB device %s into NULL raw buffer.",
+        hidif->id);
     return HID_RET_INVALID_PARAMETER;
   }
 
   if (!value) {
-    ERROR("cannot extract value into NULL value buffer.");
+    ERROR("cannot extract value from USB device %s into NULL value buffer.",
+        hidif->id);
     return HID_RET_INVALID_PARAMETER;
   }
   
@@ -181,7 +185,8 @@ hid_return hid_get_report_size(HIDInterface* const hidif,
   ASSERT(hidif->hid_data);
   
   if (!size) {
-    ERROR("cannot read report size into NULL size buffer.");
+    ERROR("cannot read report size from USB device %s into NULL size buffer.",
+        hidif->id);
     return HID_RET_INVALID_PARAMETER;
   }
   

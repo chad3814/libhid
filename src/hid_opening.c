@@ -150,7 +150,7 @@ hid_return hid_open(HIDInterface* const hidif, int const interface,
   }
 
   if (hid_is_opened(hidif)) {
-    ERROR("cannot open already opened HIDInterface.");
+    ERROR("cannot open already opened HIDInterface %s.", hidif->id);
     return HID_RET_DEVICE_ALREADY_OPENED;
   }
 
@@ -193,7 +193,7 @@ hid_return hid_force_open(HIDInterface* const hidif, int const interface,
   }
 
   if (hid_is_opened(hidif)) {
-    ERROR("cannot open already opened HIDInterface.");
+    ERROR("cannot open already opened HIDInterface %s.", hidif->id);
     return HID_RET_DEVICE_ALREADY_OPENED;
   }
 
@@ -228,9 +228,9 @@ hid_return hid_close(HIDInterface* const hidif)
 {
   int ret;
 
-  TRACE("closing USB device %s...", hidif->id);
-
   if (hid_is_opened(hidif)) {
+
+    TRACE("closing USB device %s...", hidif->id);
 
     hid_reset_parser(hidif);
     
@@ -248,7 +248,7 @@ hid_return hid_close(HIDInterface* const hidif)
       NOTICE("successfully closed USB device %s.", hidif->id);
     }
   }
-  else WARNING("attempt to close unopened HIDInterface.");
+  else WARNING("attempt to close unopened USB device %s.", hidif->id);
 
   TRACE("freeing memory allocated for HID parser...");
   if(hidif->hid_parser) free(hidif->hid_parser);

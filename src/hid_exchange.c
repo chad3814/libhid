@@ -41,7 +41,7 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
   }
 
   if (len != size) {
-    WARNING("failed to retrieve complete report to USB device %s; "
+    WARNING("failed to retrieve complete report from USB device %s; "
         "requested: %d bytes, got: %d bytes.", hidif->id, size, len);
     return HID_RET_FAIL_GET_REPORT;
   }
@@ -129,7 +129,7 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
   }
 
   if (len != size) {
-    WARNING("failed to retrieve complete report to USB device %s; "
+    WARNING("failed to retrieve complete report from USB device %s; "
         "requested: %d bytes, got: %d bytes.", hidif->id, 
         size, len);
     return HID_RET_FAIL_GET_REPORT;

@@ -48,6 +48,7 @@ void hid_reset_HIDInterface(HIDInterface* const hidif)
   hidif->dev_handle = NULL;
   hidif->device = NULL;
   hidif->interface = -1;
+  hidif->id[0] = '\0';
   hidif->hid_data = NULL;
   hidif->hid_parser = NULL;
 }
