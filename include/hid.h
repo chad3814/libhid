@@ -82,6 +82,8 @@ hid_return hid_init();
 
 HIDInterface hid_new_HIDInterface();
 
+void hid_reset_HIDInterface(HIDInterface* const hidif);
+
 hid_return hid_cleanup();
 
 bool hid_is_initialised();

@@ -17,6 +17,4 @@ hid_return hid_find_object(HIDInterface* const hidif,
 hid_return hid_format_path(char* const buffer, unsigned int length,
     int const path[], unsigned int const depth);
 
-void hid_reset_HIDInterface(HIDInterface* const hidif);
-
 #endif // __INCLUDED_HID_HELPERS_H__

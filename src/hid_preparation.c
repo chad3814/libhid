@@ -17,8 +17,8 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
   TRACE("initialising the HID descriptor for "
       TRACEDEVICESTR "...", TRACEDEVICEARGS);
 
-  /* TODO: if BUFLEN is a standard for HID descriptors, export it to somewhere
-   * central
+  /* TODO: BUFLEN seems to depend on the device, so we need to do something
+   * about the following.
    */
   byte const BUFLEN = 9;
   char buffer[BUFLEN];

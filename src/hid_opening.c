@@ -227,17 +227,14 @@ hid_return hid_close(HIDInterface* const hidif)
     hid_reset_parser(hidif);
     //usb_reset(hidif->dev_handle);
     
-    TRACE("releasing " TRACEDEVICESTR "...", TRACEDEVICEARGS);
-    /*if (usb_release_interface(hidif->dev_handle, hidif->interface) < 0)
+    /*TRACE("releasing " TRACEDEVICESTR "...", TRACEDEVICEARGS);
+    if (usb_release_interface(hidif->dev_handle, hidif->interface) < 0)
       WARNING("failed to release " TRACEDEVICESTR ".", TRACEDEVICEARGS);*/
 
     TRACE("closing handle of " TRACEDEVICESTR "...", TRACEDEVICEARGS);
     ret = usb_close(hidif->dev_handle);
     if (ret < 0) {
       WARNING("failed to close " TRACEDEVICESTR ".", TRACEDEVICEARGS);
-    }
-    else {
-      NOTICE("successfully closed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
     }
   }
 
@@ -250,6 +247,7 @@ hid_return hid_close(HIDInterface* const hidif)
 
   if (ret < 0) return HID_RET_FAIL_CLOSE_DEVICE;
 
+  NOTICE("successfully closed " TRACEDEVICESTR ".", TRACEDEVICEARGS);
   return HID_RET_SUCCESS;
 }
 
