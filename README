@@ -8,7 +8,7 @@ libhid is (c) 2003-2004 by
 and distributed under the terms of the GNU General Public License.
 See the file ./COPYING in the source distribution for more information.
 
-Revision: $Id: README,v 1.6 2004/09/10 12:33:00 krafft Exp $
+Revision: $Id$
 
 Please send bugreports to <libhid-discuss@lists.ailab.ch>.
 
@@ -57,10 +57,25 @@ You should be able to use an earlier gcc 3.x compiler, or even a 2.x one (but
 upgrade your compiler.
 
 Furthermore, libhid needs libusb version 0.1.8beta or newer. It does not work
-with libusb 1.0 at this moment.
+with libusb 1.0 at this moment. The following two Debian packages provide the
+needed software:
+
+  - libusb-0.1-4 (1:0.1.8-17)
+  - libusb-dev (1:0.1.8-17)
 
 If you want to build the swig python existension, you will need swig 1.3 
-installed.
+installed. The following two Debian packages provide it:
+
+  - libswig1.3.22 (1.3.22-3)
+  - swig (1.3.22-3)
+
+Lastly, to compile the documentation, you need doxygen, which is in the
+following Debian package:
+
+  - doxygen (1.2.15-2)
+
+(Btw: pre-built Debian packages are available at
+  http://people.debian.org/~madduck/packages/stage/libhid/binary/)
 
 Once these are installed, the package can be configured and compiled.
 Configuration happens as follows:
