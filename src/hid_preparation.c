@@ -75,6 +75,7 @@ static hid_return hid_prepare_report_descriptor(HIDInterface* const hidif)
 
   if (len < 0) {
     WARNING("failed to get report descriptor for USB device %s...", hidif->id);
+    NOTICE("Error from libusb: %s", usb_strerror());
     return HID_RET_FAIL_GET_REPORT;
   }
 
