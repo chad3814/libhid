@@ -1,3 +1,9 @@
+libhid (0.2.0-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- martin f. krafft <madduck@debian.org>  Tue, 25 May 2004 17:38:25 +0200
+
 libhid (0.1.11-1) unstable; urgency=low
 
   * Initial release.

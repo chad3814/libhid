@@ -1,0 +1,11 @@
+libhid ChangeLog
+================
+
+2004-05-25  Martin F. Krafft (libhid@pobox.madduck.net)
+
+  - Added this ChangeLog
+  - Added a swig-generated Python wrapper.
+  - Replaced libhid-config with a pkg-config file
+  - Reworked the autotools files
+
+Revision: $Id: ChangeLog,v 1.2 2004/05/25 21:37:52 krafft Exp $

@@ -232,8 +232,6 @@ hid_return hid_close(HIDInterface* const hidif)
 
     TRACE("closing USB device %s...", hidif->id);
 
-    hid_reset_parser(hidif);
-    
 #if 0
     TRACE("releasing USB device %s...", hidif->id);
     if (usb_release_interface(hidif->dev_handle, hidif->interface) < 0)
@@ -250,6 +248,8 @@ hid_return hid_close(HIDInterface* const hidif)
   }
   else WARNING("attempt to close unopened USB device %s.", hidif->id);
 
+  if (hidif->hid_parser) hid_reset_parser(hidif);
+    
   TRACE("freeing memory allocated for HID parser...");
   if(hidif->hid_parser) free(hidif->hid_parser);
   if(hidif->hid_data) free(hidif->hid_data);
@@ -265,5 +265,5 @@ hid_return hid_close(HIDInterface* const hidif)
 bool hid_is_opened(HIDInterface const* hidif)
 {
   if (!hidif) WARNING("attempt to query open status of NULL HIDInterface.");
-  return hidif && hidif->dev_handle != NULL;
+  return hidif && hidif->dev_handle;
 }

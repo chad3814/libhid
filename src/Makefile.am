@@ -1,15 +1,18 @@
-AM_CPPFLAGS = -I../include -I../hidparser `libusb-config --cflags`
-AM_CFLAGS =
-AM_LDFLAGS = -L. `libusb-config --libs`
+AM_MAKEFLAGS = @MAKEFLAGS@
+ACLOCAL_AMFLAGS = -I m4
 
-if LINUX_API
-OS_SUPPORT = linux.c
+AM_CPPFLAGS =
+AM_CFLAGS = @OS_CFLAGS@
+AM_LDFLAGS = @OS_LDFLAGS@
+
+if OS_LINUX
+OS_SUPPORT_SOURCE = linux.c
 else
-if BSD_API
-OS_SUPPORT = bsd.c
+if OS_BSD
+OS_SUPPORT_SOURCE = bsd.c
 else
-if DARWIN_API
-OS_SUPPORT = darwin.c
+if OS_DARWIN
+OS_SUPPORT_SOURCE = darwin.c
 AM_CFLAGS += -no-cpp-precomp
 AM_LDFLAGS += -lIOKit -framework "CoreFoundation"
 else
@@ -18,46 +21,24 @@ endif
 endif
 endif
 
-AM_CPPFLAGS_ := $(AM_CPPFLAGS)
-CPPFLAGSFILLER := $(shell test ! -z "$(CPPFLAGS)" && echo ' ')
-CFLAGSFILLER := $(shell test ! -z "$(CFLAGS)" && echo ' ')
-LDFLAGSFILLER := $(shell test ! -z "$(LDFLAGS)" && echo ' ')
-
-override AM_CPPFLAGS = $(AM_CPPFLAGS_) \
-  -DCPPFLAGS="\"$(CPPFLAGS)$(CPPFLAGSFILLER)$(AM_CPPFLAGS_)\"" \
-	-DCFLAGS="\"$(CFLAGS)$(CFLAGSFILLER)$(AM_CFLAGS)\"" \
-	-DLDFLAGS="\"$(LDFLAGS)$(LDFLAGSFILLER)$(AM_LDFLAGS)\"" \
-	-DCOMPILEDATE="\"`date -u +'%Y.%m.%d.%H%M%S utc'`\""
-
 lib_LTLIBRARIES = libhid.la
 libhid_la_DEPENDENCIES = ../hidparser/libhidparser.la
 libhid_la_LIBADD = ../hidparser/libhidparser.la
 libhid_la_SOURCES = \
-  $(OS_SUPPORT) \
+  $(OS_SUPPORT_SOURCE) \
 	hid_initialisation.c \
 	hid_preparation.c \
 	hid_opening.c \
 	hid_parsing.c \
 	hid_exchange.c \
 	hid_presentation.c \
-	config.c \
 	debug.c
-
-bin_PROGRAMS = libhid-config
-libhid_config_SOURCES = libhid-config.c
-libhid_config_DEPENDENCIES = libhid.la
-libhid_config_LDADD = libhid.la
 
 include_HEADERS = ../include/hid.h
 
 ../hidparser/libhidparser.la::
-	make -C ../hidparser libhidparser.la
+	@$(MAKE) -sC ../hidparser libhidparser.la
 
-cvsclean:: mrproper
-mrproper:: maintainer-clean
-	rm -f Makefile.in
-
+.PHONY: clean-local
 clean-local::
 	rm -f $(wildcard *.loT)
-
-.PHONY: debug run cvsclean mrproper clean-local

@@ -1,8 +1,8 @@
 #!/bin/sh -ex
 
 libtoolize --force &> /dev/null
-aclocal
+aclocal -I m4
 autoheader
-automake --add-missing --no-force
+automake --add-missing
 autoconf
 exec ./configure $@

@@ -1,169 +1,96 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.58)
+AC_REVISION($Revision: 1.13 $)
+AC_COPYRIGHT([Please see the ./COPYING file for license information.])
 
-AH_TOP(
-#undef LINUX_API
-#undef BSD_API
-#undef DARWIN_API
+AC_PREREQ(2.57)
 
-#undef LIBHID_VERSION
-)
+##### INITIALISATION #########################################################
 
 # Making releases:
-#   Version string: major.minor.micro.iface_age.bin_age
+#     if functions were added, arg1 = 0
+#     if not backward compatible, arg1 = arg2 = 0
 #
-#   on release: [major/minor/micro]++, iface_age++, bin_age++
-#     if functions were added, iface_age = 0
-#     if not backward compatible, iface_age = bin_age = 0
-#
-AC_INIT(libhid, 0.1.11.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.12 $)
+m4_define([IFACE_AGE], [0])
+m4_define([BIN_AGE],   [0])
+m4_define([MD_INIT_NAME], m4_esyscmd([set -- `head -1 README` && echo -n $1]))
+m4_define([MD_INIT_VERSION], m4_esyscmd([expr "`head -1 debian/changelog`" : '.*(\([^-]\+\)-[0-9]\+).*' | tr -d "\n"]).IFACE_AGE.BIN_AGE)
+m4_define([MD_INIT_ADDRESS], m4_esyscmd([grep -i bugreports\ to README | sed -e 's,.*<\([^>]\+\).*,\1,' | tr -d "\n"]))
 
-AM_INIT_AUTOMAKE
-
-LIBHID_MAJOR_VERSION=`echo "AC_PACKAGE_VERSION" | cut -d. -f1`
-LIBHID_MINOR_VERSION=`echo "AC_PACKAGE_VERSION" | cut -d. -f2`
-LIBHID_MICRO_VERSION=`echo "AC_PACKAGE_VERSION" | cut -d. -f3`
-LIBHID_INTERFACE_AGE=`echo "AC_PACKAGE_VERSION" | cut -d. -f4`
-LIBHID_BINARY_AGE=`echo "AC_PACKAGE_VERSION" | cut -d. -f5`
-LIBHID_VERSION=$LIBHID_MAJOR_VERSION.$LIBHID_MINOR_VERSION.$LIBHID_MICRO_VERSION
-
-AC_DEFINE_UNQUOTED(LIBHID_VERSION, $LIBHID_VERSION)
-
-AC_SUBST(LIBHID_MAJOR_VERSION)
-AC_SUBST(LIBHID_MINOR_VERSION)
-AC_SUBST(LIBHID_MICRO_VERSION)
-AC_SUBST(LIBHID_INTERFACE_AGE)
-AC_SUBST(LIBHID_BINARY_AGE)
-AC_SUBST(LIBHID_VERSION)
-
-LIBHID_MICRO_VERSION_NUM=`echo $LIBHID_MICRO_VERSION | sed 's/[[a-zA-Z]]//g'`
-
-LT_RELEASE=$LIBHID_MAJOR_VERSION.$LIBHID_MINOR_VERSION
-LT_CURRENT=`expr $LIBHID_MICRO_VERSION_NUM - $LIBHID_INTERFACE_AGE`
-LT_REVISION=$LIBHID_INTERFACE_AGE
-LT_AGE=`expr $LIBHID_BINARY_AGE - $LIBHID_INTERFACE_AGE`
-
-AC_SUBST(LT_RELEASE)
-AC_SUBST(LT_CURRENT)
-AC_SUBST(LT_REVISION)
-AC_SUBST(LT_AGE)
-
-VERSION=$LIBHID_VERSION
-PACKAGE=AC_PACKAGE_NAME
-
-AM_MAINTAINER_MODE
+AC_INIT(MD_INIT_NAME, MD_INIT_VERSION, MD_INIT_ADDRESS)
 
 AC_CONFIG_HEADER([config.h])
-AC_PROG_LIBTOOL
+AC_CONFIG_SRCDIR([include/hid.h])
+AC_CONFIG_AUX_DIR([.])
 
-debug_default=yes
-AC_ARG_ENABLE(debug, AC_HELP_STRING([--enable-debug=yes/no],
-      [turn on debugging (default=$debug_default)]),
-      ,
-      enable_debug=$debug_default
-)
+AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE
 
-if test "x$enable_debug" = "xyes"; then
-  CFLAGS=`echo $CFLAGS | sed -e 's,-g[[^ ]]\+,-g,g'`
-  CFLAGS=`echo $CFLAGS | sed -e 's,-O[[0-9]]\+,-O0,g'`
-fi
+##### CONFIGURE ARGUMENTS ####################################################
 
-AC_MSG_CHECKING(for target OS)
-case $host in
-  *-linux*)
-    AC_DEFINE(LINUX_API, [], [define if building for Linux])
-    AC_SUBST(LINUX_API)
-    os_support=linux
-    AC_MSG_RESULT(Linux)
-    OSLIBS=""
-    ;;
-  *-freebsd*|*-openbsd*|*-netbsd*)
-    AC_DEFINE(BSD_API, [], [define if building for BSD])
-    AC_SUBST(BSD_API)
-    os_support=bsd
-    AC_MSG_RESULT(FreeBSD, OpenBSD and/or NetBSD)
-    OSLIBS=""
-    ;;
-  *-darwin*)
-    AC_DEFINE(DARWIN_API, [], [define if building for OS X (Darwin)])
-    AC_SUBST(DARWIN_API)
-    os_support=darwin
-    AC_MSG_RESULT(Darwin and/or MacOS 10)
-    OSLIBS="-lIOKit"
-    ;;
-  *)
-    AC_MSG_RESULT(unknown)
-    AC_MSG_ERROR(libhid is not supported on $host)
-esac
+MD_ARG_ENABLE_CUSTOM(pedantic, pedantic compiler checks, yes)
+MD_ARG_ENABLE_CUSTOM(warnings, proper compiler warnings, yes)
+MD_ARG_ENABLE_CUSTOM(werror, compiler warnings as errors, no)
+MD_ARG_ENABLE_CUSTOM(debug, debugging, no)
+MD_ARG_ENABLE_CUSTOM(gdbdebug, gdb-enhanced debugging symbols, no)
 
-AM_CONDITIONAL(LINUX_API, test "$os_support" = "linux")
-AM_CONDITIONAL(BSD_API, test "$os_support" = "bsd")
-AM_CONDITIONAL(DARWIN_API, test "$os_support" = "darwin")
+MD_ARG_WITH_CUSTOM(ccache, ccache for compiler caching, [yes, if found])
+MD_ARG_WITH_CUSTOM(distcc, distcc for distributed compilation, [yes, if found])
 
-AC_SUBST(OSLIBS)
+##### VERSIONING #############################################################
+
+MD_VERSION_INFO
+MD_LT_VERSION_INFO
+
+PACKAGE=AC_PACKAGE_NAME
+VERSION=$MD_VERSION
+
+##### CONFIGURATION ##########################################################
+
+MD_CHECK_OS
+
+MD_CHECK_LIBUSB018B
 
 AC_PROG_CC
-AC_PROG_CC_STDC
+
+MD_CONF_DISTCC
+MD_CONF_CCACHE
+
+AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
 AC_HEADER_STDC
-
 AC_HEADER_STDBOOL
+
+AC_C_INLINE
 AC_C_CONST
-
-AC_CHECK_FUNCS([strncmp])
-
-if test "x$GCC" = "xyes"; then
-  CFLAGS="`echo $CFLAGS | sed -e 's,-Wall[[ 	]]\+,,g'` -Wall"
-fi
-
 AC_C_BIGENDIAN
+AC_C_STRINGIZE
 
-if test "$ac_cv_c_bigendian" = "yes"; then
-  BIGENDIAN="1"
-else
-  BIGENDIAN="0"
-fi
-AC_SUBST(BIGENDIAN)
+MD_CONF_DEBUGGING
+MD_CONF_COMPILER
+MD_CONF_FLAGS([-I../include])
 
-saved_CPPFLAGS=$CPPFLAGS
-saved_LDFLAGS=$LDFLAGS
+AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "linux")
+AM_CONDITIONAL(OS_BSD, test "$MD_OS" = "bsd")
+AM_CONDITIONAL(OS_DARWIN, test "$MD_OS" = "darwin")
 
-AC_CHECK_HEADERS([usb.h])
-CPPFLAGS="`libusb-config --cflags` $CPPFLAGS"
-LDFLAGS="`libusb-config --libs` $LDFLAGS"
+MD_SAVED_PACKAGE=$PACKAGE
+PACKAGE=hid
+AM_PATH_PYTHON([],
+  [ AM_CONDITIONAL([PYTHONWRAPPER], [true]) ],
+  [ AM_CONDITIONAL([PYTHONWRAPPER], [false]) ])
+PACKAGE=$MD_SAVED_PACKAGE
 
-test "$os_support" = "linux" && {
-  AC_MSG_CHECKING(for libusb version)
-  AC_LINK_IFELSE(
-    [
-      #include <usb.h>
-
-      int main(void)
-      {
-        usb_dev_handle* dev;
-        usb_detach_kernel_driver_np(dev, 0);
-        return 0;
-      }
-    ],
-    AC_MSG_RESULT(ok (>= 0.1.8beta)),
-    AC_MSG_ERROR(libhid requires libusb version 0.1.8beta or greater)
-  )
-}
-
-CPPFLAGS=$saved_CPPFLAGS
-LDFLAGS=$saved_LDFLAGS
-
-AC_CHECK_HEADERS([hidparser.h])
+##### OUTPUT #################################################################
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([src/Makefile])
 AC_CONFIG_FILES([hidparser/Makefile])
-AC_CONFIG_FILES([src/config.c])
+AC_CONFIG_FILES([swig/Makefile])
 AC_CONFIG_FILES([test/Makefile])
+AC_CONFIG_FILES([pkgconfig/libhid.pc])
 
 AC_OUTPUT

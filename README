@@ -1,0 +1,42 @@
+libhid README
+=============
+
+Revision: $Id: README,v 1.2 2004/05/25 21:37:52 krafft Exp $
+
+Please send bugreports to <libhid@lists.ailab.ch>.
+
+Introduction
+------------
+
+Notes
+-----
+
+Note that the library is not (yet) complete and it's not thoroughly tested.
+However, given the effort and grief I went through in writing it, I would
+like to make it available to folks, get people to test it, and hopefully have
+some peeps submit improvements. If you have any suggestions, please write to
+me at krafft@ailab.ch.
+
+It's not yet documented, although the usage should be fairly straight
+forward. I am hoping to find someone else to document it as I suck at
+documentation and as the author, it's exceptionally difficult to stay
+didactically correct.
+
+Credits
+-------
+
+Usage
+-----
+
+The library supports pkg-config. Thus, to compile with the library,
+
+  #include <hid.h>
+
+and in your Makefile:
+
+  CPPFLAGS += `pkg-config libhid --cflags`
+  LDFLAGS += `pkg-config libhid --libs`
+
+If using automake, use the AM_* versions of the two variables.
+
+Have fun.

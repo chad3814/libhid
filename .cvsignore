@@ -12,3 +12,4 @@ stamp-h1
 .debinstall
 *.deb
 *.tar.gz
+.debian

@@ -126,21 +126,6 @@ hid_return hid_write_identification(FILE* const out,
 
 hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif);
 
-void hid_write_library_config(FILE* const outstream);
-
-void hid_write_library_name(FILE* const outstream);
-void hid_write_library_arch(FILE* const outstream);
-void hid_write_library_version(FILE* const outstream);
-void hid_write_library_full_version(FILE* const outstream);
-void hid_write_library_libtool_age(FILE* const outstream);
-void hid_write_library_compile_date(FILE* const outstream);
-void hid_write_library_bugreport_address(FILE* const outstream);
-
-void hid_write_library_prefix(FILE* const outstream);
-void hid_write_library_cppflags(FILE* const outstream);
-void hid_write_library_ldflags(FILE* const outstream);
-void hid_write_library_libtool_libs(FILE* const outstream);
-
 #ifdef __cplusplus
 }
 #endif

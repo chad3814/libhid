@@ -1,1 +1,9 @@
 *.py
+.deps
+.libs
+Makefile.in
+*.c
+*.lo
+*.la
+stamp-h1
+Makefile
