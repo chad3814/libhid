@@ -32,8 +32,12 @@ typedef short          wchar;
  */
 #define PATH_SIZE               10 /*!< maximum depth for Path */
 #define USAGE_TAB_SIZE          50 /*!< Size of usage stack */
-#define MAX_REPORT             300 /*!< Including FEATURE, INPUT and OUTPUT */
-#define REPORT_DSC_SIZE       6144 /*!< Size max of Report Descriptor */
+
+/*! Including FEATURE, INPUT and OUTPUT */
+#define MAX_REPORT             300
+
+/*! Size max of Report Descriptor */
+#define REPORT_DSC_SIZE       6144
 
 /* 
  * Items
