@@ -1,3 +1,29 @@
+libhid (0.2.4-5) unstable; urgency=low
+
+  * Doh! automake1.8 and autoconf aren't needed as build dependencies.
+
+ -- martin f. krafft <madduck@debian.org>  Tue,  7 Sep 2004 22:06:20 +0200
+
+libhid (0.2.4-4) unstable; urgency=low
+
+  * The "I promise to figure out build dependencies in advanced next time" 
+    release.
+  * Added automake1.8, autoconf, pkg-config, and libtool build dependencies.
+
+ -- martin f. krafft <madduck@debian.org>  Tue,  7 Sep 2004 20:43:31 +0200
+
+libhid (0.2.4-3) unstable; urgency=low
+
+  * Added python build dependency (closes: Bug#270193).
+
+ -- martin f. krafft <madduck@debian.org>  Mon,  6 Sep 2004 05:55:47 +0200
+
+libhid (0.2.4-2) unstable; urgency=low
+
+  * Added python2.3-dev to Build-Depends (closes: Bug#270014).
+
+ -- martin f. krafft <madduck@debian.org>  Sun,  5 Sep 2004 11:45:53 +0200
+
 libhid (0.2.4-1) unstable; urgency=low
 
   * New upstream release.
