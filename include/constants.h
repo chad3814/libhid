@@ -5,7 +5,15 @@
 #  error "this file is only supposed to be used from within libhid."
 #endif /* HID_INTERNAL */
 
-#define USB_TIMEOUT 5000
+/*!@brief (in milliseconds)
+ *
+ * If you have a low-speed device, it may only be able to send ~160
+ * bytes/sec. Ideally, then, this timeout would be related to the number of
+ * bytes expected from the device.
+ *
+ * @todo Make timeout dependent on size of transfer
+ */
+#define USB_TIMEOUT 10000 
 
 #define HID_REPORT_GET 0x01
 #define HID_REPORT_SET 0x09
