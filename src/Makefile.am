@@ -27,7 +27,7 @@ override AM_CPPFLAGS = $(AM_CPPFLAGS_) \
   -DCPPFLAGS="\"$(CPPFLAGS)$(CPPFLAGSFILLER)$(AM_CPPFLAGS_)\"" \
 	-DCFLAGS="\"$(CFLAGS)$(CFLAGSFILLER)$(AM_CFLAGS)\"" \
 	-DLDFLAGS="\"$(LDFLAGS)$(LDFLAGSFILLER)$(AM_LDFLAGS)\"" \
-	-DCOMPILEDATE="\"`date +'%Y.%m.%d.%H%M%S'`\""
+	-DCOMPILEDATE="\"`date -u +'%Y.%m.%d.%H%M%S' utc`\""
 
 lib_LTLIBRARIES = libhid.la
 libhid_la_DEPENDENCIES = ../hidparser/libhidparser.la
