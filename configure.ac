@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_REVISION($Revision: 1.17 $)
+AC_REVISION($Revision: 1.18 $)
 AC_COPYRIGHT([Please see the ./COPYING file for license information.])
 
 AC_PREREQ(2.57)
@@ -37,6 +37,8 @@ MD_ARG_ENABLE_CUSTOM(gdbdebug, gdb-enhanced debugging symbols, no)
 
 MD_ARG_WITH_CUSTOM(ccache, ccache for compiler caching, [yes, if found])
 MD_ARG_WITH_CUSTOM(distcc, distcc for distributed compilation, [yes, if found])
+
+MD_ARG_ENABLE_CUSTOM(swig, swig python wrapper, yes)
 
 ##### VERSIONING #############################################################
 

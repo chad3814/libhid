@@ -1,6 +1,14 @@
 libhid ChangeLog
 ================
 
+2004-09-09  Martin F. Krafft (libhid@pobox.madduck.net)
+
+  - Added autoconf enable argument for swig.
+
+2004-09-07  Martin F. Krafft (libhid@pobox.madduck.net)
+
+  - Fixed Debian build dependencies.
+
 2004-08-30  Martin F. Krafft (libhid@pobox.madduck.net)
 
   - Added autoconf check for gcc3, which is now required.
@@ -24,4 +32,4 @@ libhid ChangeLog
   - Replaced libhid-config with a pkg-config file
   - Reworked the autotools files
 
-Revision: $Id: ChangeLog,v 1.6 2004/08/30 20:42:45 krafft Exp $
+Revision: $Id: ChangeLog,v 1.7 2004/09/09 16:15:11 krafft Exp $

@@ -1,3 +1,9 @@
+libhid (0.2.5-1) unstable; urgency=low
+
+  * New upstream release (closes: Bug#270781).
+
+ -- martin f. krafft <madduck@debian.org>  Thu,  9 Sep 2004 18:07:57 +0200
+
 libhid (0.2.4-5) unstable; urgency=low
 
   * Doh! automake1.8 and autoconf aren't needed as build dependencies.
