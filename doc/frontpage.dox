@@ -50,7 +50,13 @@ participate.</li>
 target="_blank"><strong>libhid-cvs</strong></a> [ <a
 href="http://lists.ailab.ch/pipermail/libhid-cvs/"
 target="_blank">archives</a> ] -- a mailing list receiving
-CVS commit mails. If you want to closely track libhid development, you
+CVS commit mails. This list is being superceded by libhid-commits (below).</li>
+
+<li><a href="http://lists.alioth.debian.org/mailman/listinfo/libhid-commits"
+target="_blank"><strong>libhid-commits</strong></a> [ <a
+href="http://lists.alioth.debian.org/pipermail/libhid-commits/"
+target="_blank">archives</a> ] -- a mailing list receiving
+Subversion (svn) commit mails. If you want to closely track libhid development, you
 probably want to subscribe to this list.</li>
 
 </ul>
@@ -204,7 +210,7 @@ src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1!" height="31"
 width="88" /></a></p>
 
 <pre>
-$Id: frontpage.dox,v 1.2 2004/09/22 02:26:41 clepple Exp $
+$Id$
 </pre>
 */
 
