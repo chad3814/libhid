@@ -2,7 +2,7 @@ libhid to-do list
 -----------------
 
 AQU: Arnaud Quette
-CLE: Charles Lepple
+CFL: Charles Lepple
 MKR: Martin Krafft
 
 - [Nobody] HID Parser rewritte
@@ -86,7 +86,9 @@ MKR: Martin Krafft
     http://ailab.ch/pipermail/libhid-discuss/2004-September/000206.html
     http://ailab.ch/pipermail/libhid-discuss/2004-September/000211.html
 
-- [CLE] documentation (doxygen)
+- [CFL] documentation (doxygen)
+
+- [CFL] Make Swig work with Fink on OS X
 
 - [MKR] hotplug scripts
   - what kind of hotplug scripts?
