@@ -25,5 +25,6 @@ mrproper:: maintainer-clean
 	rm -f COPYING INSTALL
 	rm -rf install
 	rm -f $(wildcard */Makefile.in)
+	rm -f $(wildcard *~)
 
 .PHONY: cvsclean mrproper test

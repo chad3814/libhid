@@ -39,8 +39,9 @@ struct usb_dev_handle;
 typedef struct HIDInterface_t {
   struct usb_dev_handle *dev_handle;
   struct usb_device *device;
-  unsigned int report_len;
+  int interface;
   char* report_desc;
+  unsigned int report_len;
 } HIDInterface;
 
 typedef struct HIDInterfaceMatcher_t {

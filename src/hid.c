@@ -49,10 +49,20 @@ hid_return hid_init()
   return HID_RET_SUCCESS;
 }
 
+static void reset_HIDInterface(HIDInterface* hidif)
+{
+  hidif->dev_handle = NULL;
+  hidif->device = NULL;
+  hidif->interface = -1;
+  hidif->report_desc = NULL;
+  hidif->report_len = 0;
+}
+
 HIDInterface hid_new_HIDInterface()
 {
   TRACE("creating a new HIDInterface instance...");
-  HIDInterface ret = { NULL, NULL, 0, NULL };
+  HIDInterface ret;
+  reset_HIDInterface(&ret);
   return ret;
 }
 
@@ -306,8 +316,10 @@ hid_return hid_open(HIDInterface* hidif, int const interface,
   if (usb_claim_interface(hidif->dev_handle, interface) < 0) {
     WARNING("failed to claim interface %d on USB device %s/%s...", interface,
               hidif->device->bus->dirname, hidif->device->filename);
+    hid_close(hidif);
     return HID_RET_FAIL_CLAIM_IFACE;
   }
+  hidif->interface = interface;
   NOTICE("successfully claimed interface %d on USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
   
@@ -317,10 +329,16 @@ hid_return hid_open(HIDInterface* hidif, int const interface,
    */
 
   ret = init_hid_descriptor(hidif);
-  if (ret != HID_RET_SUCCESS) return ret;
+  if (ret != HID_RET_SUCCESS) {
+    hid_close(hidif);
+    return ret;
+  }
 
   ret = init_report_descriptor(hidif);
-  if (ret != HID_RET_SUCCESS) return ret;
+  if (ret != HID_RET_SUCCESS) {
+    hid_close(hidif);
+    return ret;
+  }
 
   NOTICE("successfully opened interface %d on USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
@@ -349,8 +367,10 @@ hid_return hid_force_open(HIDInterface* hidif, int const interface,
     WARNING("failed %dd times to claim interface %d on USB device %s/%s...",
         retries, interface,
         hidif->device->bus->dirname, hidif->device->filename);
+    hid_close(hidif);
     return HID_RET_FAIL_CLAIM_IFACE;
   }
+  hidif->interface = interface;
   NOTICE("successfully claimed interface %d on USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
  
@@ -360,10 +380,16 @@ hid_return hid_force_open(HIDInterface* hidif, int const interface,
    */
 
   ret = init_hid_descriptor(hidif);
-  if (ret != HID_RET_SUCCESS) return ret;
+  if (ret != HID_RET_SUCCESS) {
+    hid_close(hidif);
+    return ret;
+  }
 
   ret = init_report_descriptor(hidif);
-  if (ret != HID_RET_SUCCESS) return ret;
+  if (ret != HID_RET_SUCCESS) {
+    hid_close(hidif);
+    return ret;
+  }
 
   NOTICE("successfully opened interface %d on USB device %s/%s...", interface,
       hidif->device->bus->dirname, hidif->device->filename);
@@ -378,11 +404,31 @@ hid_return hid_close(HIDInterface* hidif)
 
   if (!hidif) return HID_RET_INVALID_INTERFACE;
 
-  if (hid_is_opened(hidif)) usb_close(hidif->dev_handle);
-  hidif->dev_handle = NULL;
-  hidif->device = NULL;
+  TRACE("closing interface %d of device on %s/%s...", hidif->interface, 
+      hidif->device->bus->dirname, hidif->device->filename);
+
+  if (hid_is_opened(hidif)) {
+    
+    TRACE("releasing interface %d of device on %s/%s...", hidif->interface,
+        hidif->device->bus->dirname, hidif->device->filename);
+    if (usb_release_interface(hidif->dev_handle, hidif->interface) < 0)
+      WARNING("failed to release interface %d of device on %s/%s.",
+          hidif->interface, hidif->device->bus->dirname,
+          hidif->device->filename);
+
+    TRACE("closing USB device on %s/%s.",
+        hidif->device->bus->dirname, hidif->device->filename);
+    if (usb_close(hidif->dev_handle) < 0)
+      WARNING("failed to close USB device on %s/%s.",
+          hidif->device->bus->dirname, hidif->device->filename);
+    NOTICE("successfully closed USB device.");
+
+  }
+    
   if (hidif->report_desc) free(hidif->report_desc);
-  
+  TRACE("resetting HIDInterface...");
+  reset_HIDInterface(hidif);
+
   return HID_RET_SUCCESS;
 }
 

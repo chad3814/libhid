@@ -11,7 +11,7 @@ AC_PREREQ(2.58)
 #     if not backward compatible, iface_age = bin_age = 0
 #
 AC_INIT(libhid, 0.1.90.0.0, libhid@lists.ailab.ch)
-AC_REVISION($Revision: 1.2 $)
+AC_REVISION($Revision: 1.3 $)
 
 AM_INIT_AUTOMAKE
 
@@ -108,7 +108,7 @@ AC_HEADER_STDC
 
 AC_HEADER_STDBOOL
 AC_C_CONST
-AC_C_INLINE
+#AC_C_INLINE
 #AC_TYPE_SIZE_T
 
 #AC_PROG_GCC_TRADITIONAL
@@ -117,12 +117,12 @@ AC_C_INLINE
 #AC_FUNC_MEMCMP
 #AC_CHECK_FUNCS([memset strchr strdup strtoul])
 
-AC_CHECK_SIZEOF(char)
-AC_CHECK_SIZEOF(short)
-AC_CHECK_SIZEOF(long)
-AC_CHECK_SIZEOF(int)
-AC_CHECK_SIZEOF(void *)
-AC_CHECK_SIZEOF(long long)
+#AC_CHECK_SIZEOF(char)
+#AC_CHECK_SIZEOF(short)
+#AC_CHECK_SIZEOF(long)
+#AC_CHECK_SIZEOF(int)
+#AC_CHECK_SIZEOF(void *)
+#AC_CHECK_SIZEOF(long long)
 
 if test "x$GCC" = "xyes"; then
   if ! echo " $CFLAGS " | grep -q '[ 	]-Wall[ 	]'; then

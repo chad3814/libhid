@@ -22,11 +22,11 @@ int main(void) {
 
   HIDInterface hid = hid_new_HIDInterface();
   char* serial = "01529";
-  HIDInterfaceMatcher matcher = { 0x06c2, HID_ID_MATCH_ANY, match_serial_number, (void*)serial, strlen(serial)+1 };
+  HIDInterfaceMatcher matcher = { 0x06c2, 0x0038, match_serial_number, (void*)serial, strlen(serial)+1 };
 
   ret = hid_force_open(&hid, 0, &matcher, 3);
 
-  ret = hid_write_identification(stderr, &hid);
+  ret = hid_write_identification(stdout, &hid);
 
   ret = hid_close(&hid);
 
