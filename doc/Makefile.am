@@ -3,6 +3,29 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = www
 
+if DOXYGEN
+all-local: html
+endif
+
+EXTRA_DIST = frontpage.dox
+
+DOXY_SOURCES = \
+	$(wildcard ../src/*.c) \
+	$(wildcard ../include/*.h) \
+	$(wildcard *.dox)
+
+.stamp_doxygen: $(DOXY_SOURCES)
+	doxygen doxygen.rc
+	@touch $@
+
+html: .stamp_doxygen
+	chmod -R a+rX html
+	find html -type d -exec chmod 711 {} \;
+
+clean-local:
+	rm -f .stamp_doxygen
+	rm -rf html
+
 # COPYRIGHT --
 #
 # This file is part of libhid, a user-space HID access library.

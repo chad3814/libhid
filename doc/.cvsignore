@@ -1,2 +1,6 @@
 Makefile
 Makefile.in
+.stamp_doxygen
+doxygen.rc
+html
+def
