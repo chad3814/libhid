@@ -10,29 +10,21 @@ SWIGFLAGS = -python -c -I../include
 
 dist_noinst_DATA = hid.i
 
-pkgpyexec_LTLIBRARIES = libpython_hid.la
-nodist_libpython_hid_la_SOURCES = hid_wrap.c
-libpython_hid_la_DEPENDENCIES = ../src/libhid.la
+pkgpyexec_LTLIBRARIES = _hid.la
+nodist__hid_la_SOURCES = hid_wrap.c
+_hid_la_DEPENDENCIES = ../src/libhid.la
+_hid_la_LDFLAGS = -module
 
 pkgpython_PYTHON = __init__.py
 
 __init__.py: hid.py
 	ln -f $< $@
 
-.PRECIOUS: %.py
-%.py: %.i
+%py: %.i
 	$(SWIG) $(SWIGFLAGS) $<
-	sed -e "s,\(^\|[^[:alnum:]]\)_\($(patsubst %.py,%,$@)\),\1libpython_\2,g" \
-		$@ > $@.new;
-	mv $@.new $@;
-
-%_wrap.c: %.py
-	for i in $(patsubst %.py,%,$<); do \
-		sed -e "s,SWIG_init[ 	]\+init_$$i,SWIG_init initlibpython_$$i,g" \
-				-e "s,SWIG_name[ 	]\+\"_$$i\",SWIG_name \"libpython_$$i\",g" \
-			$@ > $@.new; \
-		mv $@.new $@; \
-	done
+	
+%_wrap.c: %.i
+	$(SWIG) $(SWIGFLAGS) $<
 
 ../src/libhid.la::
 	@$(MAKE) -sC ../src libhid.la

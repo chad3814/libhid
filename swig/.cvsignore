@@ -7,3 +7,4 @@ Makefile.in
 *.la
 stamp-h1
 Makefile
+*.pyc
