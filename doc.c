@@ -40,7 +40,28 @@
 
   @section lists Mailing List
 
-  A mailing list is available at https://ailab.ch/mailman/listinfo/libhid
+  <p>Development of libhid is currently coordinated with mailing lists and CVS
+  (see further down). The following three mailing lists exist (click on the list
+  name to go to the list information page):</p>
+
+  <ul>
+
+  <li><a href="http://lists.ailab.ch/listinfo/libhid-announce"
+  target="_blank"><strong>libhid-announce</strong></a> -- a moderated list with
+  very low volume for announcements. Everyone should subscribe here.</li>
+
+  <li><a href="http://lists.ailab.ch/listinfo/libhid-discuss"
+  target="_blank"><strong>libhid-discuss</strong></a> -- a subscriber-only list
+  for general discussion. Everyone is cordially invited to join and
+  participate.</li>
+
+  <li><a href="http://lists.ailab.ch/listinfo/libhid-cvs"
+  target="_blank"><strong>libhid-cvs</strong></a> -- a mailing list receiving
+  CVS commit mails. If you want to closely track libhid development, you
+  probably want to subscribe to this list.</li>
+
+  </ul>
+  
 
   @section design Design & architecture
 
