@@ -1,4 +1,4 @@
-DEBIAN_VERSION = ${shell head -1 debian/changelog 2>/dev/null | sed -e '1s,.*(\([^)]*\)).*,\1,'}
+DEBIAN_VERSION = $(shell head -1 debian/changelog 2>/dev/null | sed -e '1s,.*(\([^)]*\)).*,\1,')
 DEBIAN_ARCH = $(shell test -x `which dpkg-architecture 2>/dev/null` && dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null || echo i386)
 
 TARBALL = $(distdir).tar.gz
@@ -19,7 +19,8 @@ $(STAMP): $(TARBALL)
 	touch $@
 
 $(CHANGES): $(STAMP)
-	cd $(DISTDIR) && dpkg-buildpackage -rfakeroot -k$(DEBSIGN_KEYID)
+	cd $(DISTDIR) && debuild -uc -us
+	dpkg-sig --cache-passphrase --sign-changes full --sign builder $@
 
 $(DEBDIR)/dupload.conf: dupload.conf
 	ln -f $< $@
