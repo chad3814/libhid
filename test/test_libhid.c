@@ -45,7 +45,7 @@ int main(void)
   hid_set_debug(HID_DEBUG_ALL);
   hid_set_debug_stream(stderr);
   /* passed directly to libusb */
-  hid_set_usb_debug(256);
+  hid_set_usb_debug(0);
   
   ret = hid_init();
   if (ret != HID_RET_SUCCESS) {

@@ -53,10 +53,12 @@ typedef struct HIDInterface_t {
   HIDParser* hid_parser;
 } HIDInterface;
 
+typedef bool (*matcher_fn_t)(struct usb_dev_handle const* usbdev,
+    void* custom, unsigned int len);
 typedef struct HIDInterfaceMatcher_t {
   unsigned short vendor_id;
   unsigned short product_id;
-  bool (*matcher_fn)(struct usb_dev_handle const* usbdev, void* custom, unsigned int len);
+  matcher_fn_t matcher_fn;
   void* custom_data;
   unsigned int custom_data_length;
 } HIDInterfaceMatcher;

@@ -23,9 +23,11 @@ dist_noinst_DATA = \
 	debian/control \
 	debian/copyright \
 	debian/libhid-dev.docs \
+	debian/libhid-dev.examples \
 	debian/libhid-dev.install \
 	debian/libhid0.install \
 	debian/python-hid.docs \
+	debian/python-hid.examples \
 	debian/python-hid.install \
 	debian/rules
 

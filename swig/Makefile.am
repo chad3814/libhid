@@ -11,12 +11,15 @@ SWIGFLAGS = -python -noruntime -I../include
 # swig produces crap code :)
 override CFLAGS := $(subst -Werror,,$(CFLAGS))
 
-dist_noinst_DATA = hid.i
+dist_noinst_DATA = hid.i test_libhid.py.in
 
 pkgpyexec_LTLIBRARIES = _hid.la
 nodist__hid_la_SOURCES = hid_wrap.c
+dist__hid_la_SOURCES = hid_swig_helpers.c
 _hid_la_DEPENDENCIES = ../src/libhid.la
 _hid_la_LDFLAGS = -module
+
+dist_noinst_HEADERS = hid_swig_helpers.h
 
 nodist_pkgpython_PYTHON = __init__.py
 
@@ -28,33 +31,48 @@ __init__.py: hid.py
 %.py: %.i
 	$(SWIG) $(SWIGFLAGS) $<
 	
-%_wrap.c: %.i
-	$(SWIG) $(SWIGFLAGS) $<
+%_wrap.c: %.py
 	sed -i -e 's/PyObject \*self/PyObject *self UNUSED/' $@
 
 ../src/libhid.la::
 	@$(MAKE) -sC ../src libhid.la
 
-startup.py: $(pyexec_LTLIBRARIES)
+startup.py: $(pkgpyexec_LTLIBRARIES)
 	echo "#!/usr/bin/python" > $@
-	echo "from sys import path" >> $@
-	echo "from os import getcwd" >> $@
-	echo "path.append(getcwd() + '/.libs')" >> $@
+	echo >> $@
+	echo "# preparation" >> $@
+	echo "import sys" >> $@
+	echo "import os" >> $@
+	echo "libsdir = os.getcwd() + '/.libs'" >> $@
+	echo "if os.path.isdir(libsdir):" >> $@
+	echo "  sys.path.append(libsdir)" >> $@
 	for i in *.i; do \
 		echo "from $${i%%.i} import *"; \
 	done >> $@
 
-.PHONY: run
-run: $(pyexec_LTLIBRARIES) startup.py
+.PHONY: python
+python: startup.py
 	env PYTHONSTARTUP=./startup.py python
+
+test_libhid.py: startup.py test_libhid.py.in
+	cat $< > $@
+	echo >> $@
+	cat test_libhid.py.in >> $@
+	chmod +x $@
+
+.PHONY: run test
+run test: test_libhid.py
+	./$<
+
+.PHONY: all-local
+all-local: test_libhid.py
 
 .PHONY: clean-local
 clean-local:
 	rm -f $(wildcard *.py) $(wildcard *.pyc)
-	rm -f $(wildcard *.c)
 	rm -f $(wildcard *.s)
-# only delete _wrap.i files, not the python sources
-	rm -f $(wildcard *_wrap.i)
+# only delete _wrap.[ci] files, not the python sources or helpers
+	rm -f $(wildcard *_wrap.c) $(wildcard *_wrap.i)
 	rm -f $(wildcard *.o)
 	rm -f $(wildcard *.so)
 	rm -f $(wildcard *.lo)

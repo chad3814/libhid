@@ -1,22 +1,10 @@
-%module hid
-%{
-#include <compiler.h>
 #include <hid.h>
-#include <hid_swig_helpers.h>
-%}
 
-%include "exception.i"
+/*void* null = (void*)0;*/
 
-%typemap(in) FILE* {
-  if (PyFile_Check($input)) {
-      $1 = PyFile_AsFile($input);
-  } else {
-      SWIG_exception(SWIG_TypeError, "file expected");
-  }
-}
-
-%include "hid.h"
-%include "hid_swig_helpers.h"
+HIDInterfaceMatcher hid_new_HIDInterfaceMatcher(unsigned short vendor_id,
+    unsigned short product_id, matcher_fn_t matcher_fn, void* custom_data,
+    unsigned int custom_data_length);
 
 /* COPYRIGHT --
  *

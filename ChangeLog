@@ -17,6 +17,7 @@ libhid ChangeLog
 	- added special handling for -Werror to swig code, which can't have it set
 	- added GCC handling for unused parameters
 	- updated TODO list
+	- added prelimiary python test code (does not read/write yet).
 
 2004-09-15  Martin F. Krafft (libhid@pobox.madduck.net)
 
