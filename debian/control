@@ -1,4 +1,5 @@
 Source: libhid
+Section: libs
 Priority: optional
 Maintainer: martin f. krafft <madduck@debian.org>
 Build-Depends: debhelper (>= 4.0.0), libusb-dev (>= 1:0.1.8)
