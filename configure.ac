@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_REVISION($Revision: 1.16 $)
+AC_REVISION($Revision: 1.17 $)
 AC_COPYRIGHT([Please see the ./COPYING file for license information.])
 
 AC_PREREQ(2.57)
@@ -78,19 +78,9 @@ AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "linux")
 AM_CONDITIONAL(OS_BSD, test "$MD_OS" = "bsd")
 AM_CONDITIONAL(OS_DARWIN, test "$MD_OS" = "darwin")
 
-AC_CHECK_PROGS(SWIG_BIN, swig)
+MD_CHECK_SWIG([1.3])
 
-if test ! -z "$SWIG_BIN"; then
-  AC_SUBST(SWIG_BIN)
-  MD_SAVED_PACKAGE=$PACKAGE
-  PACKAGE=hid
-  AM_PATH_PYTHON([],
-    [ AM_CONDITIONAL([PYTHONWRAPPER], [true]) ],
-    [ AM_CONDITIONAL([PYTHONWRAPPER], [false]) ])
-  PACKAGE=$MD_SAVED_PACKAGE
-else
-  AM_CONDITIONAL([PYTHONWRAPPER], [false])
-fi
+MD_CONF_FLAGS([-I../include])
 
 ##### OUTPUT #################################################################
 
