@@ -181,7 +181,7 @@ int main(void)
    *
    * And reading works similarly:
    *   char packet[RECV_PACKET_LEN];
-   *   ret = hid_get_input_report(hid, PATH_OUT, PATHLEN, packet, *   RECV_PACKET_LEN);
+   *   ret = hid_get_input_report(hid, PATH_OUT, PATHLEN, packet, RECV_PACKET_LEN);
    *   if (ret != HID_RET_SUCCESS) {
    *     fprintf(stderr, "hid_get_input_report failed with return code %d\n", ret);
    *   }
