@@ -2,7 +2,7 @@
 
 #include <hid.h>
 
-#include <usb.h>
+#include <debug.h>
 
 hid_return hid_get_item_value(HIDInterface const* hidif,
                               char const *const itempath,

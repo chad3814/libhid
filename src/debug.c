@@ -2,6 +2,9 @@
 
 #include <debug.h>
 
+HIDDebugLevel debug_level = HID_DEBUG_NONE;
+FILE* debug_stream = NULL;
+
 struct usb_dev_handle {
   int fd;
 
@@ -14,6 +17,21 @@ struct usb_dev_handle {
 
   void *impl_info;
 };
+
+void hid_set_debug(HIDDebugLevel const level)
+{
+  debug_level = level;
+}
+
+void hid_set_debug_stream(FILE* outstream)
+{
+  debug_stream = outstream;
+}
+
+void hid_set_usb_debug(int const level)
+{
+  usb_set_debug(level);
+}
 
 void trace_usb_bus(FILE* out, struct usb_bus const* usbbus)
 {

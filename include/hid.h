@@ -16,12 +16,13 @@
 #  define false 0
 #endif
 
-typedef enum hid_return_t {
+typedef enum hid_return {
   HID_RET_SUCCESS = 0,
   HID_RET_FAIL_FIND_BUSSES,
   HID_RET_FAIL_FIND_DEVICES,
   HID_RET_INVALID_INTERFACE,
   HID_RET_FAIL_OPEN_DEVICE,
+  HID_RET_NOT_OPENED,
   HID_RET_NOT_FOUND,
   HID_RET_FAIL_SET_ALTIFACE,
   HID_RET_FAIL_CLAIM_IFACE,
@@ -45,23 +46,42 @@ typedef struct HIDInterface_t {
 typedef struct HIDInterfaceMatcher_t {
   unsigned short vendor_id;
   unsigned short product_id;
-  bool (*matcher_fn)(struct usb_device const*, void* custom);
+  bool (*matcher_fn)(struct usb_dev_handle const* usbdev, void* custom, unsigned int len);
   void* custom_data;
+  unsigned int custom_data_length;
 } HIDInterfaceMatcher;
 #define HID_ID_MATCH_ANY 0x0000
 
+typedef enum HIDDebugLevel_t {
+  HID_DEBUG_NONE = 0x0,
+  HID_DEBUG_ERRORS = 0x1,
+  HID_DEBUG_WARNINGS = 0x2,
+  HID_DEBUG_NOTICES = 0x4,
+  HID_DEBUG_TRACES = 0x8,
+  HID_DEBUG_ASSERTS = 0x10,
+  HID_DEBUG_NOTRACES = HID_DEBUG_ERRORS | HID_DEBUG_WARNINGS | HID_DEBUG_NOTICES | HID_DEBUG_ASSERTS,
+  HID_DEBUG_ALL = HID_DEBUG_ERRORS | HID_DEBUG_WARNINGS | HID_DEBUG_NOTICES | HID_DEBUG_TRACES | HID_DEBUG_ASSERTS
+} HIDDebugLevel;
+  
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+void hid_set_debug(HIDDebugLevel const level);
+void hid_set_debug_stream(FILE* outstream);
+void hid_set_usb_debug(int const level);
+
 hid_return hid_init();
 
-hid_return hid_prepare_interface(HIDInterface* hidif);
+HIDInterface hid_new_HIDInterface();
 
 hid_return hid_cleanup();
 
-hid_return hid_open(HIDInterface* hidif, HIDInterfaceMatcher const* match);
-hid_return hid_force_open(HIDInterface* hidif,
+bool hid_is_initialised();
+
+hid_return hid_open(HIDInterface* hidif, int const interface,
+                    HIDInterfaceMatcher const* match);
+hid_return hid_force_open(HIDInterface* hidif, int const interface,
                           HIDInterfaceMatcher const* match,
                           unsigned short retries);
 
