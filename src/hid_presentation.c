@@ -23,7 +23,7 @@ hid_return hid_write_identification(FILE* const out,
   unsigned short const BUFLEN = 256;
   char buffer[BUFLEN];
   
-  fprintf(out, "device identification of HIDInterface at 0x%08x:\n", (unsigned int)hidif);
+  fprintf(out, "device identification of HIDInterface %s:\n", hidif->id);
   fprintf(out, "  dev_handle:    0x%08x\n", (unsigned int)hidif->dev_handle);
   fprintf(out, "  device:        0x%08x\n", (unsigned int)hidif->device);
   fprintf(out, "  location:      %s/%s\n",
@@ -80,7 +80,7 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif)
       
   unsigned int i = 0;
 
-  fprintf(out, "parse tree of HIDInterface at 0x%08x:\n", (unsigned int)hidif);
+  fprintf(out, "parse tree of HIDInterface %s:\n", hidif->id);
 
   while (HIDParse(hidif->hid_parser, hidif->hid_data)) {
     fprintf(out, "  path: ");
