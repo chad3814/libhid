@@ -30,8 +30,8 @@ hid_return hid_os_force_claim(HIDInterface* const hidif, int const interface,
     return HID_RET_INVALID_PARAMETER;
   }
 
-  if (hid_is_opened(hidif)) {
-    ERROR("cannot open already opened HIDInterface.");
+  if (!hid_is_opened(hidif)) {
+    ERROR("cannot force claim interface of unopened HIDInterface.");
     return HID_RET_DEVICE_ALREADY_OPENED;
   }
 
