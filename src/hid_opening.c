@@ -267,3 +267,18 @@ bool hid_is_opened(HIDInterface const* hidif)
   if (!hidif) WARNING("attempt to query open status of NULL HIDInterface.");
   return hidif && hidif->dev_handle;
 }
+
+/* COPYRIGHT --
+ *
+ * This file is part of libhid, a user-space HID access library.
+ * libhid is (c) 2003-2004
+ *   Martin F. Krafft <libhid@pobox.madduck.net>
+ *   Charles Lepple <clepple@ghz.cc>
+ *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
+ * and distributed under the terms of the GNU General Public License.
+ * See the file ./COPYING in the source distribution for more information.
+ *
+ * THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES
+ * OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ */

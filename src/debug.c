@@ -96,3 +96,18 @@ void trace_usb_dev_handle(FILE* out, usb_dev_handle const* usbdev_h)
   fprintf(out, "  altsetting:               %d\n", usbdev_h->altsetting);
   fprintf(out, "  impl_info:                0x%08x\n", (unsigned int)usbdev_h->impl_info);
 }
+
+/* COPYRIGHT --
+ *
+ * This file is part of libhid, a user-space HID access library.
+ * libhid is (c) 2003-2004
+ *   Martin F. Krafft <libhid@pobox.madduck.net>
+ *   Charles Lepple <clepple@ghz.cc>
+ *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
+ * and distributed under the terms of the GNU General Public License.
+ * See the file ./COPYING in the source distribution for more information.
+ *
+ * THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES
+ * OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ */

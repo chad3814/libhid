@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_REVISION($Revision: 1.15 $)
+AC_REVISION($Revision: 1.16 $)
 AC_COPYRIGHT([Please see the ./COPYING file for license information.])
 
 AC_PREREQ(2.57)
@@ -102,3 +102,18 @@ AC_CONFIG_FILES([test/Makefile])
 AC_CONFIG_FILES([pkgconfig/libhid.pc])
 
 AC_OUTPUT
+
+# COPYRIGHT --
+#
+# This file is part of libhid, a user-space HID access library.
+# libhid is (c) 2003-2004
+#   Martin F. Krafft <libhid@pobox.madduck.net>
+#   Charles Lepple <clepple@ghz.cc>
+#   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
+# and distributed under the terms of the GNU General Public License.
+# See the file ./COPYING in the source distribution for more information.
+#
+# THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES
+# OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
