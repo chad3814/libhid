@@ -40,5 +40,5 @@ include_HEADERS = ../include/hid.h
 	@$(MAKE) -sC ../hidparser libhidparser.la
 
 .PHONY: clean-local
-clean-local::
+clean-local:
 	rm -f $(wildcard *.loT)

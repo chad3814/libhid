@@ -5,13 +5,13 @@ AM_CPPFLAGS = -I/usr/include/python2.3/ -I../include -DHID_INTERNAL
 AM_CFLAGS = -fpic
 AM_LDFLAGS = -shared ../src/libhid.la -lusb -lswigpy
 
-SWIG = swig -python -c
-SWIGFLAGS = -I../include
+SWIG = @SWIG_BIN@
+SWIGFLAGS = -python -c -I../include
 
 dist_noinst_DATA = hid.i
 
 pkgpyexec_LTLIBRARIES = libpython_hid.la
-libpython_hid_la_SOURCES = hid_wrap.c
+nodist_libpython_hid_la_SOURCES = hid_wrap.c
 libpython_hid_la_DEPENDENCIES = ../src/libhid.la
 
 pkgpython_PYTHON = __init__.py
@@ -19,21 +19,23 @@ pkgpython_PYTHON = __init__.py
 __init__.py: hid.py
 	ln -f $< $@
 
+.PRECIOUS: %.py
 %.py: %.i
 	$(SWIG) $(SWIGFLAGS) $<
-	sed -e "s,_$(patsubst %.py,%,$@),libpython&,g" $@ > $@.new;
+	sed -e "s,\(^\|[^[:alnum:]]\)_\($(patsubst %.py,%,$@)\),\1libpython_\2,g" \
+		$@ > $@.new;
 	mv $@.new $@;
 
 %_wrap.c: %.py
-	for i in $(patsubst %.i,%,$<); do \
+	for i in $(patsubst %.py,%,$<); do \
 		sed -e "s,SWIG_init[ 	]\+init_$$i,SWIG_init initlibpython_$$i,g" \
-				-e "s,SWIG_name[ 	]\+\"_$$i\",SWIG_name \"libpython_hid\",g" \
+				-e "s,SWIG_name[ 	]\+\"_$$i\",SWIG_name \"libpython_$$i\",g" \
 			$@ > $@.new; \
 		mv $@.new $@; \
 	done
 
 ../src/libhid.la::
-	@$(MAKE) -sC ../hidparser libhidparser.la
+	@$(MAKE) -sC ../src libhid.la
 
 startup.py: $(pyexec_LTLIBRARIES)
 	echo "#!/usr/bin/python" > $@

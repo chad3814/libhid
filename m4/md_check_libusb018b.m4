@@ -1,9 +1,13 @@
 AC_DEFUN([MD_CHECK_LIBUSB018B],
   [
     AC_CHECK_HEADERS([usb.h])
-    CPPFLAGS="`libusb-config --cflags` $CPPFLAGS"
-    LDFLAGS="`libusb-config --libs` $LDFLAGS"
 
+    LIBUSB_CFLAGS="`libusb-config --cflags`"
+    LIBUSB_LIBS="`libusb-config --libs`"
+
+    AC_SUBST(LIBUSB_CFLAGS)
+    AC_SUBST(LIBUSB_LIBS)
+    
     test "$os_support" = "linux" && {
       AC_MSG_CHECKING(for libusb version)
       AC_LINK_IFELSE(

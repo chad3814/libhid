@@ -17,11 +17,11 @@ test_libhid_LDADD = ../src/libhid.la
 	@$(MAKE) -sC ../hidparser libhidparser.la
 
 .PHONY: debug
-debug:: test_libhid
+debug: test_libhid
 	libtool --mode=execute gdb -q $<
 
 .PHONY: run
-run:: test_libhid
+run: test_libhid
 	libtool --mode=execute ./$<
 
 clean-local::

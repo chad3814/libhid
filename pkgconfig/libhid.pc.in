@@ -6,5 +6,5 @@ includedir=@includedir@
 Name: libhid
 Description: HID access library
 Version: @VERSION@
-Libs: -L${libdir} -lhid -lusb
-Cflags: -I${includedir}
+Libs: @LIBUSB_LIBS@ -L${libdir} -lhid
+Cflags: @LIBUSB_CFLAGS@ -I${includedir}

@@ -59,6 +59,8 @@ MKR: Martin Krafft
 
 - [MKR] deal with all the compiler warnings
 
+[done 2004.05.26] [MKR] fix lintian warnings about ldconfig
+
 [done 2004.03.26] [MKR] Debian integration
 
 [done 2004.03.25] [MKR] use libusb-config properly
