@@ -70,6 +70,23 @@ hid_return hid_prepare_parser(HIDInterface* const hidif)
   TRACE("setting up the HID parser for " TRACEDEVICESTR "...", TRACEDEVICEARGS);
 
   hid_reset_parser(hidif);
+
+  TRACE("dumping the raw report descriptor");
+  {
+	  char buffer[160], tmp[10];
+	  int i;
+
+	  sprintf(buffer, "0x%03x: ", 0);
+	  for(i=0; i<hidif->hid_parser->ReportDescSize; i++) {
+		  if(!(i % 8)) {
+			  if(i != 0) TRACE("%s", buffer);
+			  sprintf(buffer, "0x%03x: ", i);
+		  }
+		  sprintf(tmp, "0x%02x ", (int)(hidif->hid_parser->ReportDesc[i]));
+		  strcat(buffer, tmp);
+	  }
+	  if(hidif->hid_parser->ReportDescSize % 8) TRACE("%s", buffer);
+  }
   
   /* TODO: the return value here should be used, no? */
   TRACE("parsing the HID tree of " TRACEDEVICESTR "...", TRACEDEVICEARGS);
