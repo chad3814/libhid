@@ -23,7 +23,6 @@ hid_return hid_write_identification(FILE* const out,
   unsigned short const BUFLEN = 256;
   char buffer[BUFLEN];
   
-  fprintf(out, "-----------------------------------------------------------\n");
   fprintf(out, "device identification of HIDInterface at 0x%08x:\n", (unsigned int)hidif);
   fprintf(out, "  dev_handle:    0x%08x\n", (unsigned int)hidif->dev_handle);
   fprintf(out, "  device:        0x%08x\n", (unsigned int)hidif->device);
@@ -59,7 +58,6 @@ hid_return hid_write_identification(FILE* const out,
     else
       fprintf(out, "(unable to fetch product string)\n");
   }
-  fprintf(out, "-----------------------------------------------------------\n");
   
   return HID_RET_SUCCESS;
 }
@@ -81,7 +79,6 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif)
       
   unsigned int i = 0;
 
-  fprintf(out, "-----------------------------------------------------------\n");
   fprintf(out, "parse tree of HIDInterface at 0x%08x:\n", (unsigned int)hidif);
 
   while (HIDParse(hidif->hid_parser, hidif->hid_data)) {
@@ -93,7 +90,6 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif)
     }
     fprintf(out, "; type: 0x%02x\n", hidif->hid_data->Type);
   }
-  fprintf(out, "-----------------------------------------------------------\n");
 
   hid_reset_parser(hidif);
 

@@ -34,7 +34,6 @@ void hid_set_usb_debug(int const level)
 
 void trace_usb_bus(FILE* out, struct usb_bus const* usbbus)
 {
-  fprintf(out, "-----------------------------------------------------------\n");
   fprintf(out, "usb_bus instance at: 0x%08x\n", (unsigned int)usbbus);
   fprintf(out, "  dirname:           %s\n", usbbus->dirname);
   fprintf(out, "  devices:           0x%08x\n", (unsigned int)usbbus->devices);
@@ -44,7 +43,6 @@ void trace_usb_bus(FILE* out, struct usb_bus const* usbbus)
 
 void trace_usb_device(FILE* out, struct usb_device const* usbdev)
 {
-  fprintf(out, "-----------------------------------------------------------\n");
   fprintf(out, "usb_device instance at: 0x%08x\n", (unsigned int)usbdev);
   fprintf(out, "  prev:                 0x%08x\n", (unsigned int)usbdev->prev);
   fprintf(out, "  next:                 0x%08x\n", (unsigned int)usbdev->next);
@@ -57,7 +55,6 @@ void trace_usb_device(FILE* out, struct usb_device const* usbdev)
 
 void trace_usb_device_descriptor(FILE* out, struct usb_device_descriptor const* descriptor)
 {
-  fprintf(out, "-----------------------------------------------------------\n");
   fprintf(out, "usb_device_descriptor instance at: 0x%08x\n", (unsigned int)descriptor);
   fprintf(out, "  bLength:                         %d\n", descriptor->bLength);
   fprintf(out, "  bDescriptorType:                 %d\n", descriptor->bDescriptorType); 
@@ -77,7 +74,6 @@ void trace_usb_device_descriptor(FILE* out, struct usb_device_descriptor const* 
 
 void trace_usb_config_descriptor(FILE* out, struct usb_config_descriptor const* config)
 {
-  fprintf(out, "-----------------------------------------------------------\n");
   fprintf(out, "usb_config_descriptor instance at: 0x%08x\n", (unsigned int)config);
   fprintf(out, "  bLength:                         %d\n", config->bLength);
   fprintf(out, "  bDescriptorType:                 %d\n", config->bDescriptorType);
@@ -91,7 +87,6 @@ void trace_usb_config_descriptor(FILE* out, struct usb_config_descriptor const* 
 
 void trace_usb_dev_handle(FILE* out, usb_dev_handle const* usbdev_h)
 {
-  fprintf(out, "-----------------------------------------------------------\n");
   fprintf(out, "usb_dev_handle instance at: 0x%08x\n", (unsigned int)usbdev_h);
   fprintf(out, "  fd:                       %d\n", usbdev_h->fd);
   fprintf(out, "  bus:                      0x%08x\n", (unsigned int)usbdev_h->bus);
