@@ -8,8 +8,8 @@
 #include <hid.h>
 #include <usb.h>
 
-HIDDebugLevel hid_debug_level;
-FILE* hid_debug_stream;
+extern HIDDebugLevel hid_debug_level;
+extern FILE* hid_debug_stream;
 
 #define DEBUGPRINTF(t, s, a...) if (hid_debug_stream) { \
                                   fprintf(hid_debug_stream, "%s: %s(): ", t, __FUNCTION__); \
