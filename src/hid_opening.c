@@ -226,7 +226,7 @@ hid_return hid_force_open(HIDInterface* const hidif, int const interface,
 
 hid_return hid_close(HIDInterface* const hidif)
 {
-  int ret;
+  int ret = -1;
 
   if (hid_is_opened(hidif)) {
 
