@@ -1,7 +1,7 @@
-libhid (0.1.10-1) unstable; urgency=low
+libhid (0.1.11-1) unstable; urgency=low
 
   * Initial release.
     closes: Bug#227984
 
- -- martin f. krafft <madduck@debian.org>  Fri, 23 Jan 2004 14:23:51 +0100
+ -- martin f. krafft <madduck@debian.org>  Thu, 25 Mar 2004 19:36:27 +0100
 

@@ -14,7 +14,7 @@ bool match_serial_number(struct usb_dev_handle const* usbdev, void* custom, unsi
 
 int main(void)
 {
-  hid_write_library_config(stdout);
+  //hid_write_library_config(stdout);
   
   hid_set_debug(HID_DEBUG_NOTRACES);
   hid_set_debug_stream(stderr);

@@ -29,7 +29,7 @@ debian:: dist
 	mkdir -p .debinstall
 	cd .debinstall && tar xfz ../$(distdir).tar.gz
 	cd .debinstall/$(distdir) && fakeroot debian/rules binary
-	mv --target-directory=. $(wildcard .debinstall/*.deb)
+	cd .debinstall && mv *.deb ..
 	rm -rf .debinstall
 
 cvsclean:: mrproper

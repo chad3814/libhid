@@ -55,9 +55,9 @@ MKR: Martin Krafft
 
 - dealing with physical descriptors (if necessary)
 
-- [MKR] Debian integration
-
 - [MKR] export of USB_TIMEOUT parameter
+
+[done 2004.03.26] [MKR] Debian integration
 
 [done 2004.03.25] [MKR] use libusb-config properly
 

@@ -9,3 +9,6 @@ config.status
 configure
 libtool
 stamp-h1
+.debinstall
+*.deb
+*.tar.gz
