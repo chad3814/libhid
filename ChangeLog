@@ -5,6 +5,8 @@ libhid ChangeLog
 
   - Changed list addresses and contact information.
 	- Added a preliminary webpage for libhid: doc/www/index.html
+  - Debian: Added suggestion for pkg-config for libhid-dev.
+  - Debian: Removed suggestion for pkg-config from libhid0.
 
 2004-09-09  Martin F. Krafft (libhid@pobox.madduck.net)
 
@@ -37,4 +39,4 @@ libhid ChangeLog
   - Replaced libhid-config with a pkg-config file
   - Reworked the autotools files
 
-Revision: $Id: ChangeLog,v 1.8 2004/09/10 12:33:00 krafft Exp $
+Revision: $Id: ChangeLog,v 1.9 2004/09/10 12:33:47 krafft Exp $
