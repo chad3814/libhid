@@ -34,11 +34,11 @@ if you want to help, please <a
 href="mailto:libhid-discuss@lists.ailab.ch">contact us</a>!).</p>
 
 <p>For a simple example on how to use libhid, please check out <a
-href="http://svn.debian.org/viewcvs/libhid/trunk/test/test_libhid.c?view=auto"
+href="http://svn.ailab.ch/viewcvs/libhid/trunk/test/test_libhid.c?view=auto"
 target="_blank">this source file</a>.</p>
 
 <p>For more information, please consult the <a
-href="http://svn.debian.org/viewcvs/*checkout*/libhid/trunk/README"
+href="http://svn.ailab.ch/viewcvs/*checkout*/libhid/trunk/README"
 target="_blank">README</a>.</p>
 
 <h2>Mailing lists</h2>
@@ -71,7 +71,7 @@ CVS commit mails. <strong>This list is being superceded by libhid-commits
 
 <li><a href="http://lists.alioth.debian.org/mailman/listinfo/libhid-commits"
 target="_blank"><strong>libhid-commits</strong></a> [ archived via <a
-href="http://svn.debian.org/viewcvs/libhid/" target="_blank">viewcvs</a> ] --
+href="http://svn.ailab.ch/viewcvs/libhid/" target="_blank">viewcvs</a> ] --
 a mailing list receiving Subversion (svn) commit mails. If you want to closely
 track libhid development, you probably want to subscribe to this list.</li>
 
@@ -94,21 +94,30 @@ tree will be the preferred development repository from here forward.
 The CVS version history is available in the Subversion repository as
 well.</p>
 
+<p><strong>Important:</strong> The SVN repository has moved. If you have
+a checked out copy, please relocate it. If you have read-only access, use the
+first command. With write access, use the second:</p>
+
+<code>
+svn sw --relocate svn://svn.{debian.org,ailab.ch}/svn/libhid/trunk
+svn sw --relocate svn+ssh://svn.{debian.org/svn,ailab.ch/home/svn/external}/libhid/trunk
+</code>
+
 <p>To check out the latest version of libhid into the directory
 <tt>libhid-svn</tt>, ensure that Subversion is installed, and use the
 following command:</p>
 
 <code>
-svn co svn://svn.debian.org/libhid/trunk libhid-svn
+svn co svn://svn.ailab.ch/libhid/trunk libhid-svn
 </code>
 
 <p>To retrieve a particular released (or otherwise tagged) version of libhid,
 simply modify the checkout URL. You may have to browse with <a
-href="http://svn.debian.org/viewcvs/libhid/" target="_blank">viewcvs</a> to
+href="http://svn.ailab.ch/viewcvs/libhid/" target="_blank">viewcvs</a> to
 find the exact tag name. As an example, let's retrieve version 0.2.8-1:</p>
 
 <code>
-svn co svn://svn.debian.org/libhid/tags/0.2.8-1 libhid-0.2.8-1
+svn co svn://svn.ailab.ch/libhid/tags/0.2.8-1 libhid-0.2.8-1
 </code>
 
 <p>Instructions on how to compile the code are available in the <a
@@ -117,18 +126,19 @@ write to the <a href="mailto:libhid-discuss@lists.ailab.ch">mailing list</a>
 if you have questions, comments, or problems.</p>
 
 <p>The Subversion tree can also be viewed <a
-href="http://svn.debian.org/viewcvs/libhid/" target="_blank">online</a> via
+href="http://svn.ailab.ch/viewcvs/libhid/" target="_blank">online</a> via
 viewcvs. The latest version is available at the <a
-href="http://svn.debian.org/viewcvs/libhid/trunk/"
+href="http://svn.ailab.ch/viewcvs/libhid/trunk/"
 target="_blank">trunk</a>.</p>
 
 <p>If you want to contribute, please send a patch or two. We cannot give out
 write access to the Subversion tree just like that, but if you show us
 a patch, we'll conclude that you are serious about developing libhid, and give
-you permission. You will need an account on <a href="http://alioth.debian.org"
+you permission.
+<!--You will need an account on <a href="http://alioth.debian.org"
 target="_blank">Alioth</a>. You can <a
 href="http://alioth.debian.org/account/register.php" target="_blank">sign
-up</a> for free (and need not be affiliated with Debian).</p>
+up</a> for free (and need not be affiliated with Debian).</p>-->
 
 <h3>CVS</h3>
 
@@ -142,7 +152,7 @@ cvs -z3 -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external co libhid
 </code>
 
 <p>In addition, the CVS tree can be viewed <a
-href="http://cvs.ailab.ch/cgi-bin/viewcvs.cgi/libhid/"
+href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/"
 target="_blank">online</a>.</p>
 
 <h3>Debian</h3>
@@ -194,14 +204,25 @@ supported by Swig</a>, we will make it available. Just echo your desires to <a
 href="mailto:libhid-discuss@lists.ailab.ch">the discussion list</a>.</p>
 
 <p>For a simple example on how to use libhid from Python, please check out <a
-href="http://svn.debian.org/viewcvs/libhid/trunk/swig/test_libhid.py?view=auto"
+href="http://svn.ailab.ch/viewcvs/libhid/trunk/swig/test_libhid.py?view=auto"
 target="_blank">this script</a>.</p>
 
 <h2>Licence</h2>
 
-<p>libhid is released under the <a
+<p>libhid is released under the terms of the <a
 href="http://www.opensource.org/licenses/gpl-license.php"
-target="_blank">GPL</a>.</p>
+target="_blank">GPL</a> version 2.</p>
+
+<p>We realise that this is a serious impediment. The GPL is
+a &quot;viral&quot; licence, and you will only be able to use libhid in other
+GPL projects. We would like to change the licence, but libhid uses the <a
+href="http://www.mgeups.com/opensource/projects/hidparser.htm"
+target="_blank">MGE UPS SYSTEMS HID Parser</a>, which is GPL, and thus we
+cannot. Our solution is to rewrite the HID parser. One of these days. We are
+also in contact with MGE, trying to convince them to loosen their licence.
+If the licencing issues are solved, we are likely to re-release libhid under
+the <a href="http://www.opensource.org/licenses/artistic-license.php"
+target="_blank">Artistic Licence</a>.</p>
 
 <h2>About</h2>
 
