@@ -165,6 +165,45 @@ hid_return hid_set_item_value(HIDInterface* const hidif UNUSED,
   return HID_RET_SUCCESS;
 }
 
+hid_return hid_interrupt_read(HIDInterface * const hidif, unsigned int const ep, char* const bytes, unsigned int const size, unsigned int const timeout)
+{
+  ASSERT(hid_is_initialised());
+	ASSERT(hid_is_opened(hidif));
+	ASSERT(bytes);
+
+	if (!bytes) return HID_RET_INVALID_PARAMETER;
+
+	if (!hid_is_opened(hidif)) {
+	  WARNING("the device has not been opened.");
+		return HID_RET_DEVICE_NOT_OPENED;
+	}
+
+  TRACE("retrieving interrupt report from device %s ...", hidif->id);
+	hidif->hid_data->Type = ITEM_INPUT;
+	hidif->hid_data->ReportID = 0;
+
+	int len = usb_interrupt_read(hidif->dev_handle,
+	                             ep,
+															 bytes,
+															 size,
+															 timeout);
+
+  if (len < 0) {
+	  WARNING("failed to get interrupt read from device %s", hidif->id);
+		return HID_RET_FAIL_INT_READ;
+	}
+
+	if (len != (signed)size) {
+	  WARNING("failed to get all of interrupt report from device %s; "
+		  "requested: %d bytes, sent: %d bytes.", hidif->id,
+			size, len);
+	  return HID_RET_FAIL_INT_READ;
+	}
+
+	NOTICE("successgully got interrupt report from device $s", hidif->id);
+	return HID_RET_SUCCESS;
+}
+
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.

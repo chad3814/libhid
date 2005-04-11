@@ -39,6 +39,7 @@ typedef enum hid_return_t {
   HID_RET_OUT_OF_SPACE,
   HID_RET_FAIL_SET_REPORT,
   HID_RET_FAIL_GET_REPORT,
+	HID_RET_FAIL_INT_READ,
   HID_RET_NOT_FOUND
 } hid_return;
 
@@ -127,6 +128,8 @@ hid_return hid_write_identification(FILE* const out,
     HIDInterface const* const hidif);
 
 hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif);
+
+hid_return hid_interrupt_read(HIDInterface* const hidif, unsigned int const ep, char* const bytes, unsigned int const size, unsigned int const timeout);
 
 #ifdef __cplusplus
 }
