@@ -1,6 +1,9 @@
 libhid ChangeLog
 ================
 
+2005-04-11  Eoin Verling <everling@snet.wit.ie>
+	- Implemented hid_interrupt_read, a wrapper of usb_interrupt_read.
+
 2005-02-25  Martin F. Krafft (libhid@pobox.madduck.net)
 	- Added $PATH-style docbook stylesheet autodetection, inspired by Kevin
 		Godby. Thanks, Kevin!
