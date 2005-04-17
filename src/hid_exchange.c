@@ -200,7 +200,7 @@ hid_return hid_interrupt_read(HIDInterface * const hidif, unsigned int const ep,
     return HID_RET_FAIL_INT_READ;
   }
 
-  NOTICE("successgully got interrupt report from device $s", hidif->id);
+  NOTICE("successgully got interrupt report from device %s", hidif->id);
   return HID_RET_SUCCESS;
 }
 
