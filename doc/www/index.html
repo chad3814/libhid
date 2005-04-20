@@ -193,6 +193,19 @@ $ su<br />
 
 <p>to install it into <tt>/usr/local</tt>.</p>
 
+Note that there is currently a dependency on the Debian patch, which I have 
+not yet fixed. To unpack the tarball, you thus need to get both, the
+<tt>.orig.tar.gz</tt> file and the latest, corresponding <tt>.diff.gz</tt>
+file. Then, do the following to unpack:
+
+<code>
+$ tar xfz libhid_0.2.14.orig.tar.gz
+$ cd libhid-0.2.14
+$ zcat ../libhid_0.2.14-1.diff.gz | patch -p1
+$ ./configure
+[...]
+</code>
+
 <h2>A note about languages</h2>
 
 <p>At time of writing, libhid can be used directly from C/C++, or from <a
