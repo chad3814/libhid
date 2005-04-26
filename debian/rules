@@ -64,6 +64,12 @@ install: build
 	mkdir -p $(CURDIR)/debian/tmp/usr/share/doc/libhid0/html
 	install -m644 doc/www/index.html $(CURDIR)/debian/tmp/usr/share/doc/libhid0/html
 
+	for i in lintian linda; do \
+		mkdir -p $(CURDIR)/debian/tmp/usr/share/$$i/overrides; \
+		install -m644 debian/libhid-dev.$$i-overrides \
+			$(CURDIR)/debian/tmp/usr/share/$$i/overrides/libhid-dev; \
+	done
+
 binary-indep: build install
 
 binary-arch: build install

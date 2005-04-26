@@ -25,11 +25,14 @@ dist_noinst_DATA = \
 	debian/libhid-dev.docs \
 	debian/libhid-dev.examples \
 	debian/libhid-dev.install \
+	debian/libhid-dev.lintian-overrides \
+	debian/libhid-dev.linda-overrides \
 	debian/libhid0.install \
 	debian/python-hid.docs \
 	debian/python-hid.examples \
 	debian/python-hid.install \
-	debian/rules
+	debian/rules \
+	README.licence
 
 clean-local:
 	rm -f $(wildcard $(PACKAGE)-*.tar.gz)

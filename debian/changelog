@@ -1,3 +1,10 @@
+libhid (0.2.14-1) unstable; urgency=low
+
+  * New upstream release.
+  * Added lintian/linda warnings about extra LICENCE file, which is not.
+
+ -- martin f. krafft <madduck@debian.org>  Tue, 19 Apr 2005 12:17:06 +0200
+
 libhid (0.2.13-1) unstable; urgency=low
 
   * New upstream release.
