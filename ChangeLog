@@ -1,85 +1,91 @@
 libhid ChangeLog
 ================
 
+2005-04-19  Martin F. Krafft (libhid@pobox.madduck.net)
+  - Fixed a bug in hid_preparation.c, which hardcoded the HID USB interface to
+    0. Thanks to Benson Wang <chungyehwang@gmail.com> for pointing this out.
+
 2005-04-11  Eoin Verling <everling@snet.wit.ie>
-	- Implemented hid_interrupt_read, a wrapper of usb_interrupt_read.
+  - Implemented hid_interrupt_read, a wrapper of usb_interrupt_read.
 
 2005-02-25  Martin F. Krafft (libhid@pobox.madduck.net)
-	- Added $PATH-style docbook stylesheet autodetection, inspired by Kevin
-		Godby. Thanks, Kevin!
+  - Added $PATH-style docbook stylesheet autodetection, inspired by Kevin
+    Godby. Thanks, Kevin!
 
 2005-02-20  Martin F. Krafft (libhid@pobox.madduck.net)
-	- Removed dependency on libswigpy, which is deprecated.
-	- integrated more patches by Andreas Jochens <aj@andaco.de> to fix
-	  compilation issues with gcc 4. Thanks, Andreas!
+  - Removed dependency on libswigpy, which is deprecated.
+  - integrated more patches by Andreas Jochens <aj@andaco.de> to fix
+    compilation issues with gcc 4. Thanks, Andreas!
 
 2004-11-10  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- integrated patch by Andreas Jochens <aj@andaco.de> to fix compilation
-		issues on 64bit machines (amd64 specifically). Thanks, Andreas!
+  - integrated patch by Andreas Jochens <aj@andaco.de> to fix compilation
+    issues on 64bit machines (amd64 specifically). Thanks, Andreas!
 
 2004-11-09  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- fixed autotools setup to honour CFLAGS on the ./configure and ./autogen.sh
-		line appropriately.
-	- added *.s and *.i to clean target
-	- now outputs variables used for build to stdout
-	- added Arnaud Quette as Debian co-maintainer
-	- added explanatory comments to test code on how to match, open, read, and
-		write.
-	- commented custom matcher, but left it in.
-	- made all of the code (well, except) swig warning-free
-	- disabled -pedantic (per default), but added -Werror (per default)
-		(use --enable-pedantic and --disable-werror to change)
-	- added special handling for -Werror to swig code, which can't have it set
-	- added GCC handling for unused parameters
-	- updated TODO list
-	- added prelimiary python test code (does not read/write yet).
-	- added src/libhid_detach_device.c, a simple programme (installed to
-		$prefix/bin) which can detach devices to make lsusb -vvv work.
+  - fixed autotools setup to honour CFLAGS on the ./configure and ./autogen.sh
+    line appropriately.
+  - added *.s and *.i to clean target
+  - now outputs variables used for build to stdout
+  - added Arnaud Quette as Debian co-maintainer
+  - added explanatory comments to test code on how to match, open, read, and
+    write.
+  - commented custom matcher, but left it in.
+  - made all of the code (well, except) swig warning-free
+  - disabled -pedantic (per default), but added -Werror (per default)
+    (use --enable-pedantic and --disable-werror to change)
+  - added special handling for -Werror to swig code, which can't have it set
+  - added GCC handling for unused parameters
+  - updated TODO list
+  - added prelimiary python test code (does not read/write yet).
+  - added src/libhid_detach_device.c, a simple programme (installed to
+    $prefix/bin) which can detach devices to make lsusb -vvv work.
 
 2004-09-15  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- Fixed several non-POSIX uses of regular expressions in autotools files
-	- Replaced expr by $((...)) shell semantics
-	- Added override for autoconf Swig version check
+  - Fixed several non-POSIX uses of regular expressions in autotools files
+  - Replaced expr by $((...)) shell semantics
+  - Added override for autoconf Swig version check
 
 2004-09-10  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- Changed list addresses and contact information.
-	- Added a preliminary webpage for libhid: doc/www/index.html
-	- Debian: Added suggestion for pkg-config for libhid-dev.
-	- Debian: Removed suggestion for pkg-config from libhid0.
+  - Changed list addresses and contact information.
+  - Added a preliminary webpage for libhid: doc/www/index.html
+  - Debian: Added suggestion for pkg-config for libhid-dev.
+  - Debian: Removed suggestion for pkg-config from libhid0.
 
 2004-09-09  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- Added autoconf enable argument for swig.
+  - Added autoconf enable argument for swig.
 
 2004-09-07  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- Fixed Debian build dependencies.
+  - Fixed Debian build dependencies.
 
 2004-08-30  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- Added autoconf check for gcc3, which is now required.
-	- Improved autoconf handling for swig.
-	- Updated Makefiles to use -fPIC.
+  - Added autoconf check for gcc3, which is now required.
+  - Improved autoconf handling for swig.
+  - Updated Makefiles to use -fPIC.
 
 2004-06-19  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- Fixed id member of HIDInterface struct to be 16 instead of 32 bytes.
-	- Fixed Debian-related Makefile magic.
+  - Fixed id member of HIDInterface struct to be 16 instead of 32 bytes.
+  - Fixed Debian-related Makefile magic.
 
 2004-05-26  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- Renamed Python .so modules to proper _foo.so style.
-	- Added typehandling for FILE* to make set_debug_stream work.
+  - Renamed Python .so modules to proper _foo.so style.
+  - Added typehandling for FILE* to make set_debug_stream work.
 
 2004-05-25  Martin F. Krafft (libhid@pobox.madduck.net)
 
-	- Added this ChangeLog
-	- Added a swig-generated Python wrapper.
-	- Replaced libhid-config with a pkg-config file
-	- Reworked the autotools files
+  - Added this ChangeLog
+  - Added a swig-generated Python wrapper.
+  - Replaced libhid-config with a pkg-config file
+  - Reworked the autotools files
 
 Revision: $Id$
+
+# vim:et:ts=2

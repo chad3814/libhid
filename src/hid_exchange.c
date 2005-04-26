@@ -32,7 +32,7 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN + USB_TYPE_CLASS + USB_RECIP_INTERFACE,
       HID_REPORT_GET,
-      hidif->hid_data->ReportID + (HID_RT_OUTPUT << 8),
+      hidif->hid_data->ReportID + (HID_RT_INPUT << 8),
       hidif->interface,
       buffer, size, USB_TIMEOUT);
 
