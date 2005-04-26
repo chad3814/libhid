@@ -29,7 +29,7 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN+1,
       USB_REQ_GET_DESCRIPTOR,
-      (USB_DT_HID << 8) + 0, 0,
+      (USB_DT_HID << 8) + 0, hidif->interface,
       (char*)buffer, BUFLEN,
       USB_TIMEOUT);
 
@@ -74,7 +74,7 @@ static hid_return hid_prepare_report_descriptor(HIDInterface* const hidif)
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN+1,
       USB_REQ_GET_DESCRIPTOR,
-      (USB_DT_REPORT << 8) + 0, 0,
+      (USB_DT_REPORT << 8) + 0, hidif->interface,
       (char*)hidif->hid_parser->ReportDesc, hidif->hid_parser->ReportDescSize,
       USB_TIMEOUT);
 

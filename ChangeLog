@@ -1,6 +1,12 @@
 libhid ChangeLog
 ================
 
+2005-04-26  Martin F. Krafft (libhid@pobox.madduck.net)
+  - Fixed a bug in hid_exchange.c, which would prevent input record reading.
+    Thanks to Benson Wang <chungyehwang@gmail.com> for pointing this out.
+  - Added a new docbook.xsl path thanks to Martin Dengler
+    <phidgets@xades.com>.
+
 2005-04-19  Martin F. Krafft (libhid@pobox.madduck.net)
   - Fixed a bug in hid_preparation.c, which hardcoded the HID USB interface to
     0. Thanks to Benson Wang <chungyehwang@gmail.com> for pointing this out.
