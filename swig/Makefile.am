@@ -1,7 +1,9 @@
 AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
-AM_CPPFLAGS = -I/usr/include/python2.3/ -I../include -DHID_INTERNAL -DSWIG
+PYTHONINCLUDES = @PYTHON_PREFIX@/include/python@PYTHON_VERSION@
+
+AM_CPPFLAGS = -I$(PYTHONINCLUDES) -I../include -DHID_INTERNAL -DSWIG
 AM_CFLAGS = -fPIC -fno-strict-aliasing
 AM_LDFLAGS = -shared ../src/libhid.la -lusb
 
