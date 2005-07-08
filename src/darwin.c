@@ -5,12 +5,13 @@
 
 #include <hid.h>
 #include <os.h>
+#include <compiler.h>
 
 #include <debug.h>
 #include <assert.h>
 
 hid_return hid_os_force_claim(HIDInterface* const hidif, int const interface,
-    HIDInterfaceMatcher const* const matcher, unsigned short retries __attribute__ ((unused)))
+    HIDInterfaceMatcher const* const matcher, unsigned short retries UNUSED)
 {
   if (!hidif) {
     ERROR("cannot open NULL HIDInterface.");
