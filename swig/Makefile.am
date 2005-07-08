@@ -28,13 +28,12 @@ EXTRA_DIST = README
 __init__.py: hid.py
 	ln -f $< $@
 
-%.py: %.i
+%.py %_wrap.c: %.i
 	$(SWIG) $(SWIGFLAGS) $<
-	
-%_wrap.c: %.py
-	sed -i -e 's/PyObject \*self/& UNUSED/' \
-	       -e 's/int flags)/int flags UNUSED)/' \
-				 -e '1i#include <compiler.h>' $@
+	echo '#include <compiler.h>' > tmp.c
+	sed -e 's/PyObject \*self/& UNUSED/' \
+	    -e 's/int flags)/int flags UNUSED)/' < $(patsubst %.i,%_wrap.c,$<) >> tmp.c \
+	&& mv tmp.c $(patsubst %.i,%_wrap.c,$<)
 
 ../src/libhid.la::
 	@$(MAKE) -sC ../src libhid.la
@@ -66,7 +65,7 @@ clean-local:
 	rm -f $(patsubst %.i,%.py,$(wildcard *.i))
 	rm -f $(wildcard *.s)
 # only delete _wrap.[ci] files, not the python sources or helpers
-	rm -f $(wildcard *_wrap.c) $(wildcard *_wrap.i)
+	rm -f $(wildcard *_wrap.c) $(wildcard *_wrap.i) tmp.c
 	rm -f $(wildcard *.o)
 	rm -f $(wildcard *.so)
 	rm -f $(wildcard *.lo *.loT)
@@ -77,7 +76,7 @@ clean-local:
 # This file is part of libhid, a user-space HID access library.
 # libhid is (c) 2003-2005
 #   Martin F. Krafft <libhid@pobox.madduck.net>
-#   Charles Lepple <clepple@ghz.cc>
+#   Charles Lepple <clepple+libhid@ghz.cc>
 #   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
 # and distributed under the terms of the GNU General Public License.
 # See the file ./COPYING in the source distribution for more information.
