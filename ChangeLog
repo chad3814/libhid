@@ -1,6 +1,12 @@
 libhid ChangeLog
 ================
 
+2005-07-07  Charles Lepple (clepple+libhid@ghz.cc)
+  - Removed hardcoded reference to Python 2.3 and /usr/include. Pointed out by
+    Martin Dengler, and patch suggested by Martin Krafft. SVN changeset: [244]
+  - Fixed "sed lstat" error when compiling with distcc on OS X. [245]
+  - Mark last parameter in hid_os_force_claim() as unused. [246], [247]
+
 2005-04-26  Martin F. Krafft (libhid@pobox.madduck.net)
   - Fixed a bug in hid_exchange.c, which would prevent input record reading.
     Thanks to Benson Wang <chungyehwang@gmail.com> for pointing this out.
