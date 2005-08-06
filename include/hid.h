@@ -5,6 +5,13 @@
 #include <usb.h>
 #include <hidparser.h>
 
+/*!@file
+ * @brief Main libhid API header file
+ *
+ * This header file forms the public API for libhid. Functions not prototyped
+ * here are most likely for internal use only, and may change without notice.
+ */
+
 #ifndef byte
   typedef unsigned char byte;
 #endif
@@ -45,6 +52,14 @@ typedef enum hid_return_t {
 
 struct usb_dev_handle;
 
+/*!@brief Interface description
+ *
+ * This structure contains information associated with a given USB device
+ * interface. The identification information allows multiple HID-class
+ * interfaces to be accessed on a single device.
+ *
+ * Also available are raw and parsed descriptor information.
+ */
 typedef struct HIDInterface_t {
   struct usb_dev_handle *dev_handle;
   struct usb_device *device;
@@ -65,14 +80,22 @@ typedef struct HIDInterfaceMatcher_t {
 } HIDInterfaceMatcher;
 #define HID_ID_MATCH_ANY 0x0000
 
+/*!@brief Bitmask for selection of debugging messages
+ *
+ * The values of this enumeration can be combined with the bitwise-OR operator
+ * to select which debug messages should be printed. The selection can be set
+ * with hid_set_debug(). You can set a file descriptor for error messages with
+ * hid_set_debug_stream().
+ */
 typedef enum HIDDebugLevel_t {
-  HID_DEBUG_NONE = 0x0,
-  HID_DEBUG_ERRORS = 0x1,
-  HID_DEBUG_WARNINGS = 0x2,
-  HID_DEBUG_NOTICES = 0x4,
-  HID_DEBUG_TRACES = 0x8,
-  HID_DEBUG_ASSERTS = 0x10,
+  HID_DEBUG_NONE = 0x0,		//!< Default
+  HID_DEBUG_ERRORS = 0x1,	//!< Serious conditions
+  HID_DEBUG_WARNINGS = 0x2,	//!< Less serious conditions
+  HID_DEBUG_NOTICES = 0x4,	//!< Informational messages
+  HID_DEBUG_TRACES = 0x8,	//!< Verbose tracing of functions
+  HID_DEBUG_ASSERTS = 0x10,	//!< Assertions for sanity checking
   HID_DEBUG_NOTRACES = HID_DEBUG_ERRORS | HID_DEBUG_WARNINGS | HID_DEBUG_NOTICES | HID_DEBUG_ASSERTS,
+				//!< This is what you probably want to start with while developing with libhid
   HID_DEBUG_ALL = HID_DEBUG_ERRORS | HID_DEBUG_WARNINGS | HID_DEBUG_NOTICES | HID_DEBUG_TRACES | HID_DEBUG_ASSERTS
 } HIDDebugLevel;
   

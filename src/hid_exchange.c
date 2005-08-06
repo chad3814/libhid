@@ -9,6 +9,14 @@
 #include <debug.h>
 #include <assert.h>
 
+/*!@brief Send a control message to retrieve an entire input report
+ *
+ * @param[in] hidif Which interface to query
+ * @param[in] path  Path to input item (to find Report ID)
+ * @param[in] depth See hid_find_object()
+ * @param[out] buffer Result is stored here
+ * @param[in] size  How many bytes to fetch
+ */
 hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
     unsigned int const depth, char* const buffer, unsigned int const size)
 {
@@ -51,6 +59,14 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
   return HID_RET_SUCCESS;
 }
 
+/*!@brief Send an entire output report to the device
+ *
+ * @param[in] hidif Which interface to send to
+ * @param[in] path  Path to an output item (to find Report ID)
+ * @param[in] depth See hid_find_object()
+ * @param[in] buffer Output Report
+ * @param[in] size  How many bytes to send
+ */
 hid_return hid_set_output_report(HIDInterface* const hidif, int const path[],
     unsigned int const depth, char const* const buffer, unsigned int const size)
 {
@@ -94,6 +110,15 @@ hid_return hid_set_output_report(HIDInterface* const hidif, int const path[],
   return HID_RET_SUCCESS;
 }
 
+/*!@brief Retrieve a numeric input item
+ *
+ * @param[in] hidif Which interface to send to
+ * @param[in] path  Path to input item
+ * @param[in] depth See hid_find_object()
+ * @param[out] value Result from hid_extract_value()
+ *
+ * @todo Handle exponent and unit conversion (separate library?)
+ */
 hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
     unsigned int const depth, double *const value)
 {
@@ -101,7 +126,7 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
   ASSERT(hid_is_opened(hidif));
 
   unsigned int size;
-  unsigned char buffer[32]; /* FIXME: dyn alloc or argument */
+  unsigned char buffer[32]; /*! @todo Dynamically allocate the item buffer */
 
   if (!hid_is_opened(hidif)) {
     WARNING("the device has not been opened.");
@@ -146,6 +171,7 @@ hid_return hid_get_item_value(HIDInterface* const hidif, int const path[],
   return HID_RET_SUCCESS;
 }
 
+/*!@brief Currently unimplemented */
 hid_return hid_get_item_string(HIDInterface* const hidif UNUSED,
     int const path[] UNUSED, unsigned int const depth UNUSED,
     char *const value UNUSED, unsigned int const maxlen UNUSED)
@@ -156,6 +182,7 @@ hid_return hid_get_item_string(HIDInterface* const hidif UNUSED,
 }
 
 
+/*!@brief Currently unimplemented */
 hid_return hid_set_item_value(HIDInterface* const hidif UNUSED,
     int const path[] UNUSED, unsigned int const depth UNUSED,
     double const value UNUSED)
@@ -165,7 +192,22 @@ hid_return hid_set_item_value(HIDInterface* const hidif UNUSED,
   return HID_RET_SUCCESS;
 }
 
-hid_return hid_interrupt_read(HIDInterface * const hidif, unsigned int const ep, char* const bytes, unsigned int const size, unsigned int const timeout)
+/*!@brief Read from the interrupt endpoint
+ *
+ * @param[in]  hidif  Which interface to send to
+ * @param[in]  ep     Which endpoint to read
+ * @param[out] bytes  Buffer to store results
+ * @param[in]  size   How many bytes to read
+ * @param[in] timeout How long to wait, in milliseconds
+ *
+ * Upon successful completion, the @a bytes array will contain an input report
+ * from the device. It is up to the programmer to determine which input
+ * endpoint to read, and to ensure that the endpoint is bitwise-ORed with 0x80
+ * (USB_ENDPOINT_IN).
+ */
+hid_return hid_interrupt_read(HIDInterface * const hidif,
+     unsigned int const ep, char* const bytes, unsigned int const size, 
+     unsigned int const timeout) 
 {
   ASSERT(hid_is_initialised());
   ASSERT(hid_is_opened(hidif));
@@ -179,8 +221,6 @@ hid_return hid_interrupt_read(HIDInterface * const hidif, unsigned int const ep,
   }
 
   TRACE("retrieving interrupt report from device %s ...", hidif->id);
-  hidif->hid_data->Type = ITEM_INPUT;
-  hidif->hid_data->ReportID = 0;
 
   int len = usb_interrupt_read(hidif->dev_handle,
                                ep,
@@ -200,7 +240,7 @@ hid_return hid_interrupt_read(HIDInterface * const hidif, unsigned int const ep,
     return HID_RET_FAIL_INT_READ;
   }
 
-  NOTICE("successgully got interrupt report from device %s", hidif->id);
+  NOTICE("successfully got interrupt report from device %s", hidif->id);
   return HID_RET_SUCCESS;
 }
 
