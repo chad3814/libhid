@@ -31,11 +31,14 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
     return HID_RET_DEVICE_NOT_OPENED;
   }
 
-  TRACE("retrieving report from USB device %s...", hidif->id);
+  TRACE("looking up report ID...");
   hidif->hid_data->Type = ITEM_INPUT;
   hidif->hid_data->ReportID = 0;
 
   hid_find_object(hidif, path, depth);
+
+  TRACE("retrieving report ID %d from USB device %s...", 
+        hidif->hid_data->ReportID, hidif->id);
 
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_IN + USB_TYPE_CLASS + USB_RECIP_INTERFACE,
@@ -81,11 +84,14 @@ hid_return hid_set_output_report(HIDInterface* const hidif, int const path[],
     return HID_RET_DEVICE_NOT_OPENED;
   }
 
-  TRACE("sending report to USB device %s...", hidif->id);
+  TRACE("looking up report ID...");
   hidif->hid_data->Type = ITEM_OUTPUT;
   hidif->hid_data->ReportID = 0;
 
   hid_find_object(hidif, path, depth);
+
+  TRACE("sending report ID %d to USB device %s...", 
+        hidif->hid_data->ReportID, hidif->id);
 
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_OUT + USB_TYPE_CLASS + USB_RECIP_INTERFACE,
