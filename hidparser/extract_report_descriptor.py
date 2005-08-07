@@ -84,7 +84,7 @@ def parse_tag(desc, index = 0):
     # FIXME: sign-extend data if necessary
 
     if bSize > 0:
-        print "(value: 0x%x)" % data,
+        print "(value: 0x%x / %d)" % (data, data),
     print
 
     print "  bSize = %d byte(s)" % bSize
