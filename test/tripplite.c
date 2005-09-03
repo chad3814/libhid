@@ -51,20 +51,11 @@ int tripp_lite_send(HIDInterface* hid, const char *msg)
   
 int tripp_lite_receive(HIDInterface* hid, char *msg)
 {
-  int i, ret = hid_interrupt_read(hid, 0x81, msg, 8, 100);
+  int ret = hid_interrupt_read(hid, 0x81, msg, 8, 100);
 
   if (ret != HID_RET_SUCCESS) {
     fprintf(stderr, "hid_interrupt_read failed with return code %d\n", ret);
     return ret;
-  } else {
-    for (i = 0; i < 8; i++) {
-      printf("%02x ", msg[i]);
-    }
-    printf("\"");
-    for(i=0; i<8; i++) {
-      printf("%c", isprint(msg[i]) ? msg[i] : '.');
-    }
-    printf("\" ");
   }
   return 0;
 }
@@ -248,27 +239,43 @@ int main(void)
    *   // now use the RECV_PACKET_LEN bytes starting at *packet.
    */
 
-   char buffer_in[8], buffer_out[8] = "B";
+   char buffer_in[8], buffer_out[8] = "L";
 
    hid_set_debug(HID_DEBUG_ALL & ~(HID_DEBUG_TRACES | HID_DEBUG_NOTICES));
 
-   int i;
-   for(i='A';i<='Z';i++) {
-     buffer_out[0] = i;
-     printf("'%c': ", i);
+   int cmd, i, count, done;
+   for(cmd='A';cmd<='Z';cmd++) {
+     buffer_out[0] = cmd;
+     printf("'%c': ", cmd);
      tripp_lite_send(hid, buffer_out);
      fflush(stdout);
-     sleep(1);
+     // sleep(1);
+     usleep(1000*250);
+     done = count = 0;
 
-     tripp_lite_receive(hid, buffer_in);
+     // Each tripp_lite_receive call should take ~10 ms (because of the way
+     // Interrupt In requests are queued)
+     while(!done && count++ < 100*5) {
+       tripp_lite_receive(hid, buffer_in);
 
-     if(buffer_in[0] != buffer_out[0]) {
-       puts("(mismatch)");
+       done = (buffer_in[0] == buffer_out[0]);
+     }
+
+     // printf(" (%d cycles) ", count);
+
+     if(done) {
+       for (i = 0; i < 8; i++) {
+	 printf("%02x ", buffer_in[i]);
+       }
+       printf("\"");
+       for(i=0; i<8; i++) {
+	 printf("%c", isprint(buffer_in[i]) ? buffer_in[i] : '.');
+       }
+       printf("\"\n");
      } else {
-       puts("(OK)");
+       printf("?\n");
      }
      fflush(stdout);
-     sleep(1);
    }
 
    ret = hid_close(hid);
