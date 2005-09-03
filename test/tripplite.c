@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
 
 bool match_serial_number(struct usb_dev_handle* usbdev, void* custom, unsigned int len)
 {
@@ -13,6 +14,61 @@ bool match_serial_number(struct usb_dev_handle* usbdev, void* custom, unsigned i
   free(buffer);
   return ret;
 }
+
+int tripp_lite_send(HIDInterface* hid, const char *msg)
+{
+  int const path_out[] = {0xffa00001,0xffa00002,0xffa10005 };
+  int i, ret, csum = 0;
+  char buffer[8];
+  
+  for(i=1;i<8;i++) buffer[i] = 0;
+
+  buffer[0] = ':';
+
+  for(i=0;msg[i];i++) {
+    buffer[i+1] = msg[i];
+    csum += msg[i];
+  }
+  buffer[i+1] = 255-(csum & 0xff);
+  buffer[i+2] = 0x0d;
+  if((i+2) > 8) {
+    fprintf(stderr, "tripp_lite_send: message too long (%d)\n", i+1);
+    return -1;
+  }
+
+  for(i=0;i<8;i++) {
+    printf("%02x ", buffer[i]);
+  }
+  printf("-> ");
+
+  ret = hid_set_output_report(hid, path_out, 3, buffer, 8);
+  if (ret != HID_RET_SUCCESS) {
+    fprintf(stderr, "hid_set_output_report failed with return code %d\n", ret);
+  }
+
+  return ret;
+}
+  
+int tripp_lite_receive(HIDInterface* hid, char *msg)
+{
+  int i, ret = hid_interrupt_read(hid, 0x81, msg, 8, 100);
+
+  if (ret != HID_RET_SUCCESS) {
+    fprintf(stderr, "hid_interrupt_read failed with return code %d\n", ret);
+    return ret;
+  } else {
+    for (i = 0; i < 8; i++) {
+      printf("%02x ", msg[i]);
+    }
+    printf("\"");
+    for(i=0; i<8; i++) {
+      printf("%c", isprint(msg[i]) ? msg[i] : '.');
+    }
+    printf("\" ");
+  }
+  return 0;
+}
+
 
 int main(void)
 {
@@ -91,7 +147,7 @@ int main(void)
     return 1;
   }
 
-#if 1
+#if 0
   ret = hid_dump_tree(stdout, hid);
   if (ret != HID_RET_SUCCESS) {
     fprintf(stderr, "hid_dump_tree failed with return code %d\n", ret);
@@ -192,53 +248,28 @@ int main(void)
    *   // now use the RECV_PACKET_LEN bytes starting at *packet.
    */
 
-#if 0
-   ret = usb_set_configuration(hid->dev_handle, 1);
-   if (ret != 0) {
-	   fprintf(stderr, "usb_set_configuration: return = %d\n", ret);
-   }
-#endif
-
-   // Apparently this isn't necessary:
-   // hid_set_idle(hid, 0, 0);
-
-   /* Magic:            :     S                           */
-   char buffer_out[8] = { 0x3a, 0x53, 0xac, 0x0d, 0, 0, 0, 0 };
-   char buffer_in[8];
-
-   int i;
-   int const path_out[] = {0xffa00001,0xffa00002,0xffa10005 };
-
-   ret = hid_set_output_report(hid, path_out, 3, buffer_out, 8);
-   if (ret != HID_RET_SUCCESS) {
-     fprintf(stderr, "hid_set_output_report failed with return code %d\n", ret);
-   }
+   char buffer_in[8], buffer_out[8] = "B";
 
    hid_set_debug(HID_DEBUG_ALL & ~(HID_DEBUG_TRACES | HID_DEBUG_NOTICES));
-   puts("Interrupt report:");
 
-   while(1) {
-     fprintf(stderr, "-> ");
-
-     ret = hid_set_output_report(hid, path_out, 3, buffer_out, 8);
-     if (ret != HID_RET_SUCCESS) {
-       fprintf(stderr, "hid_set_output_report failed with return code %d\n", ret);
-     }
-
+   int i;
+   for(i='A';i<='Z';i++) {
+     buffer_out[0] = i;
+     printf("'%c': ", i);
+     tripp_lite_send(hid, buffer_out);
+     fflush(stdout);
      sleep(1);
 
-     ret = hid_interrupt_read(hid, 0x81, buffer_in, 8, 100);
-     if (ret != HID_RET_SUCCESS) {
-       fprintf(stderr, "hid_interrupt_read failed with return code %d\n", ret);
+     tripp_lite_receive(hid, buffer_in);
+
+     if(buffer_in[0] != buffer_out[0]) {
+       puts("(mismatch)");
      } else {
-       for (i = 0; i < 8; i++) {
-	 printf("%02x ", buffer_in[i]);
-       }
-       puts("");
+       puts("(OK)");
      }
+     fflush(stdout);
      sleep(1);
    }
-
 
    ret = hid_close(hid);
    if (ret != HID_RET_SUCCESS) {
@@ -271,3 +302,4 @@ int main(void)
  * WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES
  * OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
+// vim:sw=2
