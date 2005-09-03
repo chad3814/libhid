@@ -28,7 +28,7 @@ EXTRA_DIST = README
 __init__.py: hid.py
 	ln -f $< $@
 
-%.py %_wrap.c: %.i
+%.py %_wrap.c: %.i ../include/hid.h
 	$(SWIG) $(SWIGFLAGS) $<
 	echo '#include <compiler.h>' > tmp.c
 	sed -e 's/PyObject \*self/& UNUSED/' \
