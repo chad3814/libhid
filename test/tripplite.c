@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include <ctype.h>
 
 bool match_serial_number(struct usb_dev_handle* usbdev, void* custom, unsigned int len)
@@ -93,6 +94,7 @@ int main(void)
 
   /* see include/debug.h for possible values */
   hid_set_debug(HID_DEBUG_NOTRACES);
+  // hid_set_debug(HID_DEBUG_ALL);
   hid_set_debug_stream(stderr);
   /* passed directly to libusb */
   hid_set_usb_debug(0);
@@ -244,14 +246,20 @@ int main(void)
 
    hid_set_debug(HID_DEBUG_ALL & ~(HID_DEBUG_TRACES | HID_DEBUG_NOTICES));
 
-   int cmd = 'B', i, count, done;
+   int cmd = 'L', i, count, done;
    long voltage, hz;
+   time_t now;
+
    /* for(cmd='A';cmd<='Z';cmd++) */ while(1) {
-     if(cmd == 'B') { cmd = 'S'; } else { 
-       if(cmd == 'S') cmd = 'L'; else {
-	 cmd = 'B';
-	 sleep(1);
-	 puts("");
+     if(cmd == 'L') { cmd = 'B'; } else {
+       if(cmd == 'B') { cmd = 'S'; } else { 
+	 if(cmd == 'S') cmd = 'F'; else {
+	   cmd = 'L';
+	   sleep(2);
+	   puts("");
+	   now = time(NULL);
+	   puts(ctime(&now));
+	 }
        }
      }
 
