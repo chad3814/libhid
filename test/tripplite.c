@@ -199,46 +199,62 @@ int main(void)
    }
 #endif
 
-  hid_set_idle(hid, 0, 0);
+   // Apparently this isn't necessary:
+   // hid_set_idle(hid, 0, 0);
 
-  char buffer[8] = { 0x3a, 0x53, 0xac, 0x0d, 0, 0, 0, 0 };
-  int i;
-  int const path_out[] = {0xffa00001,0xffa00002,0xffa10005 };
-  ret = hid_set_output_report(hid, path_out, 3, buffer, 8);
-  if (ret != HID_RET_SUCCESS) {
-    fprintf(stderr, "hid_set_output_report failed with return code %d\n", ret);
-  }
+   /* Magic:            :     S                           */
+   char buffer_out[8] = { 0x3a, 0x53, 0xac, 0x0d, 0, 0, 0, 0 };
+   char buffer_in[8];
 
-  while(1) {
-	  ret = hid_interrupt_read(hid, 0x81, buffer, 8, 100);
-	  if (ret != HID_RET_SUCCESS) {
-		  fprintf(stderr, "hid_interrupt_read failed with return code %d\n", ret);
-	  } else {
-		  printf("Interrupt report:\n");
-		  for (i = 0; i < 8; i++) {
-			  printf("%02x ", buffer[i]);
-		  }
-		  puts("");
-	  }
-	  sleep(1);
-  }
+   int i;
+   int const path_out[] = {0xffa00001,0xffa00002,0xffa10005 };
+
+   ret = hid_set_output_report(hid, path_out, 3, buffer_out, 8);
+   if (ret != HID_RET_SUCCESS) {
+     fprintf(stderr, "hid_set_output_report failed with return code %d\n", ret);
+   }
+
+   hid_set_debug(HID_DEBUG_ALL & ~(HID_DEBUG_TRACES | HID_DEBUG_NOTICES));
+   puts("Interrupt report:");
+
+   while(1) {
+     fprintf(stderr, "-> ");
+
+     ret = hid_set_output_report(hid, path_out, 3, buffer_out, 8);
+     if (ret != HID_RET_SUCCESS) {
+       fprintf(stderr, "hid_set_output_report failed with return code %d\n", ret);
+     }
+
+     sleep(1);
+
+     ret = hid_interrupt_read(hid, 0x81, buffer_in, 8, 100);
+     if (ret != HID_RET_SUCCESS) {
+       fprintf(stderr, "hid_interrupt_read failed with return code %d\n", ret);
+     } else {
+       for (i = 0; i < 8; i++) {
+	 printf("%02x ", buffer_in[i]);
+       }
+       puts("");
+     }
+     sleep(1);
+   }
 
 
-  ret = hid_close(hid);
-  if (ret != HID_RET_SUCCESS) {
-	  fprintf(stderr, "hid_close failed with return code %d\n", ret);
-	  return 1;
-  }
+   ret = hid_close(hid);
+   if (ret != HID_RET_SUCCESS) {
+     fprintf(stderr, "hid_close failed with return code %d\n", ret);
+     return 1;
+   }
 
-  hid_delete_HIDInterface(&hid);
+   hid_delete_HIDInterface(&hid);
 
-  ret = hid_cleanup();
-  if (ret != HID_RET_SUCCESS) {
-	  fprintf(stderr, "hid_cleanup failed with return code %d\n", ret);
-	  return 1;
-  }
+   ret = hid_cleanup();
+   if (ret != HID_RET_SUCCESS) {
+     fprintf(stderr, "hid_cleanup failed with return code %d\n", ret);
+     return 1;
+   }
 
-  return 0;
+   return 0;
 }
 
 /* COPYRIGHT --
