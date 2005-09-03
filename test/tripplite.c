@@ -240,23 +240,32 @@ int main(void)
    *   // now use the RECV_PACKET_LEN bytes starting at *packet.
    */
 
-   char buffer_in[8], buffer_out[] = "W\0";
+   char buffer_in[8], buffer_out[] = "B";
 
    hid_set_debug(HID_DEBUG_ALL & ~(HID_DEBUG_TRACES | HID_DEBUG_NOTICES));
 
-   int cmd, i, count, done;
-   for(cmd='A';cmd<='A';cmd++) {
-     // buffer_out[0] = cmd;
-     // printf("'%c': ", cmd);
+   int cmd = 'B', i, count, done;
+   long voltage, hz;
+   /* for(cmd='A';cmd<='Z';cmd++) */ while(1) {
+     if(cmd == 'B') { cmd = 'S'; } else { 
+       if(cmd == 'S') cmd = 'L'; else {
+	 cmd = 'B';
+	 sleep(1);
+	 puts("");
+       }
+     }
+
+     buffer_out[0] = cmd;
+     printf("'%c': ", cmd);
      tripp_lite_send(hid, buffer_out, sizeof(buffer_out));
      fflush(stdout);
      // sleep(1);
-     usleep(1000*250);
+     usleep(1000*100);
      done = count = 0;
 
      // Each tripp_lite_receive call should take ~10 ms (because of the way
      // Interrupt In requests are queued)
-     while(!done && count++ < 100*5) {
+     while(!done && count++ < 100*2) {
        tripp_lite_receive(hid, buffer_in);
 
        done = (buffer_in[0] == buffer_out[0]);
@@ -265,14 +274,32 @@ int main(void)
      // printf(" (%d cycles) ", count);
 
      if(done) {
+       // Hex:
        for (i = 0; i < 8; i++) {
 	 printf("%02x ", buffer_in[i]);
        }
+
+       // ASCII:
        printf("\"");
        for(i=0; i<8; i++) {
 	 printf("%c", isprint(buffer_in[i]) ? buffer_in[i] : '.');
        }
-       printf("\"\n");
+       printf("\"");
+
+       switch(buffer_in[0]) {
+	 case 'B':
+	   voltage = strtol(buffer_in+5, NULL, 16);
+	   printf(" = %f VDC ", voltage / 16.0);
+	   buffer_in[5] = 0;
+	   hz = strtol(buffer_in+1, NULL, 16);
+	   printf("%f Hz", hz / 55.0);
+	   break;
+	 case 'L':
+	   voltage = strtol(buffer_in+1, NULL, 16);
+	   printf(" = %f VAC", voltage / 2.0);
+	   break;
+       }
+       puts("");
      } else {
        printf("?\n");
      }
