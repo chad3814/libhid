@@ -17,6 +17,9 @@
 
 #define HID_REPORT_GET 0x01
 #define HID_REPORT_SET 0x09
+
+#define HID_GET_IDLE   0x02
+#define HID_SET_IDLE   0x0A
   
 #define HID_RT_INPUT 0x01
 #define HID_RT_OUTPUT 0x02

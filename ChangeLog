@@ -1,6 +1,13 @@
 libhid ChangeLog
 ================
 
+2005-09-02  Charles Lepple (clepple+libhid@ghz.cc)
+  - Added hid_interrupt_write() and hid_set_idle() functions. [255]
+  - Added usb_strerror() calls to most of the hid_exchange functions to aid in
+    debugging. [255]
+  - Patched hidparser with fix applied to NUT (affects APC UPSes) [254]
+  - Misc changes to extract_report_descriptor [251],[253]
+
 2005-07-07  Charles Lepple (clepple+libhid@ghz.cc)
   - Removed hardcoded reference to Python 2.3 and /usr/include. Pointed out by
     Martin Dengler, and patch suggested by Martin Krafft. SVN changeset: [244]

@@ -155,6 +155,13 @@ hid_return hid_dump_tree(FILE* const out, HIDInterface* const hidif);
 hid_return hid_interrupt_read(HIDInterface* const hidif, unsigned int const ep,
     char* const bytes, unsigned int const size, unsigned int const timeout);
 
+hid_return hid_interrupt_write(HIDInterface* const hidif, unsigned int const ep,
+    const char* const bytes, unsigned int const size, unsigned int const timeout);
+
+hid_return hid_set_idle(HIDInterface * const hidif,
+    unsigned duration, unsigned report_id);
+
+
 #ifdef __cplusplus
 }
 #endif
