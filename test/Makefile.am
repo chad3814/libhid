@@ -5,7 +5,11 @@ AM_CPPFLAGS =
 AM_CFLAGS =
 AM_LDFLAGS =
 
-noinst_PROGRAMS = test_libhid lshid
+noinst_PROGRAMS = test_libhid lshid tripplite
+tripplite_SOURCES = tripplite.c
+tripplite_DEPENDENCIES = ../src/libhid.la
+tripplite_LDADD = ../src/libhid.la
+
 test_libhid_SOURCES = test_libhid.c
 test_libhid_DEPENDENCIES = ../src/libhid.la
 test_libhid_LDADD = ../src/libhid.la
