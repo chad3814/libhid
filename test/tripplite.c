@@ -15,23 +15,24 @@ bool match_serial_number(struct usb_dev_handle* usbdev, void* custom, unsigned i
   return ret;
 }
 
-int tripp_lite_send(HIDInterface* hid, const char *msg)
+int tripp_lite_send(HIDInterface* hid, const char *msg, size_t len)
 {
   int const path_out[] = {0xffa00001,0xffa00002,0xffa10005 };
-  int i, ret, csum = 0;
+  int ret, csum = 0;
+  size_t i;
   char buffer[8];
-  
+
   for(i=1;i<8;i++) buffer[i] = 0;
 
   buffer[0] = ':';
 
-  for(i=0;msg[i];i++) {
+  for(i=0;i<len;i++) {
     buffer[i+1] = msg[i];
     csum += msg[i];
   }
-  buffer[i+1] = 255-(csum & 0xff);
-  buffer[i+2] = 0x0d;
-  if((i+2) > 8) {
+  buffer[i] = 255-(csum & 0xff);
+  buffer[i+1] = 0x0d;
+  if((i+1) > 8) {
     fprintf(stderr, "tripp_lite_send: message too long (%d)\n", i+1);
     return -1;
   }
@@ -91,10 +92,10 @@ int main(void)
   HIDInterfaceMatcher matcher = { 0x09ae, 0x01, NULL, NULL, 0 };
 
   /* see include/debug.h for possible values */
-  hid_set_debug(HID_DEBUG_ALL);
+  hid_set_debug(HID_DEBUG_NOTRACES);
   hid_set_debug_stream(stderr);
   /* passed directly to libusb */
-  hid_set_usb_debug(5);
+  hid_set_usb_debug(0);
   
   ret = hid_init();
   if (ret != HID_RET_SUCCESS) {
@@ -239,15 +240,15 @@ int main(void)
    *   // now use the RECV_PACKET_LEN bytes starting at *packet.
    */
 
-   char buffer_in[8], buffer_out[8] = "L";
+   char buffer_in[8], buffer_out[] = "W\0";
 
    hid_set_debug(HID_DEBUG_ALL & ~(HID_DEBUG_TRACES | HID_DEBUG_NOTICES));
 
    int cmd, i, count, done;
-   for(cmd='A';cmd<='Z';cmd++) {
-     buffer_out[0] = cmd;
-     printf("'%c': ", cmd);
-     tripp_lite_send(hid, buffer_out);
+   for(cmd='A';cmd<='A';cmd++) {
+     // buffer_out[0] = cmd;
+     // printf("'%c': ", cmd);
+     tripp_lite_send(hid, buffer_out, sizeof(buffer_out));
      fflush(stdout);
      // sleep(1);
      usleep(1000*250);
