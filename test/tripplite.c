@@ -16,12 +16,12 @@ bool match_serial_number(struct usb_dev_handle* usbdev, void* custom, unsigned i
   return ret;
 }
 
-int tripp_lite_send(HIDInterface* hid, const char *msg, size_t len)
+int tripp_lite_send(HIDInterface* hid, const unsigned char *msg, size_t len)
 {
   int const path_out[] = {0xffa00001,0xffa00002,0xffa10005 };
   int ret, csum = 0;
   size_t i;
-  char buffer[8];
+  unsigned char buffer[8];
 
   for(i=1;i<8;i++) buffer[i] = 0;
 
@@ -39,11 +39,11 @@ int tripp_lite_send(HIDInterface* hid, const char *msg, size_t len)
   }
 
   for(i=0;i<8;i++) {
-    printf("%02x ", buffer[i]);
+    printf("%02x ", (unsigned)(buffer[i]));
   }
   printf("-> ");
 
-  ret = hid_set_output_report(hid, path_out, 3, buffer, 8);
+  ret = hid_set_output_report(hid, path_out, 3, (char *)buffer, 8);
   if (ret != HID_RET_SUCCESS) {
     fprintf(stderr, "hid_set_output_report failed with return code %d\n", ret);
   }
@@ -51,9 +51,9 @@ int tripp_lite_send(HIDInterface* hid, const char *msg, size_t len)
   return ret;
 }
   
-int tripp_lite_receive(HIDInterface* hid, char *msg)
+int tripp_lite_receive(HIDInterface* hid, unsigned char *msg)
 {
-  int ret = hid_interrupt_read(hid, 0x81, msg, 8, 100);
+  int ret = hid_interrupt_read(hid, 0x81, (char *)msg, 8, 2000);
 
   if (ret != HID_RET_SUCCESS) {
     fprintf(stderr, "hid_interrupt_read failed with return code %d\n", ret);
@@ -242,29 +242,33 @@ int main(void)
    *   // now use the RECV_PACKET_LEN bytes starting at *packet.
    */
 
-   char buffer_in[8], buffer_out[] = "B";
+   unsigned char buffer_in[8], buffer_out[] = "B";
 
    hid_set_debug(HID_DEBUG_ALL & ~(HID_DEBUG_TRACES | HID_DEBUG_NOTICES));
 
-   int cmd = 'L', i, count, done;
+   unsigned int cmd = 'L', i, count, done;
    long voltage, hz;
    time_t now;
 
-   /* for(cmd='A';cmd<='Z';cmd++) */ while(1) {
+   for(cmd='R';cmd<='Z';cmd++) /* while(1) */ {
+#if 0
      if(cmd == 'L') { cmd = 'B'; } else {
        if(cmd == 'B') { cmd = 'S'; } else { 
 	 if(cmd == 'S') cmd = 'F'; else {
 	   cmd = 'L';
+#endif
 	   sleep(2);
 	   puts("");
 	   now = time(NULL);
 	   puts(ctime(&now));
+#if 0
 	 }
        }
      }
+#endif
 
      buffer_out[0] = cmd;
-     printf("'%c': ", cmd);
+     printf("'%c': ", (char)cmd);
      tripp_lite_send(hid, buffer_out, sizeof(buffer_out));
      fflush(stdout);
      // sleep(1);
@@ -273,18 +277,19 @@ int main(void)
 
      // Each tripp_lite_receive call should take ~10 ms (because of the way
      // Interrupt In requests are queued)
-     while(!done && count++ < 100*2) {
+
+     // while(!done && count++ < 100*2) {
        tripp_lite_receive(hid, buffer_in);
 
        done = (buffer_in[0] == buffer_out[0]);
-     }
+     //}
 
      // printf(" (%d cycles) ", count);
 
      if(done) {
        // Hex:
        for (i = 0; i < 8; i++) {
-	 printf("%02x ", buffer_in[i]);
+	 printf("%02x ", (unsigned)buffer_in[i]);
        }
 
        // ASCII:
@@ -296,14 +301,14 @@ int main(void)
 
        switch(buffer_in[0]) {
 	 case 'B':
-	   voltage = strtol(buffer_in+5, NULL, 16);
+	   voltage = strtol((char *)buffer_in+5, NULL, 16);
 	   printf(" = %f VDC ", voltage / 16.0);
 	   buffer_in[5] = 0;
-	   hz = strtol(buffer_in+1, NULL, 16);
+	   hz = strtol((char *)buffer_in+1, NULL, 16);
 	   printf("%f Hz", hz / 55.0);
 	   break;
 	 case 'L':
-	   voltage = strtol(buffer_in+1, NULL, 16);
+	   voltage = strtol((char *)buffer_in+1, NULL, 16);
 	   printf(" = %f VAC", voltage / 2.0);
 	   break;
        }
