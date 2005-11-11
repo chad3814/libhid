@@ -5,6 +5,9 @@
 
 @section sec_intro Introduction
 
+<p><b>For a more up-to-date version of this page</b>, please consult <a
+href="http://libhid.alioth.debian.org/">http://libhid.alioth.debian.org</a>.</p>
+
 <p>libhid is a user-space HID access library written in C. It provides
 a generic and flexible way to access and interact with USB HID devices, much
 like libusb does for plain USB devices. It is based on <a
@@ -53,9 +56,7 @@ target="_blank">archives</a> ] -- a mailing list receiving
 CVS commit mails. This list is being superceded by libhid-commits (below).</li>
 
 <li><a href="http://lists.alioth.debian.org/mailman/listinfo/libhid-commits"
-target="_blank"><strong>libhid-commits</strong></a> [ <a
-href="http://lists.alioth.debian.org/pipermail/libhid-commits/"
-target="_blank">archives</a> ] -- a mailing list receiving
+target="_blank"><strong>libhid-commits</strong></a> [ archived via websvn ] -- a mailing list receiving
 Subversion (svn) commit mails. If you want to closely track libhid development, you
 probably want to subscribe to this list.</li>
 
@@ -71,15 +72,29 @@ list!</p>
 <p>libhid is available through various ways. In the following, we list the
 possibilities in decreasing order of preference/currency:</p>
 
-@subsection ssec_cvs CVS
+@subsection ssec_svn Subversion (SVN)
 
-<p>The CVS tree contains the most recent version of libhid. You can check it
-out in read-only mode with the following commands (the password is empty, so
-just hit enter when prompted):</p>
+<p>The <a href="http://subversion.tigris.org/" target="_blank">Subversion</a>
+tree will be the preferred development repository from here forward.
+The CVS version history is available in the Subversion repository as
+well.</p>
+
+<p>To check out the latest version of libhid into the directory
+<tt>libhid-svn</tt>, ensure that Subversion is installed, and use the
+following command:</p>
 
 <code>
-cvs -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external login<br />
-cvs -z3 -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external co libhid 
+svn co svn://svn.ailab.ch/libhid/trunk libhid-svn
+</code>
+
+<p>To retrieve a particular released (or otherwise tagged) version of libhid,
+simply modify the checkout URL. You may have to browse with <a
+href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/" target="_blank">viewcvs</a> to
+find the exact tag name. As an example, let's retrieve version 0.2.8-1:</p>
+
+<code>
+
+svn co svn://svn.ailab.ch/libhid/tags/0.2.8-1 libhid-0.2.8-1
 </code>
 
 <p>Instructions on how to compile the code are available in the <a
@@ -87,14 +102,17 @@ href="./README" target="_blank">README</a> file. Please do not hesitate to
 write to the <a href="mailto:libhid-discuss@lists.ailab.ch">mailing list</a>
 if you have questions, comments, or problems.</p>
 
-<p>In addition, the CVS tree can be viewed <a
-href="http://cvs.ailab.ch/cgi-bin/viewcvs.cgi/libhid/"
-target="_blank">online</a>.</p>
+<p>The Subversion tree can also be viewed <a
+href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/" target="_blank">online</a> via
+viewcvs. The latest version is available at the <a
+href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/trunk/"
+target="_blank">trunk</a>.</p>
 
 <p>If you want to contribute, please send a patch or two. We cannot give out
-write access to the CVS just like that, but if you show us a patch, we'll
-conclude that you are serious about developing libhid, and you'll get your
-account.</p>
+write access to the Subversion tree just like that, but if you show us
+a patch, we'll conclude that you are serious about developing libhid, and give
+you permission.
+</p>
 
 @subsection ssec_debian Debian
 
@@ -103,8 +121,11 @@ use my (madduck) repository to always get the latest versions. Simply add the
 following to your <tt>/etc/apt/sources.list</tt> file:</p>
 
 <code>
-deb http://people.debian.org/~madduck/stage ./<br />
-deb-src http://people.debian.org/~madduck/stage ./
+deb     http://debian.madduck.net ~madduck/packages/stage/libhid/
+</code>
+
+<code>
+deb-src http://debian.madduck.net ~madduck/packages/stage/libhid/
 </code>
 
 <p>and then install it. You may leave out <tt>python-hid</tt> if you do not
@@ -123,8 +144,14 @@ the extension <tt>.orig.tar.gz</tt>, download it, unpack it, and then do
 the standard</p>
 
 <code>
-$ ./configure &amp;&amp; make<br />
-$ su<br />
+$ ./configure &amp;&amp; make
+</code>
+
+<code>
+$ su
+</code>
+
+<code>
 # make install
 </code>
 
@@ -203,11 +230,10 @@ Martin, for testing, and to express their gratitude.</li>
 
 </ul>
 
-<hr />
-
-<p><a href="http://validator.w3.org/check?uri=referer"><img border="0"
+<!-- not even close... -->
+<!-- <p><a href="http://validator.w3.org/check?uri=referer"><img border="0"
 src="http://www.w3.org/Icons/valid-xhtml11" alt="Valid XHTML 1.1!" height="31"
-width="88" /></a></p>
+width="88"></img></a></p> -->
 
 <pre>
 $Id$
