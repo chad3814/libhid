@@ -85,7 +85,7 @@ static hid_return hid_prepare_report_descriptor(HIDInterface* const hidif)
   }
 
   if (len < hidif->hid_parser->ReportDescSize) {
-    WARNING("HID descriptor for USB device %s is too short; "
+    WARNING("HID report descriptor for USB device %s is too short; "
         "expected: %d bytes; got: %d bytes.\n", hidif->id,
         hidif->hid_parser->ReportDescSize, len);
     return HID_RET_REPORT_DESC_SHORT;
