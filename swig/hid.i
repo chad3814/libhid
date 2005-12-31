@@ -21,6 +21,39 @@
 // hid_interrupt_write()
 %apply (char *STRING, int LENGTH) { (const char* const bytes, unsigned int const size) }
 
+// Python-specific; this should be moved to another file which includes this
+// (to-be generic) hid.i file.
+
+// Convert tuples or lists to paths (and depth)
+// Ref: http://www.swig.org/Doc1.3/Python.html
+%typemap(in) (int const path[], unsigned int const depth) {
+  int i, size;
+  int *temp;
+
+  if (!PySequence_Check($input)) {
+    PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
+    return NULL;
+  }
+
+  size = PySequence_Size($input);
+  temp = (int *)calloc(size, sizeof(int));
+
+  for (i =0; i < size; i++) {
+    PyObject *o = PySequence_GetItem($input,i);
+    if (!PyInt_Check(o)) {
+      PyErr_SetString(PyExc_ValueError,"Expecting a sequence of integers");
+      return NULL;
+    }
+    temp[i] = (int)PyInt_AsLong(o);
+  }
+
+  $1 = temp;
+  $2 = size;
+}
+%typemap(freearg) (int const path[], unsigned int const depth) {
+  free((char *) $1);
+}
+
 %include "hid.h"
 
 /* COPYRIGHT --
