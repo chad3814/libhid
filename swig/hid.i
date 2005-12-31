@@ -14,6 +14,11 @@
   }
 }
 
+%include "cstring.i"
+
+// hid_interrupt_write()
+%apply (char *STRING, int LENGTH) { (const char* const bytes, unsigned int const size) }
+
 %include "hid.h"
 
 /* COPYRIGHT --
