@@ -1,8 +1,10 @@
-%module hid
+%module(docstring="libhid is a user-space USB HID access library built on libusb.") hid 
 %{
 #include <compiler.h>
 #include <hid.h>
 %}
+
+%feature("autodoc","1");
 
 %include "exception.i"
 
