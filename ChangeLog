@@ -4,7 +4,7 @@ libhid ChangeLog
 2005-12-31  Charles Lepple (clepple+libhid@ghz.cc)
   - Added check for return values in hid_open() and hid_force_open() to catch
     the case where the interface is claimed, but the report descriptor cannot
-    be retrieved. [274]
+    be retrieved. [276]
 
 2005-09-02  Charles Lepple (clepple+libhid@ghz.cc)
   - Added hid_interrupt_write() and hid_set_idle() functions. [256]

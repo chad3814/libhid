@@ -20,6 +20,8 @@
 
 // hid_interrupt_write()
 %apply (char *STRING, int LENGTH) { (const char* const bytes, unsigned int const size) }
+// hid_set_output_report(), etc.
+%apply (char *STRING, int LENGTH) { (const char* const buffer, unsigned int const size) }
 
 // Python-specific; this should be moved to another file which includes this
 // (to-be generic) hid.i file.
