@@ -67,9 +67,13 @@
 %ignore dev_handle;	// Internal to libhid
 %immutable device;	// provided for identification purposes
 %immutable interface;
-%immutable id;		// Still needs to be treated like a C string
 %ignore hid_data;	// Nothing to see here...
 %ignore hid_parser;	// (The HID parser API is hidden)
+
+%immutable id;
+%typemap(out) char id[32] {
+    $result = PyString_FromString($1);
+}
 
 %include "hid.h"
 
