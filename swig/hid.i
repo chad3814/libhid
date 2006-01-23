@@ -56,14 +56,22 @@
   free((char *) $1);
 }
 
+// HIDInterface:
+%ignore dev_handle;	// Internal to libhid
+%immutable device;	// provided for identification purposes
+%immutable interface;
+%immutable id;		// Still needs to be treated like a C string
+%ignore hid_data;	// Nothing to see here...
+%ignore hid_parser;	// (The HID parser API is hidden)
+
 %include "hid.h"
 
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.
- * libhid is (c) 2003-2005
+ * libhid is (c) 2003-2006
  *   Martin F. Krafft <libhid@pobox.madduck.net>
- *   Charles Lepple <clepple@ghz.cc>
+ *   Charles Lepple <clepple+libhid@ghz.cc>
  *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
  * and distributed under the terms of the GNU General Public License.
  * See the file ./COPYING in the source distribution for more information.
