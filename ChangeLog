@@ -1,6 +1,11 @@
 libhid ChangeLog
 ================
 
+2006-01-22  Charles Lepple (clepple+libhid@ghz.cc)
+  - Merged in SWIG changes to make the Python bindings more useful.  This
+    commit also had a few extra changes to some support programs and scripts,
+    but those changes were not of great consequence. [284]
+
 2005-12-31  Charles Lepple (clepple+libhid@ghz.cc)
   - Added check for return values in hid_open() and hid_force_open() to catch
     the case where the interface is claimed, but the report descriptor cannot
