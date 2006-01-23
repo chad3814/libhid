@@ -44,13 +44,13 @@ dist_noinst_PYTHON = test_libhid.py
 run test: test_libhid.py $(pkgpyexec_LTLIBRARIES)
 	python ./$<
 
-startup.py: $(pkgpyexec_LTLIBRARIES)
-	echo "from hid import *" > $@
-	echo "import sys" >> $@
-	echo "import os" >> $@
-	echo "libsdir = os.getcwd() + '/.libs'" >> $@
-	echo "if os.path.isdir(libsdir) and os.path.isfile(libsdir + '/_hid.so'):" >> $@
-		echo "sys.path.insert(0, libsdir)" >> $@
+startup.py: $(pkgpyexec_LTLIBRARIES) Makefile
+	echo "import sys,os" > $@
+	echo "libsdir = os.path.join(os.getcwd(), '.libs')" >> $@
+	echo "if os.path.isdir(libsdir) and \\" >> $@
+	echo "        os.path.isfile(os.path.join(libsdir,'_hid.so')):" >> $@
+	echo "    sys.path.insert(0, libsdir)" >> $@
+	echo "from hid import *" >> $@
 
 .PHONY: python
 python: startup.py

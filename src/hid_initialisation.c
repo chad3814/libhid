@@ -3,6 +3,7 @@
  */
 #define HID_INTERNAL
 
+#include "config.h"
 #include <hid.h>
 #include <hid_helpers.h>
 
@@ -65,6 +66,9 @@ hid_return hid_init()
     ERROR("cannot initialised already initialised HID library");
     return HID_RET_ALREADY_INITIALISED;
   }
+
+  /* Include version to make deciphering logfiles easier: */
+  NOTICE(PACKAGE_STRING " is being initialized.");
   
   TRACE("initialising USB subsystem...");
   usb_init();
