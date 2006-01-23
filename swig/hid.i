@@ -30,7 +30,7 @@
 // Ref: http://www.swig.org/Doc1.3/Python.html
 %typemap(in) (int const path[], unsigned int const depth) {
   int i, size;
-  int *temp;
+  int *temp = NULL;
 
   if (!PySequence_Check($input)) {
     PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
@@ -52,8 +52,15 @@
   $1 = temp;
   $2 = size;
 }
+// Ref: http://www.swig.org/Doc1.3/Typemaps.html#Typemaps_nn33
 %typemap(freearg) (int const path[], unsigned int const depth) {
-  free((char *) $1);
+  if($1) free((char *) $1);
+}
+// Set argument to NULL before any conversion occurs (apparently we have an
+// ordering issue where certain failure cases can result in free()ing memory
+// before it has been allocated)
+%typemap(arginit) (int const path[], unsigned int const depth) {
+   $1 = NULL;
 }
 
 // HIDInterface:
