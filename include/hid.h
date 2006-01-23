@@ -71,13 +71,17 @@ typedef struct HIDInterface_t {
 
 typedef bool (*matcher_fn_t)(struct usb_dev_handle const* usbdev,
     void* custom, unsigned int len);
+
 typedef struct HIDInterfaceMatcher_t {
   unsigned short vendor_id;
   unsigned short product_id;
-  matcher_fn_t matcher_fn;
-  void* custom_data;
-  unsigned int custom_data_length;
+#ifndef SWIG
+  matcher_fn_t matcher_fn;	//!< Only supported in C library (not via SWIG)
+  void* custom_data;		   //!< Only used by matcher_fn
+  unsigned int custom_data_length; //!< Only used by matcher_fn
+#endif
 } HIDInterfaceMatcher;
+
 #define HID_ID_MATCH_ANY 0x0000
 
 /*!@brief Bitmask for selection of debugging messages
@@ -171,9 +175,9 @@ hid_return hid_set_idle(HIDInterface * const hidif,
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.
- * libhid is (c) 2003-2005
+ * libhid is (c) 2003-2006
  *   Martin F. Krafft <libhid@pobox.madduck.net>
- *   Charles Lepple <clepple@ghz.cc>
+ *   Charles Lepple <clepple+libhid@ghz.cc>
  *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
  * and distributed under the terms of the GNU General Public License.
  * See the file ./COPYING in the source distribution for more information.
