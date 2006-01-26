@@ -39,7 +39,8 @@ int main(void)
    * Then the match will only be on vendor and product ID.
    */
 
-  HIDInterfaceMatcher matcher = { 0x0925, 0x1237, NULL, NULL, 0 };
+  // HIDInterfaceMatcher matcher = { 0x0925, 0x1237, NULL, NULL, 0 };
+  HIDInterfaceMatcher matcher = { 0x51d, 0x0002, NULL, NULL, 0 };
 
   /* see include/debug.h for possible values */
   hid_set_debug(HID_DEBUG_ALL);

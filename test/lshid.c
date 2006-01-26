@@ -71,6 +71,7 @@ bool device_iterator (struct usb_dev_handle const* usbdev, void* custom, unsigne
 
   /* Filter non HID device */
   if ( (usbdev->device->descriptor.bDeviceClass == 0) /* Class defined at interface level */
+	&& usbdev->device->config
 	&& usbdev->device->config->interface->altsetting->bInterfaceClass == USB_CLASS_HID)
 	  ret = true;
   else
@@ -89,7 +90,8 @@ int main(void)
   /* hid_write_library_config(stdout); */
   
   /* hid_set_debug(HID_DEBUG_NOTRACES); */
-  hid_set_debug(HID_DEBUG_NONE);
+  // hid_set_debug(HID_DEBUG_NONE);
+  hid_set_debug(HID_DEBUG_ALL);
   hid_set_debug_stream(stderr);
   hid_set_usb_debug(0);
 
@@ -105,7 +107,7 @@ int main(void)
   matcher.matcher_fn = device_iterator;
 
   /* open recursively all HID devices found */
-  while ( (ret = hid_open(hid, 0, &matcher)) != HID_RET_DEVICE_NOT_FOUND)
+  while ( (ret = hid_force_open(hid, 0, &matcher, 2)) != HID_RET_DEVICE_NOT_FOUND)
 	{
 	  printf("************************************************************************\n");
 	  

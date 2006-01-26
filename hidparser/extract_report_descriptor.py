@@ -128,9 +128,9 @@ def main():
         fname = '../ref/test_libhid_output/MGE_Pulsar_Evolution_500'
 
     f = open(fname, 'r')
-    desc_bytes = extract_bytes(f)
+    # desc_bytes = extract_bytes(f)
     # - or -
-    #desc_bytes = extract_bytes_libhid(f)
+    desc_bytes = extract_bytes_libhid(f)
     f.close()
 
     tokenize_descriptor(desc_bytes)
