@@ -99,6 +99,12 @@ hid_return wrap_hid_interrupt_read(HIDInterface* const hidif, unsigned int const
 _doc = hid_interrupt_read.__doc__
 hid_interrupt_read = wrap_hid_interrupt_read
 hid_interrupt_read.__doc__ = _doc
+
+import sys
+hid_return = {}
+for sym in dir(sys.modules[__name__]):
+    if sym.startswith('HID_RET_'):
+        hid_return[eval(sym)] = sym
 %}
 
 /* COPYRIGHT --
