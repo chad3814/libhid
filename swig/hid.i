@@ -4,7 +4,7 @@
 #include <hid.h>
 %}
 
-%feature("autodoc","1");
+%feature("autodoc","0");
 
 %include "exception.i"
 
@@ -39,7 +39,6 @@ hid_return wrap_hid_interrupt_read(HIDInterface* const hidif, unsigned int const
    return res;
 }
 %}  
-%feature("autodoc","hid_interrupt_read(hidif, ep, size, timeout) -> hid_return,bytes") wrap_hid_interrupt_read;
 
 // Python-specific; this should be moved to another file which includes this
 // (to-be generic) hid.i file.
@@ -93,10 +92,13 @@ hid_return wrap_hid_interrupt_read(HIDInterface* const hidif, unsigned int const
     $result = PyString_FromString($1);
 }
 
+%feature("autodoc","hid_interrupt_read(hidif, ep, size, timeout) -> hid_return,bytes") hid_interrupt_read;
 %include "hid.h"
 
 %pythoncode %{
+_doc = hid_interrupt_read.__doc__
 hid_interrupt_read = wrap_hid_interrupt_read
+hid_interrupt_read.__doc__ = _doc
 %}
 
 /* COPYRIGHT --
