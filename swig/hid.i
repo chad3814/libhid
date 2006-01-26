@@ -20,8 +20,26 @@
 
 // hid_interrupt_write()
 %apply (char *STRING, int LENGTH) { (const char* const bytes, unsigned int const size) }
+
 // hid_set_output_report(), etc.
 %apply (char *STRING, int LENGTH) { (const char* const buffer, unsigned int const size) }
+
+// hid_interrupt_read()
+%cstring_output_withsize(char* const bytes_out, unsigned int* const size_out);
+%inline %{
+hid_return wrap_hid_interrupt_read(HIDInterface* const hidif, unsigned int const ep,
+    char* const bytes_out, unsigned int* const size_out, unsigned int const timeout)
+{
+   int res;
+
+   res=hid_interrupt_read(hidif, ep, bytes_out, *size_out, timeout);
+   if (res != HID_RET_SUCCESS) {
+      *size_out = 0;
+   }
+   return res;
+}
+%}  
+%feature("autodoc","hid_interrupt_read(hidif, ep, size, timeout) -> hid_return,bytes") wrap_hid_interrupt_read;
 
 // Python-specific; this should be moved to another file which includes this
 // (to-be generic) hid.i file.
@@ -76,6 +94,10 @@
 }
 
 %include "hid.h"
+
+%pythoncode %{
+hid_interrupt_read = wrap_hid_interrupt_read
+%}
 
 /* COPYRIGHT --
  *
