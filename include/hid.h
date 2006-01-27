@@ -138,11 +138,11 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
 hid_return hid_set_output_report(HIDInterface* const hidif, int const path[],
     unsigned int const depth, char const* const buffer, unsigned int const size);
 
-/*
 hid_return hid_get_item_value(HIDInterface* const hidif,
                               int const path[], unsigned int const depth,
                               double *const value);
 
+/*
 hid_return hid_get_item_string(HIDInterface* const hidif,
                                int const path[], unsigned int const depth,
                                char *const value, unsigned int const maxlen);

@@ -1,6 +1,11 @@
 libhid ChangeLog
 ================
 
+2006-01-26  Charles Lepple (clepple+libhid@ghz.cc)
+  - More SWIG fixes; namely, hid_interrupt_read() and hid_get_input_report().
+    [288],[291]
+  - Uncommented hid_get_item_value() in hid.h [291]
+
 2006-01-22  Charles Lepple (clepple+libhid@ghz.cc)
   - Merged in SWIG changes to make the Python bindings more useful.  This
     commit also had a few extra changes to some support programs and scripts,
