@@ -16,33 +16,6 @@
   }
 }
 
-%include "cstring.i"
-
-// hid_interrupt_write()
-%apply (char *STRING, int LENGTH) { (const char* const bytes, unsigned int const size) }
-
-// hid_set_output_report(), etc.
-%apply (char *STRING, int LENGTH) { (const char* const buffer, unsigned int const size) }
-
-// hid_interrupt_read()
-%cstring_output_withsize(char* const bytes_out, unsigned int* const size_out);
-%inline %{
-hid_return wrap_hid_interrupt_read(HIDInterface* const hidif, unsigned int const ep,
-    char* const bytes_out, unsigned int* const size_out, unsigned int const timeout)
-{
-   int res;
-
-   res=hid_interrupt_read(hidif, ep, bytes_out, *size_out, timeout);
-   if (res != HID_RET_SUCCESS) {
-      *size_out = 0;
-   }
-   return res;
-}
-%}  
-
-// Python-specific; this should be moved to another file which includes this
-// (to-be generic) hid.i file.
-
 // Convert tuples or lists to paths (and depth)
 // Ref: http://www.swig.org/Doc1.3/Python.html
 %typemap(in) (int const path[], unsigned int const depth) {
@@ -80,6 +53,50 @@ hid_return wrap_hid_interrupt_read(HIDInterface* const hidif, unsigned int const
    $1 = NULL;
 }
 
+%include "cstring.i"
+
+// hid_interrupt_write()
+%apply (char *STRING, int LENGTH) { (const char* const bytes, unsigned int const size) }
+
+// hid_set_output_report(), etc.
+%apply (char *STRING, int LENGTH) { (const char* const buffer, unsigned int const size) }
+
+// hid_get_item_value()
+%apply double *OUTPUT { double *const value };
+
+// hid_interrupt_read()
+%cstring_output_withsize(char* const bytes_out, unsigned int* const size_out);
+%inline %{
+hid_return wrap_hid_interrupt_read(HIDInterface* const hidif, unsigned int const ep,
+    char* const bytes_out, unsigned int* const size_out, unsigned int const timeout)
+{
+   int res;
+
+   res=hid_interrupt_read(hidif, ep, bytes_out, *size_out, timeout);
+   if (res != HID_RET_SUCCESS) {
+      *size_out = 0;
+   }
+   return res;
+}
+%}  
+
+// hid_get_input_report()
+%inline %{
+hid_return wrap_hid_get_input_report(HIDInterface* const hidif, 
+    int const path[], unsigned int const depth,
+    char* const bytes_out, unsigned int* const size_out)
+{
+   int res;
+
+   res=hid_get_input_report(hidif, path, depth, bytes_out, *size_out);
+   if (res != HID_RET_SUCCESS) {
+      *size_out = 0;
+   }
+   return res;
+}
+%}  
+
+
 // HIDInterface:
 %ignore dev_handle;	// Internal to libhid
 %immutable device;	// provided for identification purposes
@@ -93,12 +110,17 @@ hid_return wrap_hid_interrupt_read(HIDInterface* const hidif, unsigned int const
 }
 
 %feature("autodoc","hid_interrupt_read(hidif, ep, size, timeout) -> hid_return,bytes") hid_interrupt_read;
+%feature("autodoc","hid_get_input_report(hidif, path, size) -> hid_return,bytes") hid_get_input_report;
 %include "hid.h"
 
 %pythoncode %{
 _doc = hid_interrupt_read.__doc__
 hid_interrupt_read = wrap_hid_interrupt_read
 hid_interrupt_read.__doc__ = _doc
+
+_doc = hid_get_input_report.__doc__
+hid_get_input_report = wrap_hid_get_input_report
+hid_get_input_report.__doc__ = _doc
 
 import sys
 hid_return = {}
