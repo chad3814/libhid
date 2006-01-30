@@ -12,6 +12,8 @@
 hid_return hid_os_force_claim(HIDInterface* const hidif, int const interface,
     HIDInterfaceMatcher const* const matcher, unsigned short)
 {
+  retries = retries;
+	
   if (!hidif) {
     ERROR("cannot open NULL HIDInterface.");
     return HID_RET_INVALID_PARAMETER;

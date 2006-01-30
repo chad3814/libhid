@@ -9,7 +9,7 @@ AC_DEFUN([MD_CHECK_OS],
         MD_OS=linux
         AC_MSG_RESULT(Linux)
         ;;
-      *-freebsd*|*-openbsd*|*-netbsd*)
+      *-freebsd*|*-openbsd*|*-netbsd*|*-k*bsd*-gnu)
         AC_DEFINE(OS_BSD, [], [define to 1 if building for BSD])
         AC_SUBST(OS_BSD)
         MD_OS=bsd
