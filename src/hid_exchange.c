@@ -39,7 +39,7 @@ hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
 
   hid_find_object(hidif, path, depth);
 
-  TRACE("retrieving report ID %d (length: %d) from USB device %s...", 
+  TRACE("retrieving report ID 0x%02x (length: %d) from USB device %s...", 
         hidif->hid_data->ReportID, size, hidif->id);
 
   int len = usb_control_msg(hidif->dev_handle,
@@ -95,13 +95,125 @@ hid_return hid_set_output_report(HIDInterface* const hidif, int const path[],
 
   hid_find_object(hidif, path, depth);
 
-  TRACE("sending report ID %d (length: %d) to USB device %s...", 
+  TRACE("sending report ID 0x%02x (length: %d) to USB device %s...", 
         hidif->hid_data->ReportID, size, hidif->id);
 
   int len = usb_control_msg(hidif->dev_handle,
       USB_ENDPOINT_OUT + USB_TYPE_CLASS + USB_RECIP_INTERFACE,
       HID_REPORT_SET,
       hidif->hid_data->ReportID + (HID_RT_OUTPUT << 8),
+      hidif->interface,
+      (char*)buffer, size, USB_TIMEOUT);
+
+  if (len < 0) {
+    WARNING("failed to send report to USB device %s:%s.", hidif->id,usb_strerror());
+    return HID_RET_FAIL_SET_REPORT;
+  }
+
+  if (len != (signed)size) {
+    WARNING("failed to send complete report to USB device %s; "
+        "requested: %d bytes, sent: %d bytes.", hidif->id, 
+        size, len);
+    return HID_RET_FAIL_SET_REPORT;
+  }
+
+  NOTICE("successfully sent report to USB device %s.", hidif->id);
+  return HID_RET_SUCCESS;
+}
+
+/*!@brief Send a control message to retrieve an entire feature report
+ *
+ * To use an interrupt endpoint instead of EP0, use hid_interrupt_read().
+ *
+ * @param[in] hidif Which interface to query
+ * @param[in] path  Path to input item (to find Report ID)
+ * @param[in] depth See hid_find_object()
+ * @param[out] buffer Result is stored here
+ * @param[in] size  How many bytes to fetch
+ */
+hid_return hid_get_feature_report(HIDInterface* const hidif, int const path[],
+    unsigned int const depth, char* const buffer, unsigned int const size)
+{
+  ASSERT(hid_is_initialised());
+  ASSERT(hid_is_opened(hidif));
+  ASSERT(buffer);
+
+  if (!buffer) return HID_RET_INVALID_PARAMETER;
+
+  if (!hid_is_opened(hidif)) {
+    WARNING("the device has not been opened.");
+    return HID_RET_DEVICE_NOT_OPENED;
+  }
+
+  TRACE("looking up report ID...");
+  hidif->hid_data->Type = ITEM_FEATURE;
+  hidif->hid_data->ReportID = 0;
+
+  hid_find_object(hidif, path, depth);
+
+  TRACE("retrieving report ID 0x%02x (length: %d) from USB device %s...", 
+        hidif->hid_data->ReportID, size, hidif->id);
+
+  int len = usb_control_msg(hidif->dev_handle,
+      USB_ENDPOINT_IN + USB_TYPE_CLASS + USB_RECIP_INTERFACE,
+      HID_REPORT_GET,
+      hidif->hid_data->ReportID + (HID_RT_FEATURE << 8),
+      hidif->interface,
+      buffer, size, USB_TIMEOUT);
+
+  if (len < 0) {
+    WARNING("failed to retrieve report from USB device %s:%s.", hidif->id, usb_strerror());
+    return HID_RET_FAIL_GET_REPORT;
+  }
+
+  if (len != (signed)size) {
+    WARNING("failed to retrieve complete report from USB device %s; "
+        "requested: %d bytes, got: %d bytes.", hidif->id, size, len);
+    return HID_RET_FAIL_GET_REPORT;
+  }
+
+  NOTICE("successfully retrieved report from USB device %s.", hidif->id);
+  return HID_RET_SUCCESS;
+}
+
+/*!@brief Send an entire feature report to the device
+ *
+ * This routine uses a control message to send the report. To use an interrupt
+ * endpoint, use hid_interrupt_write().
+ *
+ * @param[in] hidif Which interface to send to
+ * @param[in] path  Path to an output item (to find Report ID)
+ * @param[in] depth See hid_find_object()
+ * @param[in] buffer Output Report
+ * @param[in] size  How many bytes to send
+ */
+hid_return hid_set_feature_report(HIDInterface* const hidif, int const path[],
+    unsigned int const depth, char const* const buffer, unsigned int const size)
+{
+  ASSERT(hid_is_initialised());
+  ASSERT(hid_is_opened(hidif));
+  ASSERT(buffer);
+
+  if (!buffer) return HID_RET_INVALID_PARAMETER;
+
+  if (!hid_is_opened(hidif)) {
+    WARNING("the device has not been opened.");
+    return HID_RET_DEVICE_NOT_OPENED;
+  }
+
+  TRACE("looking up report ID...");
+  hidif->hid_data->Type = ITEM_FEATURE;
+  hidif->hid_data->ReportID = 0;
+
+  hid_find_object(hidif, path, depth);
+
+  TRACE("sending report ID 0x%02x (length: %d) to USB device %s...", 
+        hidif->hid_data->ReportID, size, hidif->id);
+
+  int len = usb_control_msg(hidif->dev_handle,
+      USB_ENDPOINT_OUT + USB_TYPE_CLASS + USB_RECIP_INTERFACE,
+      HID_REPORT_SET,
+      hidif->hid_data->ReportID + (HID_RT_FEATURE << 8),
       hidif->interface,
       (char*)buffer, size, USB_TIMEOUT);
 
