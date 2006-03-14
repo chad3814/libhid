@@ -90,7 +90,7 @@ hid_return hid_prepare_parser(HIDInterface* const hidif)
 		  sprintf(tmp, "0x%02x ", (int)(hidif->hid_parser->ReportDesc[i]));
 		  strcat(buffer, tmp);
 	  }
-	  if(hidif->hid_parser->ReportDescSize % 8) TRACE("%s", buffer);
+	  TRACE("%s", buffer);
   }
   
   /* TODO: the return value here should be used, no? */
