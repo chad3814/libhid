@@ -1,9 +1,12 @@
 libhid ChangeLog
 ================
 
-2006-03-13  Frédéric Ler (fredo@starox.org)
+2006-03-25  Charles Lepple (clepple+libhid@ghz.cc)
+  - Added SWIG bindings for get/set feature report functions
+
+2006-03-13  Frédéric Leroy (fredo@starox.org)
   - added 2 functions in order to use feature item :
-    hid_get_feature_report() and hid_set_feature_report()
+    hid_get_feature_report() and hid_set_feature_report() [296]
 
 2006-01-26  Charles Lepple (clepple+libhid@ghz.cc)
   - More SWIG fixes; namely, hid_interrupt_read() and hid_get_input_report().

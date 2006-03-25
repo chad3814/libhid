@@ -96,6 +96,22 @@ hid_return wrap_hid_get_input_report(HIDInterface* const hidif,
 }
 %}  
 
+// hid_get_feature_report()
+%inline %{
+hid_return wrap_hid_get_feature_report(HIDInterface* const hidif, 
+    int const path[], unsigned int const depth,
+    char* const bytes_out, unsigned int* const size_out)
+{
+   int res;
+
+   res=hid_get_feature_report(hidif, path, depth, bytes_out, *size_out);
+   if (res != HID_RET_SUCCESS) {
+      *size_out = 0;
+   }
+   return res;
+}
+%}  
+
 
 // HIDInterface:
 %ignore dev_handle;	// Internal to libhid
@@ -111,6 +127,7 @@ hid_return wrap_hid_get_input_report(HIDInterface* const hidif,
 
 %feature("autodoc","hid_interrupt_read(hidif, ep, size, timeout) -> hid_return,bytes") hid_interrupt_read;
 %feature("autodoc","hid_get_input_report(hidif, path, size) -> hid_return,bytes") hid_get_input_report;
+%feature("autodoc","hid_get_feature_report(hidif, path, size) -> hid_return,bytes") hid_get_feature_report;
 %include "hid.h"
 
 %pythoncode %{
@@ -121,6 +138,10 @@ hid_interrupt_read.__doc__ = _doc
 _doc = hid_get_input_report.__doc__
 hid_get_input_report = wrap_hid_get_input_report
 hid_get_input_report.__doc__ = _doc
+
+_doc = hid_get_feature_report.__doc__
+hid_get_feature_report = wrap_hid_get_feature_report
+hid_get_feature_report.__doc__ = _doc
 
 import sys
 hid_return = {}
