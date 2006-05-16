@@ -69,7 +69,7 @@ static void ResetLocalState(HIDParser* pParser)
 }
 
 /*!
- * @return pointer on current offset value for Report designed by 
+ * @return pointer to current offset value for the Report designated by 
  * @a ReportID and @a ReportType, or @a NULL if not found.
  */
 uchar* GetReportOffset(HIDParser* pParser, 
@@ -97,7 +97,7 @@ uchar* GetReportOffset(HIDParser* pParser,
 }
 
 /*!
- * Format Value to fit with long format with respect of negative values
+ * Format Value to fit with long format with respect to negative values
  */
 long FormatValue(long Value, uchar Size)
 {
