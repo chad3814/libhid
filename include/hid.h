@@ -132,6 +132,8 @@ hid_return hid_close(HIDInterface* const hidif);
 
 bool hid_is_opened(HIDInterface const* const hidif);
 
+const char *hid_strerror(hid_return ret);
+
 hid_return hid_get_input_report(HIDInterface* const hidif, int const path[],
     unsigned int const depth, char* const buffer, unsigned int const size);
 

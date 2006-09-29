@@ -1,8 +1,11 @@
 libhid ChangeLog
 ================
 
+2006-09-28  Charles Lepple (clepple+libhid@ghz.cc)
+  - Added hid_strerror() for decoding return codes. [301]
+
 2006-03-25  Charles Lepple (clepple+libhid@ghz.cc)
-  - Added SWIG bindings for get/set feature report functions
+  - Added SWIG bindings for get/set feature report functions [298]
 
 2006-03-13  Frédéric Leroy (fredo@starox.org)
   - added 2 functions in order to use feature item :
