@@ -34,7 +34,7 @@ static hid_return hid_prepare_hid_descriptor(HIDInterface* const hidif)
       USB_TIMEOUT);
 
   if (len < 0) {
-    WARNING("failed to get HID descriptor for USB device %s", hidif->id);
+    WARNING("failed to get HID descriptor for USB device %s:%s", hidif->id, usb_strerror());
     return HID_RET_NOT_HID_DEVICE;
   }
 
