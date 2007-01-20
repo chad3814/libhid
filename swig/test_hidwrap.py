@@ -1,6 +1,14 @@
+#!/usr/bin/env python
+
 def main():
+    import sys, os
+
+    # allow it to run right out of the build dir:
+    libsdir = os.getcwd() + '/.libs'
+    if os.path.isdir(libsdir) and os.path.isfile(libsdir + '/_hid.so'):
+        sys.path.insert(0, libsdir)
+
     import hidwrap
-    import sys
 
     hidwrap.set_debug(hidwrap.HID_DEBUG_ALL)
     hidwrap.set_debug_stream(sys.stderr)
