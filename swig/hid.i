@@ -32,11 +32,16 @@
 
   for (i =0; i < size; i++) {
     PyObject *o = PySequence_GetItem($input,i);
-    if (!PyInt_Check(o)) {
+    if (PyInt_Check(o)) {
+      temp[i] = (int)PyInt_AsLong(o);
+    }
+    else if (PyLong_Check(o)) {
+      temp[i] = (int)PyLong_AsUnsignedLongMask(o);
+    }
+    else {
       PyErr_SetString(PyExc_ValueError,"Expecting a sequence of integers");
       return NULL;
     }
-    temp[i] = (int)PyInt_AsLong(o);
   }
 
   $1 = temp;
