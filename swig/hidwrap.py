@@ -111,7 +111,7 @@ def _finalize_hid():
 
 # interface -------------------------------------------------------------------
 class Interface:
-    def __init__(self, vendor_id, product_id, interface_number, 
+    def __init__(self, vendor_id, product_id, interface_number=0, 
             force_open=True, retries=3):
         self.is_open = False
 
