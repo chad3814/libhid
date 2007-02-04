@@ -22,6 +22,7 @@ _hid_la_DEPENDENCIES = ../src/libhid.la
 _hid_la_LDFLAGS = -module
 
 nodist_pkgpython_PYTHON = __init__.py
+pkgpython_PYTHON = hidwrap.py
 
 EXTRA_DIST = README
 

@@ -111,8 +111,8 @@ def _finalize_hid():
 
 # interface -------------------------------------------------------------------
 class Interface:
-    def __init__(self, vendor_id, product_id, interface_number=0, 
-            force_open=True, retries=3):
+    def __init__(self, vendor_id, product_id, interface_number, 
+            force=True, retries=3):
         self.is_open = False
 
         if not is_initialized():
@@ -124,11 +124,11 @@ class Interface:
 
         self.interface = hid.hid_new_HIDInterface()
 
-        if force_open:
+        if force:
             _hid_raise("force_open", hid.hid_force_open(
                 self.interface, interface_number, matcher, retries))
         else:
-            _hid_raise("open", hid.hid_force_open(self.interface, 0, matcher))
+            _hid_raise("open", hid.hid_open(self.interface, 0, matcher))
 
         self.is_open = True
 
@@ -168,11 +168,11 @@ class Interface:
         return _hid_raise("get_item_value",
                 hid.hid_get_item_value(self.interface, path))
 
-    def interrupt_read(self, endpoint, size, timeout):
+    def interrupt_read(self, endpoint, size, timeout=0):
         return _hid_raise("interrupt_read",
                 hid.hid_interrupt_read(self.interface, endpoint, size, timeout))
 
-    def interrupt_write(self, endpoint, bytes, timeout):
+    def interrupt_write(self, endpoint, bytes, timeout=0):
         return _hid_raise("interrupt_write",
                 hid.hid_interrupt_write(self.interface, endpoint, bytes, timeout))
 

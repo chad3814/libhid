@@ -1,4 +1,4 @@
-%module(docstring="libhid is a user-space USB HID access library built on libusb.") hid 
+%module(docstring="libhid is a user-space USB HID access library built on libusb.", "threads"=1) hid 
 %{
 #include <compiler.h>
 #include <hid.h>
@@ -158,7 +158,7 @@ for sym in dir(sys.modules[__name__]):
 /* COPYRIGHT --
  *
  * This file is part of libhid, a user-space HID access library.
- * libhid is (c) 2003-2006
+ * libhid is (c) 2003-2007
  *   Martin F. Krafft <libhid@pobox.madduck.net>
  *   Charles Lepple <clepple+libhid@ghz.cc>
  *   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
