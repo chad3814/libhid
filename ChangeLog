@@ -1,6 +1,11 @@
 libhid ChangeLog
 ================
 
+2007-02-27  Andreas Klöckner (lists@informa.tiker.net)
+  - Various SWIG patches, including a more Pythonic libhid wrapper, and
+    support for hid_strerror(). [304-314]
+  - Other build system fixes. [312], [315]
+
 2006-09-28  Charles Lepple (clepple+libhid@ghz.cc)
   - Added hid_strerror() for decoding return codes. [301]
 
