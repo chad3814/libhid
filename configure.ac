@@ -12,10 +12,11 @@ AC_PREREQ(2.57)
 #     if functions were added, arg1 = 0
 #     if not backward compatible, arg1 = arg2 = 0
 #
+m4_define([LIBHID_VERSION], [0.2.16])
 m4_define([IFACE_AGE], [0])
 m4_define([BIN_AGE],   [0])
 m4_define([MD_INIT_NAME], m4_esyscmd([set -- `head -1 README` && echo -n $1]))
-m4_define([MD_INIT_VERSION], m4_esyscmd([head -1 debian/changelog | sed -e 's,.*(\([^-]*\)-[0-9]*).*,\1,' | tr -d "\n"]).IFACE_AGE.BIN_AGE)
+m4_define([MD_INIT_VERSION], LIBHID_VERSION.IFACE_AGE.BIN_AGE)
 m4_define([MD_INIT_ADDRESS], m4_esyscmd([grep -i bugreports\ to README | sed -e 's,.*<\([^>]*\).*,\1,' | tr -d "\n"]))
 
 AC_INIT(MD_INIT_NAME, MD_INIT_VERSION, MD_INIT_ADDRESS)
