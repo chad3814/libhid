@@ -3,6 +3,7 @@
 #include <hid.h>
 #include <hid_helpers.h>
 #include <os.h>
+#include <errno.h>
 #include <constants.h>
 #include <compiler.h>
 
@@ -351,6 +352,11 @@ hid_return hid_interrupt_read(HIDInterface * const hidif,
                                size,
                                timeout);
 
+  if (len == -ETIMEDOUT) {
+    WARNING("timeout on interrupt read from device %s", hidif->id);
+    return HID_RET_TIMEOUT;
+  }
+
   if (len < 0) {
     WARNING("failed to get interrupt read from device %s: %s", hidif->id, usb_strerror());
     return HID_RET_FAIL_INT_READ;
@@ -399,6 +405,11 @@ hid_return hid_interrupt_write(HIDInterface * const hidif,
                                (char *)bytes,
                                size,
                                timeout);
+
+  if (len == -ETIMEDOUT) {
+    WARNING("timeout on interrupt write to device %s", hidif->id);
+    return HID_RET_TIMEOUT;
+  }
 
   if (len < 0) {
     WARNING("failed to perform interrupt write to device %s: %s", hidif->id, usb_strerror());

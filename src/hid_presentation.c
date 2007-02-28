@@ -148,6 +148,8 @@ const char *hid_strerror(hid_return ret)
       return "libhid: interrupt read failed";
     case HID_RET_NOT_FOUND:
       return "libhid: not found";
+    case HID_RET_TIMEOUT:
+      return "libhid: timeout";
   }
   return "libhid: unknown error";
 }

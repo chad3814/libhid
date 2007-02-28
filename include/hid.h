@@ -47,7 +47,8 @@ typedef enum hid_return_t {
   HID_RET_FAIL_SET_REPORT,
   HID_RET_FAIL_GET_REPORT,
   HID_RET_FAIL_INT_READ,
-  HID_RET_NOT_FOUND
+  HID_RET_NOT_FOUND,
+  HID_RET_TIMEOUT
 } hid_return;
 
 struct usb_dev_handle;
