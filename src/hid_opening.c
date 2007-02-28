@@ -36,8 +36,7 @@ static unsigned int hid_compare_usb_device(struct usb_dev_handle const* dev_h,
   else TRACE("no match on vendor ID.");
 
   TRACE("inspecting product ID...");
-  if (dev->descriptor.idProduct > 0 &&
-      (dev->descriptor.idProduct & match->product_id) == match->product_id) {
+  if ((dev->descriptor.idProduct & match->product_id) == match->product_id) {
       TRACE("match on product ID: 0x%04x.", dev->descriptor.idProduct);
       ret |= USB_MATCH_PRODUCT;
   }

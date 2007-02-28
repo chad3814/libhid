@@ -2,6 +2,7 @@ AC_DEFUN([MD_CONF_DB2MAN],
   [
     for file in \
       /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl \
+      /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/*/manpages/docbook.xsl \
       /usr/share/{x,sg}ml/docbook/xsl-stylesheets-*/manpages/docbook.xsl \
       /sw/share/xml/xsl/docbook-xsl/manpages/docbook.xsl; do
 
