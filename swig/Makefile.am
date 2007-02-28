@@ -18,7 +18,7 @@ dist_noinst_DATA = hid.i
 pkgpyexec_LTLIBRARIES = _hid.la
 
 nodist__hid_la_SOURCES = hid_wrap.c
-_hid_la_DEPENDENCIES = ../src/libhid.la
+_hid_la_LIBADD = ../src/libhid.la
 _hid_la_LDFLAGS = -module
 
 nodist_pkgpython_PYTHON = __init__.py

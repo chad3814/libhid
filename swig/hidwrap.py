@@ -23,32 +23,6 @@ class HIDError(Exception):
 
 
 def _hid_raise(op, result):
-    code_strings = {
-            HID_RET_SUCCESS: "Success",
-            HID_RET_INVALID_PARAMETER: "Invalid parameter",
-            HID_RET_NOT_INITIALISED: "Not initialized",
-            HID_RET_ALREADY_INITIALISED: "Already initialized",
-            HID_RET_FAIL_FIND_BUSSES: "Failed to find busses",
-            HID_RET_FAIL_FIND_DEVICES: "Failed to find devices",
-            HID_RET_FAIL_OPEN_DEVICE: "Failed to open device",
-            HID_RET_DEVICE_NOT_FOUND: "Device not found",
-            HID_RET_DEVICE_NOT_OPENED: "Device not opened",
-            HID_RET_DEVICE_ALREADY_OPENED: "Device already opened",
-            HID_RET_FAIL_CLOSE_DEVICE: "Failed to close device",
-            HID_RET_FAIL_CLAIM_IFACE: "Failed to claim interface",
-            HID_RET_FAIL_DETACH_DRIVER:" Failed to detach driver",
-            HID_RET_NOT_HID_DEVICE: "Not a HID device",
-            HID_RET_HID_DESC_SHORT: "HID descriptor too short",
-            HID_RET_REPORT_DESC_SHORT: "HID Report descriptor too short",
-            HID_RET_REPORT_DESC_LONG: "HID Report descriptor too long",
-            HID_RET_FAIL_ALLOC: "Failed to allocated memory",
-            HID_RET_OUT_OF_SPACE: "Ran out of space",
-            HID_RET_FAIL_SET_REPORT: "Failed to set report",
-            HID_RET_FAIL_GET_REPORT: "Failed to get report",
-            HID_RET_FAIL_INT_READ: "Failed to read interrupt report",
-            HID_RET_NOT_FOUND: "Not found"
-            }
-
     if isinstance(result, int):
         result_code = result
         retval = None
@@ -63,7 +37,7 @@ def _hid_raise(op, result):
 
     if result_code != hid.HID_RET_SUCCESS:
         try:
-            raise HIDError, (result_code, "%s: %s" % (op, code_strings[result_code]))
+            raise HIDError, (result_code, "%s: %s" % (op, hid.hid_strerror(result_code)))
         except KeyError:
             raise HIDError, (result_code, "%s: Unknown error code" % op)
     else:
