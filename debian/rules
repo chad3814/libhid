@@ -81,7 +81,7 @@ binary-arch: build install
 	dh_install -a --sourcedir=debian/tmp
 	dh_link -a
 	dh_strip -a
-	dh_python -a
+	dh_pysupport -a
 	dh_compress -a
 	dh_fixperms -a
 	dh_makeshlibs -a -Xpython

@@ -1,3 +1,47 @@
+libhid (0.2.15.99-1) unstable; urgency=low
+
+  * Custom-built package of what may become 0.2.16.
+
+ -- Andreas Kloeckner <inform@tiker.net>  Mon, 26 Feb 2007 19:09:25 -0500
+
+libhid (0.2.15+20060325-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Update package to the last python policy (Closes: #373450):
+    + only build for the current python atm (build-dep upon python-dev).
+    + use dh_pysupport instead of dh_python.
+
+ -- Pierre Habouzit <madcoder@debian.org>  Fri, 11 Aug 2006 18:45:16 +0200
+
+libhid (0.2.15+20060325-2) unstable; urgency=low
+
+  * forgot to close the fixed python binding bug (closes: Bug#350493)
+  * build on GNU/kFreeBSD as also been fixed upstream in svn (closes:
+    Bug#345190)
+
+ -- Arnaud Quette <aquette@debian.org>  Mon, 10 Apr 2006 14:42:52 +0200
+
+libhid (0.2.15+20060325-1) unstable; urgency=low
+
+  * SVN snapshot [298]
+  * Added get/set feature report functionality
+
+ -- Arnaud Quette <aquette@debian.org>  Mon, 10 Apr 2006 14:42:52 +0200
+
+libhid (0.2.15+20060127-1) experimental; urgency=low
+
+  * SVN snapshot [293]
+  * Includes fixes for some Python bindings
+
+ -- Charles Lepple <clepple@ghz.cc>  Fri, 27 Jan 2006 00:06:33 -0500
+
+libhid (0.2.15+20060123-1) experimental; urgency=low
+
+  * SVN snapshot [285]
+  * Includes improved Python bindings
+
+ -- Charles Lepple <clepple@ghz.cc>  Mon, 23 Jan 2005 22:31:00 -0500
+
 libhid (0.2.14-1) unstable; urgency=low
 
   * New upstream release.
@@ -61,6 +105,8 @@ libhid (0.2.7-3) unstable; urgency=medium
 
   * Argh. Forgot to set the urgency to medium since subversion depends on this
     upload. Memo to self: don't do these things at 3:30 am.
+
+ -- martin f. krafft <madduck@debian.org>  Fri, 22 Oct 2004 03:24:52 +0200
 
 libhid (0.2.7-2) unstable; urgency=low
 
