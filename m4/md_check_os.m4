@@ -15,6 +15,12 @@ AC_DEFUN([MD_CHECK_OS],
         MD_OS=bsd
         AC_MSG_RESULT(*BSD)
         ;;
+      *-solaris*)
+        AC_DEFINE(OS_SOLARIS, [], [define to 1 if building for Solaris])
+        AC_SUBST(OS_SOLARIS)
+        MD_OS=solaris
+        AC_MSG_RESULT(Solaris)
+	;;
       *-darwin*)
         AC_DEFINE(OS_DARWIN, [], [define to 1 if building for OS X (Darwin)])
         AC_SUBST(OS_DARWIN)

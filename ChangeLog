@@ -1,6 +1,10 @@
 libhid ChangeLog
 ================
 
+2007-03-30 Albert Lee (trisk+alioth@acm.jhu.edu)
+  - Remove internal copy of usb_dev_handle so that libhid builds with Solaris'
+    libusb. [318]
+
 2007-02-28  Martin F. Krafft (libhid@pobox.madduck.net)
   - Remove limitation for non-zero product IDs. Thanks Shahrouz Zolfaghari.
   - Add additional docbook location.

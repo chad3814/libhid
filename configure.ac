@@ -15,7 +15,7 @@ AC_PREREQ(2.57)
 m4_define([LIBHID_VERSION], [0.2.16])
 m4_define([IFACE_AGE], [0])
 m4_define([BIN_AGE],   [0])
-m4_define([MD_INIT_NAME], m4_esyscmd([set -- `head -1 README` && echo -n $1]))
+m4_define([MD_INIT_NAME], m4_esyscmd([set -- `head -1 README` && echo $1 | tr -d "\n"]))
 m4_define([MD_INIT_VERSION], LIBHID_VERSION.IFACE_AGE.BIN_AGE)
 m4_define([MD_INIT_ADDRESS], m4_esyscmd([grep -i bugreports\ to README | sed -e 's,.*<\([^>]*\).*,\1,' | tr -d "\n"]))
 
@@ -79,6 +79,7 @@ MD_CONF_DEBUGGING
 MD_CONF_COMPILER
 AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "linux")
 AM_CONDITIONAL(OS_BSD, test "$MD_OS" = "bsd")
+AM_CONDITIONAL(OS_SOLARIS, test "$MD_OS" = "solaris")
 AM_CONDITIONAL(OS_DARWIN, test "$MD_OS" = "darwin")
 
 MD_CHECK_SWIG([1.3])

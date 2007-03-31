@@ -27,29 +27,22 @@
 
 char *hid_id[32]; /* FIXME: 32 devices MAX */
 
-/* NOTE: included from libusb/usbi.h. UGLY, i know, but so is libusb! */
-struct usb_dev_handle {
-  int fd;
-  struct usb_bus *bus;
-  struct usb_device *device;
-  int config;
-  int interface;
-  int altsetting;
-  void *impl_info;
-};
+struct usb_dev_handle;
 
 bool device_iterator (struct usb_dev_handle const* usbdev, void* custom, unsigned int len)
 {
   bool ret = false;
   int i;
   char current_dev_path[10];
+  const struct usb_device *device = usb_device((struct usb_dev_handle *)usbdev);
   
   /* only here to prevent the unused warning */
   /* TODO remove */
   len = *((unsigned long*)custom);
  
   /* Obtain the device's full path */
-  sprintf(current_dev_path, "%s/%s", usbdev->bus->dirname, usbdev->device->filename);
+  //sprintf(current_dev_path, "%s/%s", usbdev->bus->dirname, usbdev->device->filename);
+  sprintf(current_dev_path, "%s/%s", device->bus->dirname, device->filename);
 
   /* Check if we already saw this dev */
   for ( i = 0 ; ( hid_id[i] != NULL ) ; i++ )
@@ -61,8 +54,8 @@ bool device_iterator (struct usb_dev_handle const* usbdev, void* custom, unsigne
   /* Append device to the list if needed */
   if (hid_id[i] == NULL)
 	{
-	  hid_id[i] = (char *) malloc (strlen(usbdev->device->filename) + strlen(usbdev->bus->dirname) );
-	  sprintf(hid_id[i], "%s/%s", usbdev->bus->dirname, usbdev->device->filename);
+	  hid_id[i] = (char *) malloc (strlen(device->filename) + strlen(device->bus->dirname) );
+	  sprintf(hid_id[i], "%s/%s", device->bus->dirname, device->filename);
 	}
   else /* device already seen */
 	{
@@ -70,9 +63,9 @@ bool device_iterator (struct usb_dev_handle const* usbdev, void* custom, unsigne
 	}
 
   /* Filter non HID device */
-  if ( (usbdev->device->descriptor.bDeviceClass == 0) /* Class defined at interface level */
-	&& usbdev->device->config
-	&& usbdev->device->config->interface->altsetting->bInterfaceClass == USB_CLASS_HID)
+  if ( (device->descriptor.bDeviceClass == 0) /* Class defined at interface level */
+	&& device->config
+	&& device->config->interface->altsetting->bInterfaceClass == USB_CLASS_HID)
 	  ret = true;
   else
 	  ret = false;

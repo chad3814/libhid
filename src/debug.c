@@ -21,16 +21,7 @@ void hid_set_usb_debug(int const level)
   usb_set_debug(level);
 }
 
-/* NOTE: included from libusb/usbi.h. UGLY, i know, but so is libusb! */
-struct usb_dev_handle {
-  int fd;
-  struct usb_bus *bus;
-  struct usb_device *device;
-  int config;
-  int interface;
-  int altsetting;
-  void *impl_info;
-};
+struct usb_dev_handle;
 
 void trace_usb_bus(FILE* out, struct usb_bus const* usbbus)
 {
@@ -87,14 +78,8 @@ void trace_usb_config_descriptor(FILE* out, struct usb_config_descriptor const* 
 
 void trace_usb_dev_handle(FILE* out, usb_dev_handle const* usbdev_h)
 {
-  fprintf(out, "usb_dev_handle instance at: %10p\n", usbdev_h);
-  fprintf(out, "  fd:                       %d\n", usbdev_h->fd);
-  fprintf(out, "  bus:                      %10p\n", usbdev_h->bus);
-  fprintf(out, "  device:                   %10p\n", usbdev_h->device);
-  fprintf(out, "  config:                   %d\n", usbdev_h->config);
-  fprintf(out, "  interface:                %d\n", usbdev_h->interface);
-  fprintf(out, "  altsetting:               %d\n", usbdev_h->altsetting);
-  fprintf(out, "  impl_info:                %10p\n", usbdev_h->impl_info);
+  struct usb_device *device = usb_device((usb_dev_handle *)usbdev_h);
+  trace_usb_device(out, device);
 }
 
 /* COPYRIGHT --

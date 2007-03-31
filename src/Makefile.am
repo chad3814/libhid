@@ -11,12 +11,16 @@ else
 if OS_BSD
 OS_SUPPORT_SOURCE = bsd.c
 else
+if OS_SOLARIS
+OS_SUPPORT_SOURCE = bsd.c
+else
 if OS_DARWIN
 OS_SUPPORT_SOURCE = darwin.c
 AM_CFLAGS += -no-cpp-precomp
 AM_LDFLAGS += -lIOKit -framework "CoreFoundation"
 else
 OS_SUPPORT =
+endif
 endif
 endif
 endif
