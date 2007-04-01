@@ -19,11 +19,10 @@ pkgpyexec_LTLIBRARIES = _hid.la
 
 nodist__hid_la_SOURCES = hid_wrap.c
 _hid_la_LIBADD = ../src/libhid.la
-# _hid_la_LDFLAGS = -module
-_hid_la_LDFLAGS = $(PYTHON_LDFLAGS)
+_hid_la_LDFLAGS = -module $(PYTHON_LDFLAGS)
 
 nodist_pkgpython_PYTHON = __init__.py
-pkgpython_PYTHON = hidwrap.py
+pkgpython_PYTHON = hid.py hidwrap.py
 
 EXTRA_DIST = README
 
