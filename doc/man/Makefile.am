@@ -1,4 +1,3 @@
-AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
 dist_man1_MANS = libhid-detach-device.1

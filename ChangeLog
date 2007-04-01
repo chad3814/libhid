@@ -1,6 +1,12 @@
 libhid ChangeLog
 ================
 
+2007-04-01 Charles Lepple (clepple+libhid@ghz.cc)
+  - Reworked a lot of the autoconf/automake code with regards to SWIG. This
+    allows 'make distcheck' to build the Python bindings, and it improves
+    detection of the paths for SWIG and Python.  SWIG is no longer necessary
+    unless you want the Python bindings. [328]
+
 2007-03-31 Charles Lepple (clepple+libhid@ghz.cc)
   - Moved CFLAGS into AM_CFLAGS in each directory's Makefile.am so that 'make
     distcheck' will work.

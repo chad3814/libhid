@@ -1,7 +1,9 @@
-# AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
-if PYTHONWRAPPER
+# Flags to pass to ./configure when calling "make distcheck":
+DISTCHECK_CONFIGURE_FLAGS = --without-doxygen
+
+if HAVE_SWIG
   MAYBE_PYTHONWRAPPER = swig
 endif
 SUBDIRS = hidparser src $(MAYBE_PYTHONWRAPPER) test doc
