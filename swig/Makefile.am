@@ -1,4 +1,4 @@
-AM_MAKEFLAGS = @MAKEFLAGS@
+# AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
 PYTHONINCLUDES = @PYTHON_PREFIX@/include/python@PYTHON_VERSION@
@@ -75,7 +75,7 @@ clean-local:
 # COPYRIGHT --
 #
 # This file is part of libhid, a user-space HID access library.
-# libhid is (c) 2003-2005
+# libhid is (c) 2003-2007
 #   Martin F. Krafft <libhid@pobox.madduck.net>
 #   Charles Lepple <clepple+libhid@ghz.cc>
 #   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>

@@ -1,13 +1,19 @@
 libhid ChangeLog
 ================
 
+2007-03-31 Charles Lepple (clepple+libhid@ghz.cc)
+  - Temporarily removed ccache/distcc because they don't recognize when they
+    are called via links. [320]
+  - Updated copyright on some Makefile.am files.
+  - Updated some properties on configure.ac
+
 2007-03-30 Albert Lee (trisk+alioth@acm.jhu.edu)
   - Remove internal copy of usb_dev_handle so that libhid builds with Solaris'
-    libusb. [318]
+    libusb. [319]
 
 2007-02-28  Martin F. Krafft (libhid@pobox.madduck.net)
   - Remove limitation for non-zero product IDs. Thanks Shahrouz Zolfaghari.
-  - Add additional docbook location.
+  - Add additional docbook location.  [318]
 
 2007-02-27  Andreas Klöckner (lists@informa.tiker.net)
   - Various SWIG patches, including a more Pythonic libhid wrapper, and
