@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 AM_CPPFLAGS =
-AM_CFLAGS = @OS_CFLAGS@ -fPIC
+AM_CFLAGS = @OS_CFLAGS@ -fPIC -I$(top_srcdir)/include -I$(top_srcdir)/hidparser
 AM_LDFLAGS = @OS_LDFLAGS@
 
 if OS_LINUX

@@ -2,7 +2,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 AM_CPPFLAGS =
-AM_CFLAGS =
+AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/hidparser
 AM_LDFLAGS =
 
 noinst_PROGRAMS = test_libhid lshid

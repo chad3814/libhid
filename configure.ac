@@ -89,7 +89,7 @@ MD_CHECK_SWIG([1.3])
 MD_CHECK_DOXYGEN
 
 MD_CONF_FLAGS(
-  [-I../include -I../hidparser],
+  [],
   [$OS_CFLAGS $LIBUSB_CFLAGS],
   [],
   [$OS_LDFLAGS $LIBUSB_LIBS]

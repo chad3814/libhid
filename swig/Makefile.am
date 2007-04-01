@@ -3,12 +3,12 @@ ACLOCAL_AMFLAGS = -I m4
 
 PYTHONINCLUDES = @PYTHON_PREFIX@/include/python@PYTHON_VERSION@
 
-AM_CPPFLAGS = -I$(PYTHONINCLUDES) -I../include -DHID_INTERNAL -DSWIG
-AM_CFLAGS = -fPIC -fno-strict-aliasing
+AM_CPPFLAGS = -I$(PYTHONINCLUDES) -I$(top_srcdir)/include -DHID_INTERNAL -DSWIG
+AM_CFLAGS = -fPIC -fno-strict-aliasing  -I$(top_srcdir)/include -I$(top_srcdir)/hidparser
 AM_LDFLAGS = -shared ../src/libhid.la -lusb
 
 SWIG = @SWIG_BIN@
-SWIGFLAGS = -python -I../include
+SWIGFLAGS = -python -I$(top_srcdir)/include
 
 # swig produces crap code :)
 override CFLAGS := $(subst -Werror,,$(CFLAGS))
@@ -29,12 +29,12 @@ EXTRA_DIST = README
 __init__.py: hid.py
 	ln -f $< $@
 
-%.py %_wrap.c: %.i ../include/hid.h
-	$(SWIG) $(SWIGFLAGS) $<
+%_wrap.c %.py: %.i $(top_srcdir)/include/hid.h
+	$(SWIG) $(SWIGFLAGS) -o $@ $<
 	echo '#include <compiler.h>' > tmp.c
 	sed -e 's/PyObject \*self/& UNUSED/' \
-	    -e 's/int flags)/int flags UNUSED)/' < $(patsubst %.i,%_wrap.c,$<) >> tmp.c \
-	&& mv tmp.c $(patsubst %.i,%_wrap.c,$<)
+	    -e 's/int flags)/int flags UNUSED)/' < $@ >> tmp.c \
+	&& mv tmp.c $@
 
 ../src/libhid.la::
 	@$(MAKE) -sC ../src libhid.la

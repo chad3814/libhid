@@ -2,6 +2,8 @@ libhid ChangeLog
 ================
 
 2007-03-31 Charles Lepple (clepple+libhid@ghz.cc)
+  - Moved CFLAGS into AM_CFLAGS in each directory's Makefile.am so that 'make
+    distcheck' will work.
   - Temporarily removed ccache/distcc because they don't recognize when they
     are called via links. [320]
   - Updated copyright on some Makefile.am files.
@@ -152,4 +154,4 @@ libhid ChangeLog
 
 Revision: $Id$
 
-# vim:et:ts=2
+# vim:et:ts=2:tw=78
