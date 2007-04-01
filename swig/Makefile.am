@@ -1,10 +1,10 @@
 # AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
-PYTHONINCLUDES = @PYTHON_PREFIX@/include/python@PYTHON_VERSION@
+# PYTHONINCLUDES = @PYTHON_PREFIX@/include/python@PYTHON_VERSION@
 
-AM_CPPFLAGS = -I$(PYTHONINCLUDES) -I$(top_srcdir)/include -DHID_INTERNAL -DSWIG
-AM_CFLAGS = -fPIC -fno-strict-aliasing  -I$(top_srcdir)/include -I$(top_srcdir)/hidparser
+AM_CPPFLAGS = -I$(PYTHON_CPPFLAGS) -I$(top_srcdir)/include -DHID_INTERNAL -DSWIG
+AM_CFLAGS = -fPIC -fno-strict-aliasing # -I$(top_srcdir)/include -I$(top_srcdir)/hidparser
 AM_LDFLAGS = -shared ../src/libhid.la -lusb
 
 SWIG = @SWIG_BIN@
@@ -19,7 +19,8 @@ pkgpyexec_LTLIBRARIES = _hid.la
 
 nodist__hid_la_SOURCES = hid_wrap.c
 _hid_la_LIBADD = ../src/libhid.la
-_hid_la_LDFLAGS = -module
+# _hid_la_LDFLAGS = -module
+_hid_la_LDFLAGS = $(PYTHON_LDFLAGS)
 
 nodist_pkgpython_PYTHON = __init__.py
 pkgpython_PYTHON = hidwrap.py
