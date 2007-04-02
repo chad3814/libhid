@@ -39,6 +39,8 @@ __init__.py: hid.py
 
 dist_noinst_PYTHON = test_libhid.py
 
+CLEANFILES = __init__.py hid.py
+
 .PHONY: run test
 run test: test_libhid.py $(pkgpyexec_LTLIBRARIES)
 	python ./$<

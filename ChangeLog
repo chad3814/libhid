@@ -6,6 +6,8 @@ libhid ChangeLog
     allows 'make distcheck' to build the Python bindings, and it improves
     detection of the paths for SWIG and Python.  SWIG is no longer necessary
     unless you want the Python bindings. [328]
+  - A little bit of cleanup in swig/Makefile.am, and now 'make distcheck'
+    finishes without any errors. [329]
 
 2007-03-31 Charles Lepple (clepple+libhid@ghz.cc)
   - Moved CFLAGS into AM_CFLAGS in each directory's Makefile.am so that 'make
