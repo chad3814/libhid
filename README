@@ -1,11 +1,11 @@
 libhid README
 =============
 
-libhid is (c) 2003-2005 by
+libhid is (c) 2003-2007 by
   Martin F. Krafft <libhid@pobox.madduck.net>
   Charles Lepple <clepple+libhid@ghz.cc>
   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
-and distributed under the terms of the GNU General Public License.
+and distributed under the terms of the GNU General Public License v2.
 See the file ./COPYING in the source distribution for more information.
 
 Revision: $Id$
@@ -27,14 +27,13 @@ libhid has been designed because it is needed in two other projects
 is rather a work in progress (alpha state). We invite everyone to contribute
 or get in touch with us for additional features.
 
-Please find more information on the project website (once information becomes 
-available):
+Please find more information on the project website:
 
   http://libhid.alioth.debian.org
 
 You are welcome to sign up with the libhid mailing list at
   
-  http://lists.ailab.ch/mailman/listinfo/libhid-discuss
+  http://lists.alioth.debian.org/mailman/listinfo/libhid-discuss
 
 for support.
 
@@ -43,46 +42,24 @@ Configuration
 
 To configure the package, you will need the following software. In parentheses
 are the versions used by the developers. Previous versions may work, but are
-not supported. The names directly correspond to the Debian packages providing
-the software.
+not supported.
 
-  - libtool     (1.5.6-1)
-  - automake1.8 (1.8.5-1)
-  - autoconf    (2.59-7)
-  - pkg-config  (0.15.0-4)
-  - gcc         (3.3.4-2)
-
-You should be able to use an earlier gcc 3.x compiler, or even a 2.x one (but
-*please*, not 2.96). However, when experiencing compilation problems, please
-upgrade your compiler.
-
-On Debian systems, automake1.8 works as well as automake1.9. A slight problem
-exists if automake1.4 is installed as it takes a higher priority than any
-younger version in the alternatives system. If you can, purge that package,
-it's trash. If, however, you need it, then you may want to consider pointing
-/usr/bin/automake elsewhere:
-
-  update-alternatives --set automake /usr/bin/automake-1.8
-
-(or use -1.9). When you (finally) remove automake1.4, you can surrender
-management back to the alternatives system:
-
-  update-alternatives --auto automake
-
-Make sure to check the version with `automake --version` before going on.
-
-Furthermore, libhid needs libusb version 0.1.8beta or newer. It does not work
-with libusb 1.0 at this moment. The following two Debian packages provide the
-needed software:
+libhid needs libusb version 0.1.8beta or newer. It does not work with libusb
+1.0 at this moment. The following two Debian packages provide the needed
+software:
 
   - libusb-0.1-4 (1:0.1.8-17)
   - libusb-dev (1:0.1.8-17)
+
+The libusb home page is here: http://libusb.sourceforge.net/
 
 If you want to build the swig python existension, you will need swig 1.3 
 installed. The following two Debian packages provide it:
 
   - libswig1.3.22 (1.3.22-3)
   - swig (1.3.22-3)
+
+The SWIG homepage is here: http://www.swig.org/
 
 To create man pages for the included utility programs, you need xsltproc and
 the DocBook stylesheets.
@@ -95,13 +72,10 @@ following Debian package:
 
   - doxygen (1.2.15-2)
 
-(Btw: pre-built Debian packages are available at
-  http://people.debian.org/~madduck/packages/stage/libhid/binary/)
-
 Once these are installed, the package can be configured and compiled.
 Configuration happens as follows:
 
-  $ ./autogen.sh [args]
+  $ ./configure [args]
 
 where [args] is a space-separated list of the following:
 
@@ -116,12 +90,12 @@ More options are available. Consult the `./configure --help` output.
 
 For most purposes, it suffices to issue the following command:
   
-  $ ./autogen.sh --enable-debug
+  $ ./configure --enable-debug
 
-The recommended way to install the software (see below) requires you to
-issue the following command:
+The recommended way to install the software requires you to issue the following
+command:
   
-  $ ./autogen.sh --enable-debug --prefix=/usr/local/stow/libhid
+  $ ./configure --enable-debug --prefix=/usr/local/stow/libhid
 
 Following the configuration, the package can be build and installed as usual:
 
@@ -136,7 +110,7 @@ Note that the library is not (yet) complete and it's not thoroughly tested.
 However, given the effort and grief we went through in writing it, we would
 like to make it available to folks, get people to test it, and hopefully have
 some peeps submit improvements. If you have any suggestions, please write to
-us at libhid-discuss@lists.ailab.ch.
+us at the mailing list mentioned above.
 
 It's not yet documented, although the usage should be fairly straight
 forward. We are hoping that someone steps forward and offers to document the
@@ -146,8 +120,8 @@ the authors.
 Furthermore, we are always looking for people willing to help out. In
 particular, we would love to find someone willing to maintain the website.
 We are also looking to rewrite the MGE HIDParser and implement new
-functionality. If you are interested, please contact us at
-libhid-discuss@lists.ailab.ch.
+functionality. If you are interested, please contact us at the libhid-discuss
+mailing list address above.
 
 Credits
 -------
@@ -171,6 +145,7 @@ and in your Makefile:
   CPPFLAGS += `pkg-config libhid --cflags`
   LDFLAGS += `pkg-config libhid --libs`
 
-If using automake, use the AM_* versions of the two variables.
+If using automake, use the AM_* versions of the two variables. See
+test/test_libhid.c and its Makefile.am for more details.
 
 Have fun.
