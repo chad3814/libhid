@@ -37,7 +37,7 @@ __init__.py: hid.py
 ../src/libhid.la::
 	@$(MAKE) -sC ../src libhid.la
 
-dist_noinst_PYTHON = test_libhid.py
+dist_noinst_PYTHON = test_libhid.py test_hidwrap.py
 
 CLEANFILES = __init__.py hid.py
 
