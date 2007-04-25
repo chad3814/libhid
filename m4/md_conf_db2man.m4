@@ -14,11 +14,11 @@ AC_DEFUN([MD_CONF_DB2MAN],
     else
       LOCATE=$(command -v locate)
       if test -x $LOCATE; then
-        db2man_file=$($LOCATE docbook.xsl)
+        db2man_file=$($LOCATE '*/manpages/docbook.xsl' | head -n 1)
       fi
 
       if [[ -z "$db2man_file" -o ! -r "$db2man_file" ]]; then
-        AC_ERROR([No appropriate db2man stylesheet found.])
+        AC_WARN([No appropriate db2man stylesheet found; man pages will not be rebuilt.])
       fi
     fi
     AM_CONDITIONAL(HAVE_DB2MAN, test -n "$db2man_file")
