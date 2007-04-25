@@ -1,8 +1,8 @@
-libhid (0.2.15.99-1) unstable; urgency=low
+libhid (0.2.16~1) experimental; urgency=low
 
-  * Custom-built package of what may become 0.2.16.
+  * New upstream release
 
- -- Andreas Kloeckner <inform@tiker.net>  Mon, 26 Feb 2007 19:09:25 -0500
+ -- Charles Lepple <clepple@ghz.cc>  Wed, 25 Apr 2007 19:36:28 -0400
 
 libhid (0.2.15+20060325-2.1) unstable; urgency=low
 
