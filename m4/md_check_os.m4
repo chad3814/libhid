@@ -25,13 +25,11 @@ AC_DEFUN([MD_CHECK_OS],
         AC_DEFINE(OS_DARWIN, [], [define to 1 if building for OS X (Darwin)])
         AC_SUBST(OS_DARWIN)
         MD_OS=darwin
-        OS_CFLAGS=-no-cpp-precomp
-        OS_LDFLAGS="-lIOKit -framework \"CoreFoundation\""
-        AC_MSG_RESULT(Darwin and/or MacOS 10)
+        AC_MSG_RESULT(Darwin and/or Mac OS X)
         ;;
       *)
         AC_MSG_RESULT(unknown)
-        AC_MSG_ERROR(libhid is not supported on $host)
+        AC_MSG_ERROR(libhid is not yet supported on $host)
     esac
 
     AC_SUBST(OS_CFLAGS)
