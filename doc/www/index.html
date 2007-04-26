@@ -16,7 +16,7 @@
 
 <h1>libhid</h1>
 
-<p>This is a temporary webpage for libhid, a user-space HID access library
+<p>Welcome to the webpage for libhid, a user-space HID access library
 written in C. It provides a generic and flexible way to access and interact
 with USB HID devices, much like libusb does for plain USB devices. It is based
 on <a href="http://libusb.sourceforge.net/" target="_blank">libusb</a>, thus it
@@ -62,16 +62,9 @@ target="_blank">archives</a> ] -- a subscriber-only list
 for general discussion. Everyone is cordially invited to join and
 participate.</li>
 
-<!-- <li><a href="http://lists.alioth.debian.org/listinfo/libhid-cvs"
-target="_blank"><strong>libhid-cvs</strong></a> [ <a
-href="http://lists.alioth.debian.org/pipermail/libhid-cvs/"
-target="_blank">archives</a> ] - - a mailing list receiving
-CVS commit mails. <strong>This list is being superceded by libhid-commits
-(below).</strong></li> -->
-
 <li><a href="http://lists.alioth.debian.org/mailman/listinfo/libhid-commits"
 target="_blank"><strong>libhid-commits</strong></a> [ archived via <a
-href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/" target="_blank">viewcvs</a> ] --
+href="http://svn.debian.org/wsvn/libhid/" target="_blank">websvn</a> ] --
 a mailing list receiving Subversion (svn) commit mails. If you want to closely
 track libhid development, you probably want to subscribe to this list.</li>
 
@@ -90,9 +83,8 @@ possibilities in decreasing order of preference/currency:</p>
 <h3>Subversion (svn)</h3>
 
 <p>The <a href="http://subversion.tigris.org/" target="_blank">Subversion</a>
-tree will be the preferred development repository from here forward.
-The CVS version history is available in the Subversion repository as
-well.</p>
+tree is the most current development repository.  The CVS version history has
+been imported into in the Subversion repository as well.</p>
 
 <p><strong>Update (2006-06-29):</strong> The SVN repository has moved <b>again</b>. We are now back at Alioth. (Many thanks to Martin Krafft for hosting libhid for these past two years.) If you have
 a checked out copy, please relocate it. If you have read-only access, use the
@@ -111,17 +103,6 @@ following command:</p>
 svn co svn://svn.debian.org/libhid/trunk libhid-svn
 </code>
 
-<!-- 
-<p>To retrieve a particular released (or otherwise tagged) version of libhid,
-simply modify the checkout URL. You may have to browse with <a
-href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/" target="_blank">viewcvs</a> to
-find the exact tag name. As an example, let's retrieve version 0.2.8-1:</p>
-
-<code>
-svn co svn://svn.ailab.ch/libhid/tags/0.2.8-1 libhid-0.2.8-1
-</code>
--->
-
 <p>Instructions on how to compile the code are available in the <a
 href="./README" target="_blank">README</a> file. Please do not hesitate to
 write to the <a href="mailto:libhid-discuss@lists.alioth.debian.org">mailing list</a>
@@ -133,14 +114,16 @@ websvn. The latest version is available at the <a
 href="http://svn.debian.org/wsvn/libhid/trunk/"
 target="_blank">trunk</a>.</p>
 
-<p>If you want to contribute, please send a patch or two. We cannot give out
-write access to the Subversion tree just like that, but if you show us
-a patch, we'll conclude that you are serious about developing libhid, and give
-you permission.
-You will need an account on <a href="http://alioth.debian.org"
+<p>If you want to contribute, please send a patch or two to the libhid-discuss
+mailing list (please keep patches under 20KB, or gzip them before attaching
+them).  After a few patches have been accepted, it would not be unreasonable
+for you to ask for SVN write access. For that, you would need an account on <a
+href="http://alioth.debian.org"
 target="_blank">Alioth</a>. You can <a
 href="http://alioth.debian.org/account/register.php" target="_blank">sign
 up</a> for free (and need not be affiliated with Debian).</p>
+
+<!-- 
 
 <h3>CVS</h3>
 
@@ -152,6 +135,7 @@ empty, so just hit enter when prompted):</p>
 cvs -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external login<br />
 cvs -z3 -d :pserver:anoncvs@cvs.ailab.ch:/home/cvs/external co libhid 
 </code>
+-->
 
 <!-- <p>In addition, the CVS tree can be viewed <a
 href="http://svn.ailab.ch/cgi-bin/cgi-bin/viewcvs.cgi/libhid/"
@@ -195,10 +179,10 @@ the extension <tt>.orig.tar.gz</tt>, download it, unpack it, and then do
 the standard</p>
 -->
 
-You may download a tarball of libhid from the Debian mirrors. Simply scroll to
-the bottom of the
-<a href="http://packages.debian.org/unstable/source/libhid" target="_blank">Debian package page
-for libhid</a> and download the .orig.tar.gz file. Unpack it, then run:
+<p>You may download a tarball of libhid from Alioth at the
+<a href="http://alioth.debian.org/frs/?group_id=30451" target="_blank">download page
+for libhid</a> by selecting the link for the latest libhid-*.tar.gz file.
+Unpack it, then run:</p>
 
 <code>
 $ ./configure &amp;&amp; make<br />
@@ -206,22 +190,7 @@ $ su<br />
 # make install
 </code>
 
-<p>to install it into <tt>/usr/local</tt>. You may wish to add "--disable-swig" to the configure command line if you do not have both SWIG and the Python development headers installed.</p>
-
-<!-- 
-Note that there is currently a dependency on the Debian patch, which I have 
-not yet fixed. To unpack the tarball, you thus need to get both, the
-<tt>.orig.tar.gz</tt> file and the latest, corresponding <tt>.diff.gz</tt>
-file. Then, do the following to unpack:
-
-<code>
-$ tar xfz libhid_0.2.14.orig.tar.gz<br />
-$ cd libhid-0.2.14<br />
-$ zcat ../libhid_0.2.14-1.diff.gz | patch -p1<br />
-$ ./configure<br />
-[...]
-</code>
--->
+<p>to install it into <tt>/usr/local</tt>. </p>
 
 <h2>A note about languages</h2>
 
@@ -280,9 +249,9 @@ target="_blank">libphidgets</a>.</p>
 
 <ul>
 
-<li><a href="http://www.ghz.cc/~clepple/libHID/doc/html/"
-target="_blank"><strong>libHID</strong></a> -- the previous version of a HID
-access library. libhid officially subsumes this project.</li>
+<li><a href="http://libusb.sourceforge.net"
+target="_blank"><strong>libusb</strong></a> -- the cross-platform library used by
+libhid to access USB devices from user-space.</li>
 
 <li><a href="http://libphidgets.alioth.debian.org/"
 target="_blank"><strong>libphidgets</strong></a> -- a library to access <a
@@ -295,7 +264,7 @@ reliable monitoring of UPS hardware and ensure safe shutdowns of the systems
 which are connected. It was the reason why libHID started, and is currently
 being ported from libHID to libhid.</li>
 
-<li><a href="http://www.swig.org/" target="_blank"><strong>Swig</strong></a>
+<li><a href="http://www.swig.org/" target="_blank"><strong>SWIG</strong></a>
 -- a software development tool that connects programs written in C and C++
 with a variety of high-level programming languages. libhid uses it to provide
 the Python bindings (and other languages on request).</li>
@@ -330,9 +299,9 @@ $Id$
 COPYRIGHT:
 
 This file is part of libhid, a user-space HID access library.
-libhid is (c) 2003-2005
+libhid is (c) 2003-2007
   Martin F. Krafft <libhid@pobox.madduck.net>
-  Charles Lepple <clepple@ghz.cc>
+  Charles Lepple <clepple+libhid@ghz.cc>
   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
 and distributed under the terms of the GNU General Public License.
 See the ./COPYING file in the source tree root for more information.
