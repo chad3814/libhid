@@ -1,6 +1,12 @@
 libhid ChangeLog
 ================
 
+2007-04-25 Charles Lepple (clepple+libhid@ghz.cc)
+  - Preparation for the 0.2.16 release:
+  - Added a number of files to the tarball [334], [336]
+  - Updated documentation [331], [335], [337]
+  - Fixed some autoconf macros [332], [333]
+
 2007-04-01 Charles Lepple (clepple+libhid@ghz.cc)
   - Reworked a lot of the autoconf/automake code with regards to SWIG. This
     allows 'make distcheck' to build the Python bindings, and it improves
