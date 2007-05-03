@@ -1,6 +1,9 @@
 libhid ChangeLog
 ================
 
+2007-05-03 Charles Lepple (clepple+libhid@ghz.cc)
+  - Updated version number to distinguish SVN builds from 0.2.16 release.
+
 2007-04-25 Charles Lepple (clepple+libhid@ghz.cc)
   - Preparation for the 0.2.16 release:
   - Added a number of files to the tarball [334], [336]

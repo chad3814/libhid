@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 #     if functions were added, arg1 = 0
 #     if not backward compatible, arg1 = arg2 = 0
 #
-m4_define([LIBHID_VERSION], [0.2.16])
+m4_define([LIBHID_VERSION], [0.2.16.1])
 m4_define([IFACE_AGE], [0])
 m4_define([BIN_AGE],   [0])
 m4_define([MD_INIT_NAME], [libhid])
