@@ -1,14 +1,13 @@
 Summary: A userspace USB HID access library
 Name: libhid
-Version: 0.2.10
+Version: 0.2.16
 Release: 1
-Source0: %{name}-%{version}.orig.tar.gz
-#Source0: svn co svn://svn.ailab.ch/%{name}/tags/%{version}-%{release} %{name}-%{version}.orig
-Patch0: libhid-0.2.10-am_config_header.patch
-Patch1: libhid-0.2.10-doc_makefile_am.patch
-Patch2: libhid-0.2.10-src_makefile_am.patch
-Patch3: libhid-0.2.10-m4_doxygen.patch
-Patch4: libhid-0.2.10-docbook_xsl_location-redhat.patch
+Source0: %{name}-%{version}.tar.gz
+#Patch0: libhid-0.2.10-am_config_header.patch
+#Patch1: libhid-0.2.10-doc_makefile_am.patch
+#Patch2: libhid-0.2.10-src_makefile_am.patch
+#Patch3: libhid-0.2.10-m4_doxygen.patch
+#Patch4: libhid-0.2.10-docbook_xsl_location-redhat.patch
 License: GPL
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -17,8 +16,8 @@ Requires: libusb
 BuildRequires: libusb-devel
 BuildRequires: libtool
 BuildRequires: pkgconfig
-BuildRequires: swig
-BuildRequires: docbook-utils
+#BuildRequires: swig
+#BuildRequires: docbook-utils
 ##BuildRequires: doxygen
 ExcludeArch: s390 s390x
 
@@ -38,17 +37,18 @@ This package provides the development files and static library for libhid.
 You need this if you want to develop an application with libhid.
 
 %prep
-%setup -q -n %{name}-%{version}.orig
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-libtoolize --copy --force
-aclocal -I m4
-autoheader
-automake --add-missing
-autoconf
+# %setup -q # -n %{name}-%{version}.orig
+%setup -q
+#%patch0 -p1
+#%patch1 -p1
+#%patch2 -p1
+#%patch3 -p1
+#%patch4 -p1
+#libtoolize --copy --force
+#aclocal -I m4
+#autoheader
+#automake --add-missing
+#autoconf
 
 %build
 %configure --disable-swig --without-doxygen     # disable swig and doxygen  for now
@@ -83,6 +83,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu May 03 2007 Charles Lepple <clepple+libhid@ghz.cc> 0.2.16-1
+- Built on Fedora Core 6
 * Sat Jan 15 2005 Jason Watson <jason.watson@agrios.net> 0.2.10-1
 - Initial RPM build
 
