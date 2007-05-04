@@ -12,14 +12,14 @@ AC_PREREQ(2.57)
 #     if functions were added, arg1 = 0
 #     if not backward compatible, arg1 = arg2 = 0
 #
-m4_define([LIBHID_VERSION], [0.2.16.1])
+m4_define([LIBHID_VERSION], [0.2.17])
 m4_define([IFACE_AGE], [0])
 m4_define([BIN_AGE],   [0])
 m4_define([MD_INIT_NAME], [libhid])
 m4_define([MD_INIT_VERSION], LIBHID_VERSION.IFACE_AGE.BIN_AGE)
 m4_define([MD_INIT_ADDRESS], m4_esyscmd([grep -i bugreports\ to README | sed -e 's,.*<\([^>]*\).*,\1,' | tr -d "\n"]))
 
-AC_INIT(MD_INIT_NAME, LIBHID_VERSION, MD_INIT_ADDRESS)
+AC_INIT(MD_INIT_NAME, MD_INIT_VERSION, MD_INIT_ADDRESS)
 
 AM_CONFIG_HEADER([config.h])
 AC_CONFIG_SRCDIR([include/hid.h])
