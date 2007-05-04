@@ -1,13 +1,8 @@
 Summary: A userspace USB HID access library
 Name: libhid
-Version: 0.2.16
+Version: @PACKAGE_VERSION@
 Release: 1
 Source0: %{name}-%{version}.tar.gz
-#Patch0: libhid-0.2.10-am_config_header.patch
-#Patch1: libhid-0.2.10-doc_makefile_am.patch
-#Patch2: libhid-0.2.10-src_makefile_am.patch
-#Patch3: libhid-0.2.10-m4_doxygen.patch
-#Patch4: libhid-0.2.10-docbook_xsl_location-redhat.patch
 License: GPL
 Group: System Environment/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -37,18 +32,7 @@ This package provides the development files and static library for libhid.
 You need this if you want to develop an application with libhid.
 
 %prep
-# %setup -q # -n %{name}-%{version}.orig
 %setup -q
-#%patch0 -p1
-#%patch1 -p1
-#%patch2 -p1
-#%patch3 -p1
-#%patch4 -p1
-#libtoolize --copy --force
-#aclocal -I m4
-#autoheader
-#automake --add-missing
-#autoconf
 
 %build
 %configure --disable-swig --without-doxygen     # disable swig and doxygen  for now
@@ -69,13 +53,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_libdir}/*.so.*
 %{_bindir}/libhid-detach-device
-%{_libdir}/pkgconfig/libhid.pc
 %{_mandir}/man1/libhid-detach-device.1.gz
 
 
 %files devel
 %defattr(-,root,root)
 %doc AUTHORS README NEWS ChangeLog
+%{_libdir}/pkgconfig/libhid.pc
 %{_includedir}/*
 %{_libdir}/*.so
 %{_libdir}/*.a

@@ -19,7 +19,7 @@ m4_define([MD_INIT_NAME], [libhid])
 m4_define([MD_INIT_VERSION], LIBHID_VERSION.IFACE_AGE.BIN_AGE)
 m4_define([MD_INIT_ADDRESS], m4_esyscmd([grep -i bugreports\ to README | sed -e 's,.*<\([^>]*\).*,\1,' | tr -d "\n"]))
 
-AC_INIT(MD_INIT_NAME, MD_INIT_VERSION, MD_INIT_ADDRESS)
+AC_INIT(MD_INIT_NAME, LIBHID_VERSION, MD_INIT_ADDRESS)
 
 AM_CONFIG_HEADER([config.h])
 AC_CONFIG_SRCDIR([include/hid.h])
@@ -119,6 +119,7 @@ AC_CONFIG_FILES([doc/Makefile])
 AC_CONFIG_FILES([doc/man/Makefile])
 AC_CONFIG_FILES([doc/www/Makefile])
 AC_CONFIG_FILES([pkgconfig/libhid.pc])
+AC_CONFIG_FILES([rpm/libhid.spec])
 
 AC_OUTPUT
 
@@ -127,9 +128,9 @@ MD_DEBUG_BUILDVARS
 # COPYRIGHT --
 #
 # This file is part of libhid, a user-space HID access library.
-# libhid is (c) 2003-2005
+# libhid is (c) 2003-2007
 #   Martin F. Krafft <libhid@pobox.madduck.net>
-#   Charles Lepple <clepple@ghz.cc>
+#   Charles Lepple <clepple+libhid@ghz.cc>
 #   Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
 # and distributed under the terms of the GNU General Public License.
 # See the file ./COPYING in the source distribution for more information.

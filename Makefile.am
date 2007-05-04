@@ -36,6 +36,8 @@ dist_noinst_DATA = \
 	debian/rules \
 	README.licence
 
+EXTRA_DIST = rpm/libhid.spec rpm/libhid.spec.in
+
 clean-local:
 	rm -f $(wildcard $(PACKAGE)-*.tar.gz)
 
