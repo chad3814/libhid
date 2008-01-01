@@ -1,18 +1,33 @@
-import hid
+from ctypes import *
 
 '''This module provides an interface to libhid that should be more familiar to
-Python programmers.
+Python programmers. It uses the ctypes library introduced in Python 2.5 (but
+also available from http://starship.python.net/crew/theller/ctypes/
 
 See the test_hidwrap.py script for an example of how to use this module.
 '''
 
+# Load the libhid shared object:
+hid = cdll.LoadLibrary(".libs/_hid.so")
+
+libc = cdll.LoadLibrary("libc.so.6")
+
 # import all symbolic constants from hid --------------------------------------
-for identifier in dir(hid):
-    if identifier.startswith("HID_"):
-        locals()[identifier] = hid.__dict__[identifier]
+### FIXME: can we do this automatically in ctypes?
+# for identifier in dir(hid):
+#    if identifier.startswith("HID_"):
+#        locals()[identifier] = hid.__dict__[identifier]
 
+HID_RET_SUCCESS = 0
 
+# types:
+class HIDInterfaceMatcher(Structure):
+    _fields_ = [
+	("vendor_id", c_ushort),
+	("product_id", c_ushort), ]
+#	("matcher_fn", 
 
+hid.hid_strerror.restype = c_char_p
 
 # error handling --------------------------------------------------------------
 class HIDError(Exception):
@@ -46,7 +61,7 @@ def _hid_raise(op, result):
     else:
         raise ValueError, "result must be either an int or a tuple"
 
-    if result_code != hid.HID_RET_SUCCESS:
+    if result_code != HID_RET_SUCCESS:
         try:
             raise HIDError, (result_code, "%s: %s" % (op, hid.hid_strerror(result_code)))
         except KeyError:
@@ -74,7 +89,8 @@ def set_debug(value):
 def set_debug_stream(stream):
     '''Send debug messages to a specific Python output stream (such as
     sys.stdout or sys.stderr.'''
-    hid.hid_set_debug_stream(stream)
+    stream_file = libc.fdopen(stream.fileno(), 'w')
+    hid.hid_set_debug_stream(stream_file)
 
 def set_usb_debug(level):
     '''Set the debug level used by libusb.'''
@@ -107,8 +123,6 @@ def _finalize_hid():
         cleanup()
 
 
-
-
 # interface -------------------------------------------------------------------
 class Interface:
     '''A HID Interface object.
@@ -126,7 +140,7 @@ class Interface:
         if not is_initialized():
             init()
 
-        matcher = hid.HIDInterfaceMatcher()
+        matcher = HIDInterfaceMatcher() # Changed: ctypes
         matcher.vendor_id = vendor_id
         matcher.product_id = product_id
 
@@ -134,22 +148,24 @@ class Interface:
 
         if force:
             _hid_raise("force_open", hid.hid_force_open(
-                self.interface, interface_number, matcher, retries))
+                self.interface, interface_number, byref(matcher), retries)) # ctypes: added byref
         else:
-            _hid_raise("open", hid.hid_open(self.interface, 0, matcher))
+            _hid_raise("open", hid.hid_open(self.interface, 0, byref(matcher))) # ctypes: added byref
 
         self.is_open = True
 
 
     def write_identification(self, stream):
         '''Print the vendor, model and serial number strings, as available.'''
+        stream_file = libc.fdopen(stream.fileno(), 'w')
         _hid_raise("write_identification", hid.hid_write_identification(
-            stream, self.interface))
+            stream_file, self.interface))
 
     def dump_tree(self, stream):
         '''Dump the HID tree to a Python output stream.'''
+        stream_file = libc.fdopen(stream.fileno(), 'w')
         _hid_raise("dump_tree", hid.hid_dump_tree(
-            stream, self.interface))
+            stream_file, self.interface))
 
     def __del__(self):
         '''If the interface has been properly opened, close it.'''

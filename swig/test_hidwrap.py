@@ -14,7 +14,7 @@ def main():
     hidwrap.set_debug_stream(sys.stderr)
     hidwrap.set_usb_debug(0)
 
-    iface = hidwrap.Interface(vendor_id=0x3351, product_id=0x3715)
+    iface = hidwrap.Interface(vendor_id=0x51d, product_id=0x0002)
     iface.write_identification(sys.stdout)
     iface.dump_tree(sys.stdout)
 

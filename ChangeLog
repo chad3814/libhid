@@ -1,6 +1,11 @@
 libhid ChangeLog
 ================
 
+2008-01-01 Charles Lepple (clepple+libhid@ghz.cc)
+  - Added a version of hidwrap.py that uses ctypes instead of SWIG.
+  - Cleaned up a few items in hidwrap.py, and changed the default device for
+    testing.
+
 2007-12-31 Charles Lepple (clepple+libhid@ghz.cc)
   - Added some comments and default parameters to swig/hidwrap.py.
   - Added options to test_libhid to allow selection of target device and
