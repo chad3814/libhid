@@ -3,6 +3,8 @@ libhid ChangeLog
 
 2007-12-31 Charles Lepple (clepple+libhid@ghz.cc)
   - Added some comments and default parameters to swig/hidwrap.py.
+  - Added options to test_libhid to allow selection of target device and
+    interface on the command line.
 
 2007-05-03 Charles Lepple (clepple+libhid@ghz.cc)
   - Updated version number to distinguish SVN builds from 0.2.16 release.

@@ -1,6 +1,7 @@
 #include <hid.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h> /* for getopt() */
 
 bool match_serial_number(struct usb_dev_handle* usbdev, void* custom, unsigned int len)
 {
@@ -13,10 +14,49 @@ bool match_serial_number(struct usb_dev_handle* usbdev, void* custom, unsigned i
   return ret;
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
   HIDInterface* hid;
+  int iface_num = 0;
   hid_return ret;
+
+  unsigned short vendor_id  = 0x51d;
+  unsigned short product_id = 0x0002;
+  char *vendor, *product;
+
+  int flag;
+
+  /* Parse command-line options.
+   *
+   * Currently, we only accept the "-d" flag, which works like "lsusb", and the
+   * "-i" flag to select the interface (default 0). The syntax is one of the
+   * following:
+   * 
+   * $ test_libhid -d 1234:
+   * $ test_libhid -d :5678
+   * $ test_libhid -d 1234:5678
+   *
+   * Product and vendor IDs are assumed to be in hexadecimal.
+   *
+   * TODO: error checking and reporting.
+   */
+  while((flag = getopt(argc, argv, "d:i:")) != -1) {
+    switch (flag) {
+      case 'd':
+           product = optarg;
+           vendor = strsep(&product, ":");
+           if(vendor && *vendor) {
+               vendor_id = strtol(vendor, NULL, 16);
+           }
+           if(product && *product) {
+               product_id = strtol(product, NULL, 16);
+           }
+           break;
+      case 'i':
+           iface_num = atoi(optarg);
+           break;
+    }
+  }
 
   /* How to use a custom matcher function:
    * 
@@ -40,7 +80,7 @@ int main(void)
    */
 
   // HIDInterfaceMatcher matcher = { 0x0925, 0x1237, NULL, NULL, 0 };
-  HIDInterfaceMatcher matcher = { 0x51d, 0x0002, NULL, NULL, 0 };
+  HIDInterfaceMatcher matcher = { vendor_id, product_id, NULL, NULL, 0 };
 
   /* see include/debug.h for possible values */
   hid_set_debug(HID_DEBUG_ALL);
@@ -78,7 +118,7 @@ int main(void)
    * for an example. Try NOT to work as root!
    */
 
-  ret = hid_force_open(hid, 0, &matcher, 3);
+  ret = hid_force_open(hid, iface_num, &matcher, 3);
   if (ret != HID_RET_SUCCESS) {
     fprintf(stderr, "hid_force_open failed with return code %d\n", ret);
     return 1;
