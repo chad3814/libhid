@@ -15,6 +15,54 @@ enum USBMatchFlags {
   USB_MATCH_ALL = USB_MATCH_VENDOR | USB_MATCH_PRODUCT | USB_MATCH_CUSTOM
 };
 
+#define MAX_OPEN_DEVICES 20  // Should be changed to dynmaic 
+static struct t_open_hid_device_list {
+  int nDevices;   // number of known open devices
+  HIDInterface* hidif[MAX_OPEN_DEVICES];
+} open_hid_device_list = {0,
+			  {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
+			   NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL}
+                          };
+
+static int add_open_device(HIDInterface* hidif)
+{
+  if (open_hid_device_list.nDevices < MAX_OPEN_DEVICES) {
+    open_hid_device_list.hidif[open_hid_device_list.nDevices++] = hidif;
+    return 0;
+  } else {
+    TRACE("open_hid_device_list is full.");
+    return -1;
+  }
+}
+
+static void remove_open_device(HIDInterface* hidif)
+{
+  int i, j;
+  for (i = 0; i < open_hid_device_list.nDevices; i++) {
+    if (hidif == open_hid_device_list.hidif[i]) {
+      for (j = i+1; j < open_hid_device_list.nDevices; j++) {
+	open_hid_device_list.hidif[j-1] = open_hid_device_list.hidif[j];
+      }
+      open_hid_device_list.nDevices--;
+      return;
+    }
+  }
+}
+
+static int hid_previously_matched(struct usb_dev_handle const* dev_h, int interface)
+{
+  int i;
+  struct usb_device const* usbdev = usb_device((usb_dev_handle*)dev_h);
+
+  for (i = 0; i < open_hid_device_list.nDevices; i++) {
+    if ((interface == open_hid_device_list.hidif[i]->interface) && 
+	(usbdev == open_hid_device_list.hidif[i]->device)) {
+      return 1;
+     }
+  }
+  return 0;
+}
+
 static unsigned int hid_compare_usb_device(struct usb_dev_handle const* dev_h,
     HIDInterfaceMatcher const* const match)
 {
@@ -26,7 +74,7 @@ static unsigned int hid_compare_usb_device(struct usb_dev_handle const* dev_h,
   TRACE("comparing match specifications to USB device...");
 
   struct usb_device const* dev = usb_device((usb_dev_handle*)dev_h);
-  
+
   TRACE("inspecting vendor ID...");
   if (dev->descriptor.idVendor > 0 &&
       (dev->descriptor.idVendor & match->vendor_id) == match->vendor_id) {
@@ -83,7 +131,15 @@ static hid_return hid_find_usb_device(HIDInterface* const hidif,
       usb_dev_handle *usbdev_h = usb_open(usbdev);
 
       if (usbdev_h) {
-        usb_claim_interface(usbdev_h, hidif->interface);
+        if (!usb_claim_interface(usbdev_h, hidif->interface)) {
+	  TRACE("Could not claim interface %d...\n", hidif->interface);
+	}
+
+	// Make sure we are not considering an already matched device
+	if (hid_previously_matched(usbdev_h, hidif->interface)) {
+	  TRACE("match of previously open device/interface...");
+	  continue;
+	}
 
         unsigned int flags = hid_compare_usb_device(usbdev_h, match);
         if (flags == USB_MATCH_ALL) {
@@ -175,6 +231,9 @@ hid_return hid_open(HIDInterface* const hidif, int const interface,
   ret = hid_prepare_interface(hidif);
   if (ret != HID_RET_SUCCESS) return ret;
 
+  TRACE("add open device to list...");
+  add_open_device(hidif);
+
   NOTICE("successfully opened USB device %s.", hidif->id);
   return HID_RET_SUCCESS;
 }
@@ -221,6 +280,9 @@ hid_return hid_force_open(HIDInterface* const hidif, int const interface,
   ret = hid_prepare_interface(hidif);
   if (ret != HID_RET_SUCCESS) return ret;
 
+  TRACE("add open device to list...");
+  add_open_device(hidif);
+
   NOTICE("successfully opened USB device %s.", hidif->id);
   return HID_RET_SUCCESS;
 }
@@ -248,13 +310,16 @@ hid_return hid_close(HIDInterface* const hidif)
     }
   }
   else WARNING("attempt to close unopened USB device %s.", hidif->id);
+    
+  TRACE("remove hidif from open list...");  
+  remove_open_device(hidif);
 
   if (hidif->hid_parser) hid_reset_parser(hidif);
     
   TRACE("freeing memory allocated for HID parser...");
   if(hidif->hid_parser) free(hidif->hid_parser);
   if(hidif->hid_data) free(hidif->hid_data);
-    
+
   TRACE("resetting HIDInterface...");
   hid_reset_HIDInterface(hidif);
 

@@ -1,6 +1,10 @@
 libhid ChangeLog
 ================
 
+2008-01-22 Warren Jasper (wjasper@tx.ncsu.edu)
+  - Keep track of previously opened devices, and do not return them on
+    subsequent calls to hid*open().
+
 2008-01-01 Charles Lepple (clepple+libhid@ghz.cc)
   - Added a version of hidwrap.py that uses ctypes instead of SWIG.
   - Cleaned up a few items in hidwrap.py, and changed the default device for
