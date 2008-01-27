@@ -17,13 +17,13 @@ operating system supported by libusb: Linux, BSD, OS X, and Windows.</p>
 
 <p>libhid is still under development and it does not have a proper homepage (if
 you want to write one, please <a
-href="mailto:libhid-discuss@lists.ailab.ch">contact us</a>!). Until one is
+href="mailto:libhid-discuss@lists.alioth.debian.org">contact us</a>!). Until one is
 ready, you are welcome to download the software and try it out, it should be
 easy to use if you have some knowledge of C and are willing to read someone
 else 's code. Documentation does not yet exist, but we are working to provide
 it using <a href="http://www.doxygen.org" target="_blank">Doxygen</a> (again,
 if you want to help, please <a
-href="mailto:libhid-discuss@lists.ailab.ch">contact us</a>!).</p>
+href="mailto:libhid-discuss@lists.alioth.debian.org">contact us</a>!).</p>
 
 <p>For more information, please consult the <a href="./README"
 target="_blank">README</a>.</p>
@@ -64,7 +64,7 @@ probably want to subscribe to this list.</li>
 
 <p>We realise that the documentation and instructions we provide with the
 library are far from usable. Thus, please do not hesitate to <a
-href="mailto:libhid-discuss@lists.ailab.ch">write to us</a> on the discussion
+href="mailto:libhid-discuss@lists.alioth.debian.org">write to us</a> on the discussion
 list!</p>
 
 @section sec_getting Getting libhid
@@ -99,7 +99,7 @@ svn co svn://svn.ailab.ch/libhid/tags/0.2.8-1 libhid-0.2.8-1
 
 <p>Instructions on how to compile the code are available in the <a
 href="./README" target="_blank">README</a> file. Please do not hesitate to
-write to the <a href="mailto:libhid-discuss@lists.ailab.ch">mailing list</a>
+write to the <a href="mailto:libhid-discuss@lists.alioth.debian.org">mailing list</a>
 if you have questions, comments, or problems.</p>
 
 <p>The Subversion tree can also be viewed <a
@@ -165,7 +165,7 @@ to provide further language bindings, thanks to <a href="http://www.swig.org"
 target="_blank">Swig</a>. Thus, if you need to use HID devices from any other
 of the <a href="http://www.swig.org/compare.html" target="_blank">languages
 supported by Swig</a>, we will make it available. Just echo your desires to <a
-href="mailto:libhid-discuss@lists.ailab.ch">the discussion list</a>.</p>
+href="mailto:libhid-discuss@lists.alioth.debian.org">the discussion list</a>.</p>
 
 @section sec_licence Licence
 
@@ -175,21 +175,20 @@ target="_blank">GPL</a>.</p>
 
 @section sec_abount About
 
-<p>libhid grew out of <a href="http://www.ghz.cc/~clepple/libHID/doc/html/"
-target="_blank">libHID</a> and is actively being developed by</p>
+<p>libhid was developed by:</p>
 
 <ul>
 
 <li>Martin F. Krafft &lt;<a
 href="mailto:libhid@pobox.madduck.net">libhid@pobox.madduck.net</a>&gt;</li>
 <li>Arnaud Quette &lt;<a
-href="mailto:arnaud.quette@mgeups.com">arnaud.quette@mgeups.com</a>&gt;</li>
+href="mailto:aquette.dev@gmail.com">aquette.dev@gmail.com</a>&gt;</li>
 <li>Charles Lepple &lt;<a
-href="mailto:clepple+libhid@ghz.cc">clepple@ghz.cc</a>&gt;</li>
+href="mailto:clepple+libhid@ghz.cc">clepple+libhid@ghz.cc</a>&gt;</li>
 </ul>
 
-<p>It is used in a rewrite of the <a href="http://www.networkupstools.org/"
-target="_blank">Network UPS Tools</a> USB driver (newhidups) and as a basis
+<p>It was targeted to be used in a rewrite of the <a href="http://www.networkupstools.org/"
+target="_blank">Network UPS Tools</a> USB driver (newhidups/usbhid-ups) and as a basis
 for <a href="http://libphidgets.alioth.debian.org/"
 target="_blank">libphidgets</a>.</p>
 
@@ -244,10 +243,10 @@ $Id$
 COPYRIGHT:
 
 This file is part of libhid, a user-space HID access library.
-libhid is (c) 2003-2005
+libhid is (c) 2003-2008
   Martin F. Krafft <libhid@pobox.madduck.net>
-  Charles Lepple <clepple@ghz.cc>
-  Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
+  Charles Lepple <clepple+libhid@ghz.cc>
+  Arnaud Quette <aquette.dev@gmail.com>
 and distributed under the terms of the GNU General Public License.
 See the ./COPYING file in the source tree root for more information.
 
