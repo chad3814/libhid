@@ -5,167 +5,19 @@
 
 @section sec_intro Introduction
 
-<p><b>For a more up-to-date version of this page</b>, please consult <a
-href="http://libhid.alioth.debian.org/">http://libhid.alioth.debian.org</a>.</p>
+<p><b>Note</b>: the libhid home page at <a 
+href="http://libhid.alioth.debian.org/">http://libhid.alioth.debian.org</a> is
+generally updated more often than this page.</p>
 
 <p>libhid is a user-space HID access library written in C. It provides
 a generic and flexible way to access and interact with USB HID devices, much
 like libusb does for plain USB devices. It is based on <a
-href="http://libusb.sourceforge.net/" target="_blank">libusb</a>, thus it
+href="http://libusb.sourceforge.net/" target="_blank">libusb 0.1</a>, thus it
 requires no HID support in the kernel. Furthermore, it aims to support all
 operating system supported by libusb: Linux, BSD, OS X, and Windows.</p>
 
-<p>libhid is still under development and it does not have a proper homepage (if
-you want to write one, please <a
-href="mailto:libhid-discuss@lists.alioth.debian.org">contact us</a>!). Until one is
-ready, you are welcome to download the software and try it out, it should be
-easy to use if you have some knowledge of C and are willing to read someone
-else 's code. Documentation does not yet exist, but we are working to provide
-it using <a href="http://www.doxygen.org" target="_blank">Doxygen</a> (again,
-if you want to help, please <a
-href="mailto:libhid-discuss@lists.alioth.debian.org">contact us</a>!).</p>
-
 <p>For more information, please consult the <a href="./README"
 target="_blank">README</a>.</p>
-
-@section sec_lists Mailing lists
-
-<p>Development of libhid is currently coordinated with mailing lists and CVS
-(see further down). The following three mailing lists exist (click on the list
-name to go to the list information page):</p>
-
-<ul>
-
-<li><a href="http://lists.ailab.ch/listinfo/libhid-announce"
-target="_blank"><strong>libhid-announce</strong></a> [ <a
-href="http://lists.ailab.ch/pipermail/libhid-announce/"
-target="_blank">archives</a> ] -- a moderated list with
-very low volume for announcements. Everyone should subscribe here.</li>
-
-<li><a href="http://lists.ailab.ch/listinfo/libhid-discuss"
-target="_blank"><strong>libhid-discuss</strong></a> [ <a
-href="http://lists.ailab.ch/pipermail/libhid-discuss/"
-target="_blank">archives</a> ] -- a subscriber-only list
-for general discussion. Everyone is cordially invited to join and
-participate.</li>
-
-<li><a href="http://lists.ailab.ch/listinfo/libhid-cvs"
-target="_blank"><strong>libhid-cvs</strong></a> [ <a
-href="http://lists.ailab.ch/pipermail/libhid-cvs/"
-target="_blank">archives</a> ] -- a mailing list receiving
-CVS commit mails. This list is being superceded by libhid-commits (below).</li>
-
-<li><a href="http://lists.alioth.debian.org/mailman/listinfo/libhid-commits"
-target="_blank"><strong>libhid-commits</strong></a> [ archived via websvn ] -- a mailing list receiving
-Subversion (svn) commit mails. If you want to closely track libhid development, you
-probably want to subscribe to this list.</li>
-
-</ul>
-
-<p>We realise that the documentation and instructions we provide with the
-library are far from usable. Thus, please do not hesitate to <a
-href="mailto:libhid-discuss@lists.alioth.debian.org">write to us</a> on the discussion
-list!</p>
-
-@section sec_getting Getting libhid
-
-<p>libhid is available through various ways. In the following, we list the
-possibilities in decreasing order of preference/currency:</p>
-
-@subsection ssec_svn Subversion (SVN)
-
-<p>The <a href="http://subversion.tigris.org/" target="_blank">Subversion</a>
-tree will be the preferred development repository from here forward.
-The CVS version history is available in the Subversion repository as
-well.</p>
-
-<p>To check out the latest version of libhid into the directory
-<tt>libhid-svn</tt>, ensure that Subversion is installed, and use the
-following command:</p>
-
-<code>
-svn co svn://svn.ailab.ch/libhid/trunk libhid-svn
-</code>
-
-<p>To retrieve a particular released (or otherwise tagged) version of libhid,
-simply modify the checkout URL. You may have to browse with <a
-href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/" target="_blank">viewcvs</a> to
-find the exact tag name. As an example, let's retrieve version 0.2.8-1:</p>
-
-<code>
-
-svn co svn://svn.ailab.ch/libhid/tags/0.2.8-1 libhid-0.2.8-1
-</code>
-
-<p>Instructions on how to compile the code are available in the <a
-href="./README" target="_blank">README</a> file. Please do not hesitate to
-write to the <a href="mailto:libhid-discuss@lists.alioth.debian.org">mailing list</a>
-if you have questions, comments, or problems.</p>
-
-<p>The Subversion tree can also be viewed <a
-href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/" target="_blank">online</a> via
-viewcvs. The latest version is available at the <a
-href="http://svn.ailab.ch/cgi-bin/viewcvs.cgi/libhid/trunk/"
-target="_blank">trunk</a>.</p>
-
-<p>If you want to contribute, please send a patch or two. We cannot give out
-write access to the Subversion tree just like that, but if you show us
-a patch, we'll conclude that you are serious about developing libhid, and give
-you permission.
-</p>
-
-@subsection ssec_debian Debian
-
-<p>libhid has entered Debian, but the versions may be a little behind. You can
-use my (madduck) repository to always get the latest versions. Simply add the
-following to your <tt>/etc/apt/sources.list</tt> file:</p>
-
-<code>
-deb     http://debian.madduck.net ~madduck/packages/stage/libhid/
-</code>
-
-<code>
-deb-src http://debian.madduck.net ~madduck/packages/stage/libhid/
-</code>
-
-<p>and then install it. You may leave out <tt>python-hid</tt> if you do not
-want the Python bindings:</p>
-
-<code>
-# apt-get install libhid-dev python-hid
-</code>
-
-@subsection ssec_tarball Tarball
-
-<p>Of course, libhid is available as a tarball from <a
-href="http://people.debian.org/~madduck/stage/pool/libhid/"
-target="_blank">the Debian repository</a>. Simply find the latest file with
-the extension <tt>.orig.tar.gz</tt>, download it, unpack it, and then do
-the standard</p>
-
-<code>
-$ ./configure &amp;&amp; make
-</code>
-
-<code>
-$ su
-</code>
-
-<code>
-# make install
-</code>
-
-<p>to install it into <tt>/usr/local</tt>.</p>
-
-@section sec_lang A note about languages
-
-<p>At time of writing, libhid can be used directly from C/C++, or from <a
-href="http://www.python.org" target="_blank">Python</a>. It is possible for us
-to provide further language bindings, thanks to <a href="http://www.swig.org"
-target="_blank">Swig</a>. Thus, if you need to use HID devices from any other
-of the <a href="http://www.swig.org/compare.html" target="_blank">languages
-supported by Swig</a>, we will make it available. Just echo your desires to <a
-href="mailto:libhid-discuss@lists.alioth.debian.org">the discussion list</a>.</p>
 
 @section sec_licence Licence
 
@@ -195,10 +47,6 @@ target="_blank">libphidgets</a>.</p>
 @section sec_links Links
 
 <ul>
-
-<li><a href="http://www.ghz.cc/~clepple/libHID/doc/html/"
-target="_blank"><strong>libHID</strong></a> -- the previous version of a HID
-access library. libhid officially subsumes this project.</li>
 
 <li><a href="http://libphidgets.alioth.debian.org/"
 target="_blank"><strong>libphidgets</strong></a> -- a library to access <a
