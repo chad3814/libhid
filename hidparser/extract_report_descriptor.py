@@ -2,7 +2,7 @@
 
 """This module is mostly a playground for descriptor-parsing code.
 
-Copyright (c) 2005 Charles Lepple
+Copyright (c) 2005,2008 Charles Lepple
 
 You may distribute this file under the terms of either the GNU General Public
 License or the Artistic License."""
@@ -44,17 +44,19 @@ def extract_bytes(f):
    # Labels begin in the first column, and optionally have a colon afterwards:
    re_label = re.compile(r'^[a-z0-9_]+:?', re.IGNORECASE)
    re_comment = re.compile(r';.*$')
+   re_c_comment = re.compile(r'/\*[^*]*\*/')
 
    for line in f:
        line = re_comment.sub('', line)
+       line = re_c_comment.sub('', line)
        line = re_label.sub('', line)
        line = re_ret.sub('', line)
-       # print "Line: " + line
+       line = line.replace(',',' ')
+       print "Line: " + line
        descriptor_text += line.split()
 
    # Map each string element into an integer:
    return [int(var, 16) for var in descriptor_text]
-# string.join([ "%02x" % var for var in descriptor_bytes])
 
 def parse_tag(desc, index = 0):
     """Examine and print information about the item at desc[index].
