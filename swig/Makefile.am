@@ -30,6 +30,7 @@ __init__.py: hid.py
 %_wrap.c %.py: %.i $(top_srcdir)/include/hid.h
 	$(SWIG) $(SWIG_PYTHON_OPT) $(SWIG_INC) -o $@ $<
 	echo '#include <compiler.h>' > tmp.c
+	echo '#include <assert.h>' >> tmp.c
 	sed -e 's/PyObject \*self/& UNUSED/' \
 	    -e 's/int flags)/int flags UNUSED)/' < $@ >> tmp.c \
 	&& mv tmp.c $@

@@ -1,7 +1,7 @@
 #define HID_INTERNAL
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 HIDDebugLevel hid_debug_level = HID_DEBUG_NONE;
 FILE* hid_debug_stream = NULL;

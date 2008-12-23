@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <assert.h>
+#include <hid_assert.h>
 #include <debug.h>
 
 int main(int argc, char** argp)

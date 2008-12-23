@@ -4,7 +4,7 @@
 #include <hid_helpers.h>
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 hid_return hid_write_identification(FILE* const out,
     HIDInterface const* const hidif)

@@ -9,7 +9,7 @@ endif
 SUBDIRS = hidparser src $(MAYBE_PYTHONWRAPPER) test doc
 
 dist_noinst_HEADERS = \
-	include/assert.h \
+	include/hid_assert.h \
 	include/constants.h \
 	include/debug.h \
 	include/hid_helpers.h \

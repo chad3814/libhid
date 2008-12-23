@@ -8,7 +8,7 @@
 #include <hid_helpers.h>
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 /*!@brief Programmers can check this with hid_is_initialized().
  */

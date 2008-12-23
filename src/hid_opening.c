@@ -5,7 +5,7 @@
 #include <os.h>
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 enum USBMatchFlags {
   USB_MATCH_NONE = 0x0,

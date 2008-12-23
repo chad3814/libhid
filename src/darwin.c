@@ -8,7 +8,7 @@
 #include <compiler.h>
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 hid_return hid_os_force_claim(HIDInterface* const hidif, int const interface,
     HIDInterfaceMatcher const* const matcher, unsigned short retries UNUSED)

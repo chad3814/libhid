@@ -8,7 +8,7 @@
 #include <compiler.h>
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 /*!@brief Send a control message to retrieve an entire input report
  *

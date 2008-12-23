@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 static void hid_prepare_parse_path(HIDInterface* const hidif,
     int const path[], unsigned int const depth)

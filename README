@@ -1,10 +1,10 @@
 libhid README
 =============
 
-libhid is (c) 2003-2007 by
+libhid is (c) 2003-2008 by
   Martin F. Krafft <libhid@pobox.madduck.net>
   Charles Lepple <clepple+libhid@ghz.cc>
-  Arnaud Quette <arnaud.quette@free.fr> && <arnaud.quette@mgeups.com>
+  Arnaud Quette <aquette.dev@gmail.com>
 and distributed under the terms of the GNU General Public License v2.
 See the file ./COPYING in the source distribution for more information.
 

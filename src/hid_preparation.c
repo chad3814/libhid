@@ -5,7 +5,7 @@
 #include <constants.h>
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 /*! @todo This code does not seem to properly retrieve descriptors for devices
  * with multiple interfaces. We probably need to parse each interface a little

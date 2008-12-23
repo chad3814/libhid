@@ -7,7 +7,7 @@
 #include <os.h>
 
 #include <debug.h>
-#include <assert.h>
+#include <hid_assert.h>
 
 /*!@brief Forcibly claim an interface from an attached kernel driver.
  *
