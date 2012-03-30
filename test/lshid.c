@@ -32,7 +32,7 @@ struct usb_dev_handle;
 bool device_iterator (struct usb_dev_handle const* usbdev, void* custom, unsigned int len)
 {
   bool ret = false;
-  int i;
+  int i = len;                  /* to avoid unused len warning */
   char current_dev_path[10];
   const struct usb_device *device = usb_device((struct usb_dev_handle *)usbdev);
   
