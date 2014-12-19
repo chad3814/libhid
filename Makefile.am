@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I m4
+AUTOMAKE_OPTIONS = foreign
 
 # Flags to pass to ./configure when calling "make distcheck":
 DISTCHECK_CONFIGURE_FLAGS = --without-doxygen
