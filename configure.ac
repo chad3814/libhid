@@ -88,11 +88,11 @@ AM_CONDITIONAL(OS_DARWIN, test "$MD_OS" = "darwin")
 if test "${ac_cv_enable_swig}" = "no" ; then
   AM_CONDITIONAL(HAVE_SWIG, false)
 else
-  AC_PROG_SWIG
+  AX_PKG_SWIG
   AM_CONDITIONAL(HAVE_SWIG, "$SWIG" -version)
   if test -z "${HAVE_SWIG_TRUE}" ; then
     AM_PATH_PYTHON
-    SWIG_PYTHON
+    AX_SWIG_PYTHON
   fi
 fi
 
