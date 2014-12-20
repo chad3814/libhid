@@ -91,7 +91,8 @@ else
   AX_PKG_SWIG
   AM_CONDITIONAL(HAVE_SWIG, "$SWIG" -version)
   if test -z "${HAVE_SWIG_TRUE}" ; then
-    AM_PATH_PYTHON
+    # prefer python3 against python2
+    AM_PATH_PYTHON([3],, [:])
     AX_SWIG_PYTHON
   fi
 fi

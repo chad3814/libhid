@@ -27,7 +27,7 @@ EXTRA_DIST = README
 __init__.py: hid.py
 	ln -f $< $@
 
-%_wrap.c %.py: %.i $(top_srcdir)/include/hid.h
+%_wrap.c %.py: %.i $(top_srcdir)/include/hid.h file_py3.i
 	$(SWIG) $(AX_SWIG_PYTHON_OPT) $(SWIG_INC) -o $@ $<
 	echo '#include <compiler.h>' > tmp.c
 	echo '#include <assert.h>' >> tmp.c

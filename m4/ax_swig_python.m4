@@ -58,8 +58,16 @@ AU_ALIAS([SWIG_PYTHON], [AX_SWIG_PYTHON])
 AC_DEFUN([AX_SWIG_PYTHON],[
         AC_REQUIRE([AX_PKG_SWIG])
         AC_REQUIRE([AX_PYTHON_DEVEL])
+        # set swig python options
         test "x$1" != "xno" || swig_shadow=" -noproxy"
         AC_SUBST([AX_SWIG_PYTHON_OPT],[-python$swig_shadow])
+        AC_MSG_CHECKING([for Python3 swig option])
+        if test $PYTHON_VERSION \< 3; then
+                AC_MSG_RESULT([no])
+        else
+                AC_MSG_RESULT([yes])
+                AC_SUBST([AX_SWIG_PYTHON_OPT],["-python -py3"])
+        fi
         AC_SUBST([AX_SWIG_PYTHON_CPPFLAGS],[$PYTHON_CPPFLAGS])
 ])
 
