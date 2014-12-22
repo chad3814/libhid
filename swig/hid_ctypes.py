@@ -59,13 +59,13 @@ def _hid_raise(op, result):
         else:
             retval = result[1:]
     else:
-        raise ValueError, "result must be either an int or a tuple"
+        raise ValueError("result must be either an int or a tuple")
 
     if result_code != HID_RET_SUCCESS:
         try:
-            raise HIDError, (result_code, "%s: %s" % (op, hid.hid_strerror(result_code)))
+            raise HIDError(result_code, "%s: %s" % (op, hid.hid_strerror(result_code)))
         except KeyError:
-            raise HIDError, (result_code, "%s: Unknown error code" % op)
+            raise HIDError(result_code, "%s: Unknown error code" % op)
     else:
         return retval
 
