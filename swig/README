@@ -6,7 +6,7 @@ additional documentation at this point.
 
 The libhid Python API is exactly the same as the C API.
 
-To build the swig python bindins, you need swig 1.3.
+To build the swig python bindins, you need swig (1.3 or 2.0 are tested)
 
 You can expect further information on the project website
 

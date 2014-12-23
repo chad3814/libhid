@@ -1,7 +1,7 @@
 # AM_MAKEFLAGS = @MAKEFLAGS@
 ACLOCAL_AMFLAGS = -I m4
 
-AM_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_srcdir)/include -I$(top_srcdir)/hidparser -DHID_INTERNAL -DSWIG
+AM_CPPFLAGS = $(AX_SWIG_PYTHON_CPPFLAGS) -I$(top_srcdir)/include -I$(top_srcdir)/hidparser -DHID_INTERNAL -DSWIG
 AM_CFLAGS = -fPIC -fno-strict-aliasing
 AM_LDFLAGS = -shared ../src/libhid.la -lusb
 
@@ -27,8 +27,8 @@ EXTRA_DIST = README
 __init__.py: hid.py
 	ln -f $< $@
 
-%_wrap.c %.py: %.i $(top_srcdir)/include/hid.h
-	$(SWIG) $(SWIG_PYTHON_OPT) $(SWIG_INC) -o $@ $<
+%_wrap.c %.py: %.i $(top_srcdir)/include/hid.h file_py3.i
+	$(SWIG) $(AX_SWIG_PYTHON_OPT) $(SWIG_INC) -o $@ $<
 	echo '#include <compiler.h>' > tmp.c
 	echo '#include <assert.h>' >> tmp.c
 	sed -e 's/PyObject \*self/& UNUSED/' \
